@@ -1,6 +1,5 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/CardGameEngine.Abstract/CardGameEngine.Abstract.csproj" />
     <Project Path="src/CardGameEngine.Sample/CardGameEngine.Sample.csproj" />
     <Project Path="src/CardGameEngine/CardGameEngine.csproj" />
   </Folder>
