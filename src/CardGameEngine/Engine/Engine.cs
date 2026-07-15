@@ -1,0 +1,134 @@
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+
+namespace CardGameEngine;
+
+public class Engine<T> : IEngine<T> where T : IEngineState
+{
+    [JsonProperty]
+    protected T state = default!;
+
+    [JsonProperty]
+    protected bool sessionEnded = false; 
+
+    [JsonProperty(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
+    protected bool ExecuteReactions { get; set; }
+
+    protected Engine()
+    {
+    }
+
+    public Engine(T state, bool executeReactions = true, bool sessionEnded = false)
+    {
+        this.state = state;
+        this.ExecuteReactions = executeReactions;
+        this.sessionEnded = sessionEnded; 
+    }
+
+    [JsonIgnore]
+    public T State
+    {
+        get => state;
+    }
+
+    [JsonIgnore]
+    IEngineState IEngine.State
+    {
+        get => state;
+    }
+
+    
+    public List<IAction> Execute(IAction action, bool withReactions = true)
+    {
+        return ExecuteSimultaneously(new List<IAction> { action }, withReactions);
+    }
+
+    public List<IAction> ExecuteSimultaneously(List<IAction> actions, bool withReactions = true)
+    {
+        ExecuteReactions = withReactions;
+        List<IAction> executedActions = Execute(actions);
+        ExecuteReactions = true;
+        return executedActions;
+    }
+
+    public List<IAction> ExecuteSequentially(List<IAction> actions, bool withReactions = true)
+    {
+        List<IAction> executedActions = new List<IAction>();
+        foreach(IAction action in actions)
+        {
+            IAction? executedAction = Execute(action, withReactions).FirstOrDefault(defaultValue: null);
+            if(executedAction != null)
+            {
+                executedActions.Add(executedAction);
+            }
+            else
+            {
+                break;
+            }
+        }
+        return executedActions;
+    }
+
+    protected List<IAction> Execute(List<IAction> actions)
+    {
+        if(!ExecuteReactions)
+        {
+            return new List<IAction>();
+        }
+        
+        List<IAction> executedActions = new List<IAction>(actions);
+
+        CallActionsOrDiscard(executedActions, true,
+            (IAction action) => {
+                if (action is SessionEndedEvent)
+                {
+                    sessionEnded = true;
+                }
+            }
+        );
+
+        if(!sessionEnded)
+        {
+            CallActionsOrDiscard(executedActions, true,
+                (IAction action) => {
+                    foreach (IReaction reaction in State.AllReactions())
+                    {
+                        reaction.ReactBefore(this, action);
+                    }
+                }
+            );
+
+            CallActionsOrDiscard(executedActions, false,
+                (IAction action) => action.Execute(this)
+            );
+
+            CallActionsOrDiscard(executedActions, false,
+                (IAction action) => {
+                    foreach (IReaction reaction in State.AllReactions())
+                    {
+                        reaction.ReactAfter(this, action);
+                    }
+                }
+            );
+        }
+        
+        return executedActions;
+    }
+
+    private void CallActionsOrDiscard(List<IAction> actions, bool checkIfExecutable, System.Action<IAction> func)
+    {
+        List<IAction> actionsToBeRemoved = new List<IAction>();
+        foreach (IAction action in actions) 
+        {
+            if (!action.IsAborted && (!checkIfExecutable || action.IsExecutable(State)))
+            {
+                func(action);
+            }
+            else
+            {
+                actionsToBeRemoved.Add(action);
+            }
+        }
+        actionsToBeRemoved.ForEach(action => actions.Remove(action));
+    }
+}

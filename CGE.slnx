@@ -1,0 +1,6 @@
+<Solution>
+    <Folder Name="/src/">
+        <Project Path="src/CardGameEngine.Abstract/CardGameEngine.Abstract.csproj" Id="fc0d1132-dbd5-42ec-b091-57e92c38a7a1" />
+        <Project Path="src/CardGameEngine/CardGameEngine.csproj" />
+    </Folder>
+</Solution>
