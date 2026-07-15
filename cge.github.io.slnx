@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/CGE/" />
+  <Folder Name="/CGE/.github/" />
+  <Folder Name="/CGE/.github/workflows/">
+    <File Path=".github/workflows/gh-pages.yml" />
+    <File Path=".github/workflows/test.yml" />
+  </Folder>
+  <Folder Name="/CGE/src/">
+    <Project Path="src/cge.github.io/cge.github.io.csproj" />
+  </Folder>
+</Solution>

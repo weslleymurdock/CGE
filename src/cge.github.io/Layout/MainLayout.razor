@@ -1,0 +1,122 @@
+﻿@inherits LayoutComponentBase
+@using cge.github.io
+
+@inject NavigationManager Navigation
+@inject Application.Abstract.Services.IBrowserStorageService SettingsService
+
+@implements IDisposable
+
+
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="_customTheme" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@(_drawerOpen ? Icons.Material.Filled.MenuOpen : Icons.Material.Filled.Menu)" Color=Color.Primary Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudText Typo="Typo.h6" Class="ml-2" HtmlTag="b" Color="@(_isDarkMode ? Color.Primary : Color.Tertiary)">@Localizer["ApplicationTitle"]</MudText>
+        <MudSpacer />
+        <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
+                       Color=Color.Primary
+                       OnClick="OnToggleDarkModeAsync" />
+        <MudMenu Icon="@Icons.Material.Filled.Language" Color=Color.Primary Dense="true">
+            <MudMenuItem OnClick='() => OnLanguageMenuItemClickAsync("pt-BR")'>Português (BR)</MudMenuItem>
+            <MudMenuItem OnClick='() => OnLanguageMenuItemClickAsync("en-US")'>English   (US)</MudMenuItem>
+        </MudMenu>
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <MudNavMenu>
+            <MudList T="MudNavLink">
+                <MudNavLink Icon="@Icons.Material.Filled.Home" Href="/" Match="NavLinkMatch.All">
+                    @Localizer["Home"]
+                </MudNavLink>
+                <MudDivider DividerType="DividerType.FullWidth" />
+                <MudNavLink Icon="@Icons.Material.Filled.Apps" Href="/projects" Match="NavLinkMatch.Prefix">
+                    @Localizer["About"]
+                </MudNavLink>
+                <MudDivider DividerType="DividerType.FullWidth" />
+                <MudNavGroup Icon="@Icons.Material.Filled.WorkHistory" IconColor="Color.Primary" Title="@Localizer["Library"]" Expanded="true">
+                    <MudNavLink Href="/in-office" Icon="@Icons.Material.Filled.WorkHistory" Match="NavLinkMatch.Prefix">
+                        @Localizer["GetStarted"]
+                    </MudNavLink>
+                    <MudDivider DividerType="DividerType.Middle" />
+                    <MudNavLink Href="/tutorial" Icon="@Icons.Material.Filled.FreeCancellation" Match="NavLinkMatch.Prefix">
+                        @Localizer["Tutorial"]
+                    </MudNavLink>
+                </MudNavGroup>
+                <MudDivider DividerType="DividerType.FullWidth" />
+                <MudNavLink Icon="@Icons.Material.Filled.Person" Href="/contact" Match="NavLinkMatch.Prefix">
+                    @Localizer["Contact"]
+                </MudNavLink>
+                <MudNavLink Icon="@Icons.Custom.Brands.GitHub" Href="/contact" Match="NavLinkMatch.Prefix">
+                    @Localizer["GitHub"]
+                </MudNavLink>
+            </MudList>
+        </MudNavMenu>
+    </MudDrawer>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _drawerOpen = false;
+    private bool _isDarkMode = false;
+    private bool _isRoyalTheme = true;
+    private string _language = "pt-BR";
+    private string _theme = "royal";
+    private MudThemeProvider _mudThemeProvider = default!;
+    private MudTheme _customTheme = new MudTheme();
+
+    protected override async Task OnInitializedAsync()
+    {
+        SettingsService.OnSettingsChanged += OnSettingsChanged;
+
+        await SettingsService.InitializeAsync();
+
+        ApplySettings();
+    }
+
+    private void ApplySettings()
+    {
+        _isDarkMode = SettingsService.Settings.DarkMode;
+        _customTheme =  AppTheme.SkyBlueTheme;
+        _language = SettingsService.Settings.Language ??= "pt-BR";
+        CultureInfo culture = new(_language);
+        culture.SetCurrentCulture(_language);
+    }
+
+    private async Task ChangeLanguageAsync(string lang)
+    {
+        await SettingsService.UpdateLanguageAsync(lang);
+        ToggleLanguage(new CultureInfo(_language = lang));
+        StateHasChanged();
+    }
+
+    private void ToggleLanguage(CultureInfo culture) 
+    {
+        culture.SetCurrentCulture(_language); 
+        Navigation.Refresh(true);
+    }
+
+    public void Dispose() => SettingsService.OnSettingsChanged -= OnSettingsChanged;
+
+    private void DrawerToggle() => _drawerOpen = !_drawerOpen;
+
+    private async Task OnLanguageMenuItemClickAsync(string language) => await ChangeLanguageAsync(_language = language ??= "pt-BR");
+
+    private async Task OnToggleDarkModeAsync() 
+    {
+        _isDarkMode = !_isDarkMode;
+        await SettingsService.UpdateIsDarkMode(_isDarkMode);
+        StateHasChanged();
+    }
+
+    private void OnSettingsChanged()
+    {
+        ApplySettings();
+        StateHasChanged();
+    }
+}

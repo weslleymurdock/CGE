@@ -1,0 +1,40 @@
+name: GitHub Pages Deploy
+
+on:
+  push:
+    tags:
+      - 'v*.*'
+
+  workflow_dispatch:
+
+permissions:
+  contents: write 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout 
+      uses: actions/checkout@v6
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: '10.0.x' 
+
+    - name: Publish
+      run: dotnet publish ./src/cge.github.io/cge.github.io.csproj -c Release -o release /p:BlazorEnableCompression=false
+
+    - name: Setup base path
+      run: |
+        sed -i 's/<base href="\/" \/>/<base href="\/CGE\/" \/>/g' release/wwwroot/index.html
+        
+        touch release/wwwroot/.nojekyll
+        
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: release/wwwroot 
+        branch: gh-pages 
+        clean: true 
