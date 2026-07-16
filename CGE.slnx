@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CardGameEngine/CardGameEngine.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CardGameEngine.Tests/CardGameEngine.Tests.csproj" Id="b888bc96-6d8c-443e-95e4-dbf27eddffd0" />
+  </Folder>
+</Solution>
