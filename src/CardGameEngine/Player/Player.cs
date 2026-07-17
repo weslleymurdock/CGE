@@ -221,10 +221,6 @@ namespace CardGameEngine
         {
             return this;
         }
-
-        public static Player NewPlayer(IDeck deck, IHand hand, IBoard board, IDeck graveyard, ManaPoolStat mana, AttackStat attack, LifeStat life, List<IReaction> reactions)
-        {
-            return new Player(deck, hand, board, graveyard, mana, attack, life, reactions);
-        }
+ 
     }
 }

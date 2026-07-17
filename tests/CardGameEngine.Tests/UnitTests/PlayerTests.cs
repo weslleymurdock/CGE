@@ -92,19 +92,19 @@ public class PlayerTests
         var mockGraveyard = new Mock<IDeck>();
         mockGraveyard.Setup(g => g.AllCards).Returns(new List<ICard>());
 
-        var player = Player.NewPlayer(
-            mockDeck.Object,
-            mockHand.Object,
-            mockBoard.Object,
-            mockGraveyard.Object,
-            new ManaPoolStat(0, 0),
-            new AttackStat(0),
-            new LifeStat(0),
-            new List<IReaction>()
-        );
+        var mockPlayer = new Mock<IPlayer>();
+        mockPlayer.Setup(p => p.AllReactions()).Returns(new List<IReaction>());
+        mockPlayer.Setup(p => p.LifeValue).Returns(0);
+        mockPlayer.Setup(p => p.LifeBaseValue).Returns(0);
+        mockPlayer.Setup(p => p.AttackBaseValue).Returns(0);
+        mockPlayer.Setup(p => p.AttackValue).Returns(0);
+        mockPlayer.Setup(p => p.Deck).Returns(mockDeck.Object);
+        mockPlayer.Setup(p => p.Graveyard).Returns(mockGraveyard.Object);
+        mockPlayer.Setup(p => p.Board).Returns(mockBoard.Object);
+
 
         // Act
-        var allCards = player.AllCards;
+        var allCards = mockPlayer.Object.AllCards;
 
         // Assert
         Assert.Equal(3, allCards.Count);
@@ -159,24 +159,26 @@ public class PlayerTests
         var mockMonsterCard = new Mock<IMonsterCard>();
         var mockBoard = new Mock<IBoard>();
         mockBoard.Setup(b => b.AllCards).Returns(new List<ICard> { mockMonsterCard.Object });
-
-        var player = Player.NewPlayer(
-            new Mock<IDeck>().Object,
-            new Mock<IHand>().Object,
-            mockBoard.Object,
-            new Mock<IDeck>().Object,
-            new ManaPoolStat(0, 0),
-            new AttackStat(0),
-            new LifeStat(0),
-            new List<IReaction>()
-        );
+        var mockGraveyard = new Mock<IDeck>();
+        mockGraveyard.Setup(d => d.AllCards).Returns([(MonsterCard)mockMonsterCard.Object]);
+         var mockDeck = new Mock<IDeck>();
+        mockDeck.Setup(d => d.AllCards).Returns([(MonsterCard)mockMonsterCard.Object]);
+        var mockPlayer = new Mock<IPlayer>();
+        mockPlayer.Setup(p => p.AllReactions()).Returns(new List<IReaction>());
+        mockPlayer.Setup(p => p.LifeValue).Returns(0);
+        mockPlayer.Setup(p => p.LifeBaseValue).Returns(0);
+        mockPlayer.Setup(p => p.AttackBaseValue).Returns(0);
+        mockPlayer.Setup(p => p.AttackValue).Returns(0);
+        mockPlayer.Setup(p => p.Deck).Returns(mockDeck.Object);
+        mockPlayer.Setup(p => p.Graveyard).Returns(mockGraveyard.Object);
+        mockPlayer.Setup(p => p.Board).Returns(mockBoard.Object);
 
         // Act
-        var characters = player.Characters;
+        var characters = mockPlayer.Object.Characters;
 
         // Assert
         Assert.Equal(2, characters.Count);
-        Assert.Contains(player, characters);
+        Assert.Contains(mockPlayer.Object, characters);
         Assert.Contains(mockMonsterCard.Object, characters);
     }
 
@@ -252,19 +254,20 @@ public class PlayerTests
         var mockBoard = new Mock<IBoard>();
         mockBoard.Setup(b => b.IsFreeSlot(0)).Returns(false);
 
-        var player = Player.NewPlayer(
-            new Mock<IDeck>().Object,
-            new Mock<IHand>().Object,
-            mockBoard.Object,
-            new Mock<IDeck>().Object,
-            new ManaPoolStat(0, 0),
-            new AttackStat(0),
-            new LifeStat(0),
-            new List<IReaction>()
-        );
+        var mockPlayer = new Mock<IPlayer>();
+        mockPlayer.Setup(p => p.AllReactions()).Returns(new List<IReaction>());
+        mockPlayer.Setup(p => p.LifeValue).Returns(0);
+        mockPlayer.Setup(p => p.LifeBaseValue).Returns(0);
+        mockPlayer.Setup(p => p.AttackBaseValue).Returns(0);
+        mockPlayer.Setup(p => p.AttackValue).Returns(0);
+        mockPlayer.Setup(p => p.Deck).Returns(new Mock<Deck>().Object);
+        mockPlayer.Setup(p => p.Graveyard).Returns(new Mock<IDeck>().Object);
+        mockPlayer.Setup(p => p.Board).Returns(mockBoard.Object);
+
+
 
         // Act & Assert
-        var exception = Assert.Throws<CardGameEngineException>(() => player.CastMonster(mockGame.Object, mockMonsterCard.Object, 0));
+        var exception = Assert.Throws<CardGameEngineException>(() => mockPlayer.Object.CastMonster(mockGame.Object, mockMonsterCard.Object, 0));
         Assert.Equal("Card Game Engine Error: Slot with index 0 is already occupied!", exception.Message);
     }
 
@@ -279,22 +282,22 @@ public class PlayerTests
         var mockBoard = new Mock<IBoard>();
         mockBoard.Setup(b => b.IsFreeSlot(0)).Returns(true);
 
-        var player = Player.NewPlayer(
-            new Mock<IDeck>().Object,
-            new Mock<IHand>().Object,
-            mockBoard.Object,
-            new Mock<IDeck>().Object,
-            new ManaPoolStat(0, 0),
-            new AttackStat(0),
-            new LifeStat(0),
-            new List<IReaction>()
-        );
+        var mockPlayer = new Mock<IPlayer>();
+        mockPlayer.Setup(p => p.AllReactions()).Returns(new List<IReaction>());
+        mockPlayer.Setup(p => p.LifeValue).Returns(0);
+        mockPlayer.Setup(p => p.LifeBaseValue).Returns(0);
+        mockPlayer.Setup(p => p.AttackBaseValue).Returns(0);
+        mockPlayer.Setup(p => p.AttackValue).Returns(0);
+        mockPlayer.Setup(p => p.Deck).Returns(new Mock<Deck>().Object);
+        mockPlayer.Setup(p => p.Graveyard).Returns(new Mock<IDeck>().Object);
+        mockPlayer.Setup(p => p.Board).Returns(mockBoard.Object);
+
 
         // Act
-        player.CastMonster(mockGame.Object, mockMonsterCard.Object, 0);
+        mockPlayer.Object.CastMonster(mockGame.Object, mockMonsterCard.Object, 0);
 
         // Assert
-        mockGame.Verify(g => g.Execute(It.Is<CastMonsterAction>(a => a.Player == player && a.MonsterCard == mockMonsterCard.Object && a.BoardIndex == 0)), Times.Once);
+        mockGame.Verify(g => g.Execute(It.Is<CastMonsterAction>(a => a.Player == mockPlayer.Object && a.MonsterCard == mockMonsterCard.Object && a.BoardIndex == 0)), Times.Once);
     }
 
     [Fact]
@@ -374,31 +377,30 @@ public class PlayerTests
         var mockReaction = new Mock<IReaction>();
         mockReaction.Setup(r => r.Clone()).Returns(new Mock<IReaction>().Object); // Mock clone for reactions
 
-        var player = Player.NewPlayer(
-            mockDeck.Object,
-            mockHand.Object,
-            mockBoard.Object,
-            mockGraveyard.Object,
-            new ManaPoolStat(5,5),
-            new AttackStat(3),
-            new LifeStat(0),
-            new List<IReaction> { mockReaction.Object }
-        );
+        var mockPlayer = new Mock<IPlayer>();
+        mockPlayer.Setup(p => p.AllReactions()).Returns(new List<IReaction>());
+        mockPlayer.Setup(p => p.LifeValue).Returns(0);
+        mockPlayer.Setup(p => p.LifeBaseValue).Returns(0);
+        mockPlayer.Setup(p => p.AttackBaseValue).Returns(0);
+        mockPlayer.Setup(p => p.AttackValue).Returns(0);
+        mockPlayer.Setup(p => p.Deck).Returns(new Mock<Deck>().Object);
+        mockPlayer.Setup(p => p.Graveyard).Returns(new Mock<IDeck>().Object);
+        mockPlayer.Setup(p => p.Board).Returns(mockBoard.Object);
 
         // Act
-        var clone = (Player)player.Clone();
+        var clone = (Player)mockPlayer.Object.Clone();
 
         // Assert
-        Assert.NotSame(player, clone);
-        Assert.Equal(player.LifeValue, clone.LifeValue);
-        Assert.Equal(player.ManaValue, clone.ManaValue);
-        Assert.Equal(player.AttackValue, clone.AttackValue);
-        Assert.Equal(player.Reactions.Count, clone.Reactions.Count);
+        Assert.NotSame(mockPlayer.Object, clone);
+        Assert.Equal(mockPlayer.Object.LifeValue, clone.LifeValue);
+        Assert.Equal(mockPlayer.Object.ManaValue, clone.ManaValue);
+        Assert.Equal(mockPlayer.Object.AttackValue, clone.AttackValue);
+        Assert.Equal(mockPlayer.Object.Reactions.Count, clone.Reactions.Count);
         // Ensure collections are not the same instance, but contain the same type of objects
-        Assert.NotSame(player.Deck, clone.Deck);
-        Assert.NotSame(player.Hand, clone.Hand);
-        Assert.NotSame(player.Board, clone.Board);
-        Assert.NotSame(player.Graveyard, clone.Graveyard);
-        Assert.NotSame(player.Reactions[0], clone.Reactions[0]); // Check if reactions are cloned
+        Assert.NotSame(mockPlayer.Object.Deck, clone.Deck);
+        Assert.NotSame(mockPlayer.Object.Hand, clone.Hand);
+        Assert.NotSame(mockPlayer.Object.Board, clone.Board);
+        Assert.NotSame(mockPlayer.Object.Graveyard, clone.Graveyard);
+        Assert.NotSame(mockPlayer.Object.Reactions[0], clone.Reactions[0]); // Check if reactions are cloned
     }
 }
