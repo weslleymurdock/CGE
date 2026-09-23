@@ -8,13 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../../src/CardGameEngine/CardGameEngine.csproj" ReferenceOutputAssembly="false" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.*" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.*" PrivateAssets="all" />
     <PackageReference Include="MudBlazor" Version="9.*" />
   </ItemGroup>
 
-  <Target Name="EnsureCardGameEngineApiDocumentation" BeforeTargets="Build">
-    <Exec Command="dotnet build &quot;$(MSBuildProjectDirectory)/../../src/CardGameEngine/CardGameEngine.csproj&quot; -c $(Configuration) --nologo" />
+  <Target Name="ValidateCardGameEngineApiDocumentation" BeforeTargets="Build">
     <Error Condition="!Exists('$(MSBuildProjectDirectory)/wwwroot/api/CardGameEngine.xml')" Text="CardGameEngine API XML documentation was not generated." />
   </Target>
 
