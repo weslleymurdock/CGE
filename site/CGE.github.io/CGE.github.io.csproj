@@ -14,7 +14,8 @@
     <PackageReference Include="MudBlazor" Version="9.*" />
   </ItemGroup>
 
-  <Target Name="ValidateCardGameEngineApiDocumentation" BeforeTargets="Build">
+  <Target Name="GenerateCardGameEngineApiDocumentation" BeforeTargets="Build">
+    <Exec Command="dotnet build &quot;$(MSBuildProjectDirectory)/../../src/CardGameEngine/CardGameEngine.csproj&quot; -c $(Configuration) --nologo" />
     <Error Condition="!Exists('$(MSBuildProjectDirectory)/wwwroot/api/CardGameEngine.xml')" Text="CardGameEngine API XML documentation was not generated." />
   </Target>
 
