@@ -1,0 +1,241 @@
+@page "/api"
+@inject HttpClient Http
+
+<PageTitle>CardGameEngine — API Reference</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="py-8">
+    <MudStack Spacing="5">
+        <MudPaper Elevation="0" Class="pa-8 hero">
+            <MudText Typo="Typo.h2">API reference</MudText>
+            <MudText Typo="Typo.h6" Class="mt-3">
+                This reference is generated from the current CardGameEngine assembly during the build.
+                The site does not reference the unpublished NuGet package.
+            </MudText>
+        </MudPaper>
+
+        @if (_loading)
+        {
+            <MudProgressLinear Indeterminate="true" />
+        }
+        else if (_error is not null)
+        {
+            <MudAlert Severity="Severity.Error">
+                @_error
+            </MudAlert>
+        }
+        else if (_document is not null)
+        {
+            <MudPaper Class="pa-5">
+                <MudStack Row="true" Wrap="Wrap.Wrap" Spacing="2">
+                    <MudChip Color="Color.Primary" Variant="Variant.Outlined">
+                        NuGet version: @_version
+                    </MudChip>
+                    <MudChip Variant="Variant.Outlined">
+                        Types: @_types.Count
+                    </MudChip>
+                    <MudChip Variant="Variant.Outlined">
+                        Members: @_members.Count
+                    </MudChip>
+                    <MudChip Variant="Variant.Outlined">
+                        Generated: @_generatedAt
+                    </MudChip>
+                </MudStack>
+            </MudPaper>
+
+            <MudTextField @bind-Value="_filter"
+                          Label="Filter API"
+                          Placeholder="Type, member or signature"
+                          Variant="Variant.Outlined"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          Clearable="true" />
+
+            @foreach (var group in FilteredGroups)
+            {
+                <MudPaper Class="pa-5">
+                    <MudText Typo="Typo.h5">@group.Name</MudText>
+
+                    @if (group.Type is not null)
+                    {
+                        <MudText Class="mt-2 mb-4">@group.Type.Signature</MudText>
+                    }
+
+                    <MudStack Spacing="2">
+                        @foreach (var member in group.Members)
+                        {
+                            <MudExpansionPanel Text="@member.DisplayName">
+                                <MudStack Spacing="1">
+                                    <MudText Typo="Typo.body2">@member.Signature</MudText>
+                                    <MudText Typo="Typo.body2">@member.Summary</MudText>
+                                    <MudChip Size="Size.Small" Variant="Variant.Outlined">
+                                        @member.Accessibility @member.Kind
+                                    </MudChip>
+
+                                    @foreach (var parameter in member.Parameters)
+                                    {
+                                        <MudText Typo="Typo.caption">
+                                            @parameter.Name — @parameter.Description
+                                        </MudText>
+                                    }
+
+                                    @if (!string.IsNullOrWhiteSpace(member.Returns))
+                                    {
+                                        <MudText Typo="Typo.caption">
+                                            Returns: @member.Returns
+                                        </MudText>
+                                    }
+                                </MudStack>
+                            </MudExpansionPanel>
+                        }
+                    </MudStack>
+                </MudPaper>
+            }
+        }
+    </MudStack>
+</MudContainer>
+
+@code {
+    private XDocument? _document;
+    private List<ApiMember> _members = [];
+    private List<ApiTypeGroup> _types = [];
+    private string? _version;
+    private string? _generatedAt;
+    private string _filter = string.Empty;
+    private bool _loading = true;
+    private string? _error;
+
+    private IEnumerable<ApiTypeGroup> FilteredGroups =>
+        _types
+            .Select(group => new ApiTypeGroup(
+                group.Name,
+                group.Type,
+                group.Members
+                    .Where(MatchesFilter)
+                    .ToList()))
+            .Where(group => group.Type is not null && MatchesFilter(group.Type) || group.Members.Count > 0);
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var xml = await Http.GetStringAsync("api/CardGameEngine.xml");
+            _document = XDocument.Parse(xml);
+
+            _version = _document.Root?.Element("version")?.Value ?? "unknown";
+            _generatedAt = _document.Root?.Element("generatedAtUtc")?.Value ?? "unknown";
+
+            var elements = _document.Root?
+                .Element("members")?
+                .Elements("member")
+                .ToList() ?? [];
+
+            _members = elements.Select(ParseMember).ToList();
+
+            var typeMembers = _members
+                .Where(x => x.Kind == "type")
+                .ToDictionary(x => x.Name, StringComparer.Ordinal);
+
+            _types = _members
+                .Where(x => x.Kind != "type")
+                .GroupBy(x => DeclaringTypeName(x.Name), StringComparer.Ordinal)
+                .Select(group =>
+                {
+                    typeMembers.TryGetValue(group.Key, out var type);
+                    return new ApiTypeGroup(
+                        group.Key,
+                        type,
+                        group.OrderBy(x => x.Kind, StringComparer.Ordinal)
+                             .ThenBy(x => x.DisplayName, StringComparer.Ordinal)
+                             .ToList());
+                })
+                .OrderBy(x => x.Name, StringComparer.Ordinal)
+                .ToList();
+        }
+        catch (Exception ex)
+        {
+            _error = $"Unable to load the generated API documentation: {ex.Message}";
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private bool MatchesFilter(ApiMember member)
+    {
+        if (string.IsNullOrWhiteSpace(_filter))
+            return true;
+
+        return member.Name.Contains(_filter, StringComparison.OrdinalIgnoreCase)
+            || member.DisplayName.Contains(_filter, StringComparison.OrdinalIgnoreCase)
+            || member.Signature.Contains(_filter, StringComparison.OrdinalIgnoreCase)
+            || member.Summary.Contains(_filter, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string DeclaringTypeName(string memberName)
+    {
+        var value = memberName.Length > 2 ? memberName[2..] : memberName;
+        var hash = value.IndexOf('#');
+        if (hash >= 0)
+            value = value[..hash];
+
+        var lastDot = value.LastIndexOf('.');
+        return lastDot > 0 ? value[..lastDot] : value;
+    }
+
+    private static ApiMember ParseMember(XElement element)
+    {
+        var name = element.Attribute("name")?.Value ?? "unknown";
+        var summary = element.Element("summary")?.Value.Trim() ?? string.Empty;
+        var kind = element.Element("kind")?.Value ?? "member";
+        var accessibility = element.Element("accessibility")?.Value ?? "unknown";
+        var signature = element.Element("signature")?.Value ?? name;
+        var displayName = kind == "type"
+            ? name.StartsWith("T:", StringComparison.Ordinal) ? name[2..] : name
+            : ExtractDisplayName(name);
+
+        var parameters = element.Elements("param")
+            .Select(parameter => new ApiParameter(
+                parameter.Attribute("name")?.Value ?? "parameter",
+                parameter.Value.Trim()))
+            .ToList();
+
+        return new ApiMember(
+            name,
+            displayName,
+            kind,
+            accessibility,
+            signature,
+            summary,
+            element.Element("returns")?.Value.Trim(),
+            parameters);
+    }
+
+    private static string ExtractDisplayName(string name)
+    {
+        var value = name.Length > 2 ? name[2..] : name;
+        var hash = value.IndexOf('#');
+        if (hash >= 0)
+            value = value[..hash];
+
+        var lastDot = value.LastIndexOf('.');
+        return lastDot >= 0 ? value[(lastDot + 1)..] : value;
+    }
+
+    private sealed record ApiMember(
+        string Name,
+        string DisplayName,
+        string Kind,
+        string Accessibility,
+        string Signature,
+        string Summary,
+        string? Returns,
+        IReadOnlyList<ApiParameter> Parameters);
+
+    private sealed record ApiParameter(string Name, string Description);
+
+    private sealed record ApiTypeGroup(
+        string Name,
+        ApiMember? Type,
+        IReadOnlyList<ApiMember> Members);
+}
