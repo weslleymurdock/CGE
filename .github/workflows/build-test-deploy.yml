@@ -10,8 +10,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Continuous Integration
+  build_test:
+    name: Continuous Integration | Testing
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,4 +26,35 @@ jobs:
         run: dotnet build CGE.slnx -c Release
 
       - name: Test
-        run: dotnet test CGE.slnx -c Release --no-build
+        working-directory: ${{ github.workspace }}/tests/CardGameEngine.Tests/
+        run: dotnet test -c Release --no-build
+
+  deploy:
+    name: Continous Delivery - Docs 
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout 
+      uses: actions/checkout@v7
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: '10.0.x' 
+
+    - name: Publish
+      working-directory: ${{ github.workspace }}/src/GCE.github.io/
+      run: dotnet publish ./GCE.github.io.csproj -c Release -o ${{ github.workspace }}/release /p:BlazorEnableCompression=false
+
+    - name: Setup base path
+      run: |
+        sed -i 's/<base href="\/" \/>/<base href="\/CGE\/" \/>/g' ${{ github.workspace }}/release/wwwroot/index.html
+        touch ${{ github.workspace }}/release/wwwroot/.nojekyll
+        
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: ${{ github.workspace }}/release/wwwroot 
+        branch: gh-pages 
+        clean: true 
+
+    
