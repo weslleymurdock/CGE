@@ -10,10 +10,10 @@
 
     <MudStepper Vertical="true">
         <MudStep Title="Install CardGameEngine">
-            <MudCodeBlock Code="dotnet add package CardGameEngine --version 1.0.0" Language="bash" />
+            <code>dotnet add package CardGameEngine --version 1.0.0</code>
         </MudStep>
         <MudStep Title="Create players and game">
-            <MudCodeBlock Code="var game = new Game(new List&lt;IPlayer&gt;&#10;{ new Player(), new Player() });&#10;game.StartGame(initialHandSize: 3, initialPlayerLife: 20);" Language="csharp" />
+            <code>var game = new Game(new List&lt;IPlayer&gt;&#10;{ new Player(), new Player() });&#10;game.StartGame(initialHandSize: 3, initialPlayerLife: 20);</code>
         </MudStep>
         <MudStep Title="Build your deck">
             <MudText>Populate each player's Deck with your game-specific cards.</MudText>
@@ -34,7 +34,7 @@
             <MudText>React to actions and events to implement automatic game rules.</MudText>
         </MudStep>
         <MudStep Title="Run the game">
-            <MudCodeBlock Code="game.NextTurn();&#10;player.CastMonster(game, monster, 0);&#10;player.CastSpell(game, spell);" Language="csharp" />
+            <code>game.NextTurn();&#10;player.CastMonster(game, monster, 0);&#10;player.CastSpell(game, spell);</code>
         </MudStep>
         <MudStep Title="Validate and test">
             <MudText>Run the included console demo and add regression tests for your own rules.</MudText>
