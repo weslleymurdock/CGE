@@ -2,6 +2,9 @@
   <Folder Name="/examples/">
     <Project Path="examples/CardGameEngine.Demo/CardGameEngine.Demo.csproj" />
   </Folder>
+  <Folder Name="/site/">
+    <Project Path="site/CGE.github.io/CGE.github.io.csproj" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/CardGameEngine/CardGameEngine.csproj" />
   </Folder>
