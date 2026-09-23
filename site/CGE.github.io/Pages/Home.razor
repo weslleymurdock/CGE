@@ -83,3 +83,17 @@ game.NextTurn();</code></pre>
         </MudList>
     </MudStack>
 </MudContainer>
+
+@code {
+    private static readonly IReadOnlyList<Concept> Concepts =
+    [
+        new("Game state", "Players, decks, hands, boards, graveyards and the current turn."),
+        new("Action pipeline", "Validated state transitions through executable actions."),
+        new("Cards & components", "Compose monsters and spells from reusable card components."),
+        new("Events", "Lifecycle notifications for turns, cards and other game events."),
+        new("Reactions", "Turn events and actions into additional rule-driven actions."),
+        new("Turn lifecycle", "Start and end turns while keeping game rules in the pipeline.")
+    ];
+
+    private sealed record Concept(string Title, string Description);
+}
