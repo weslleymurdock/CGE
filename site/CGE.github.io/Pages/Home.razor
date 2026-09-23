@@ -33,12 +33,18 @@
         <MudPaper Class="pa-5">
             <MudText Typo="Typo.h6">1. Create your application</MudText>
             <MudText>Use a normal .NET 10 console, desktop, mobile or server application.</MudText>
-            <MudCodeBlock Code="dotnet new console -n MyCardGame&#10;cd MyCardGame&#10;dotnet add package CardGameEngine --version 1.0.0" Language="bash" />
+            <pre><code>dotnet new console -n MyCardGame
+cd MyCardGame
+dotnet add package CardGameEngine --version 1.0.0</code></pre>
         </MudPaper>
 
         <MudPaper Class="pa-5">
             <MudText Typo="Typo.h6">2. Create the game</MudText>
-            <MudCodeBlock Code="var player = new Player();&#10;var opponent = new Player();&#10;&#10;var game = new Game(new List&lt;IPlayer&gt; { player, opponent });&#10;game.StartGame(initialHandSize: 3, initialPlayerLife: 20);" Language="csharp" />
+            <pre><code>var player = new Player();
+var opponent = new Player();
+
+var game = new Game(new List&lt;IPlayer&gt; { player, opponent });
+game.StartGame(initialHandSize: 3, initialPlayerLife: 20);</code></pre>
         </MudPaper>
 
         <MudPaper Class="pa-5">
@@ -55,7 +61,8 @@
                 Use Game.Execute(...) for state transitions. IAction.IsExecutable(...)
                 protects the action against a game state that changed before execution.
             </MudText>
-            <MudCodeBlock Code="game.Execute(new DrawCardAction(player));&#10;game.NextTurn();" Language="csharp" />
+            <pre><code>game.Execute(new DrawCardAction(player));
+game.NextTurn();</code></pre>
         </MudPaper>
 
         <MudPaper Class="pa-5">
