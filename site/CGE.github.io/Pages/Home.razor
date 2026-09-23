@@ -7,16 +7,17 @@
         <MudPaper Elevation="0" Class="pa-8 hero">
             <MudText Typo="Typo.h2">Build your card game in C#.</MudText>
             <MudText Typo="Typo.h6" Class="mt-3">
-                CardGameEngine provides the game state, action pipeline, events, reactions,
-                cards, components and turn lifecycle. You provide the rules and cards.
+                CardGameEngine provides the game state, action pipeline, cards, components,
+                events, reactions and turn lifecycle. Your application supplies the game-specific cards and rules.
             </MudText>
             <MudStack Row="true" Spacing="2" Class="mt-6">
                 <MudButton Href="#quickstart" Variant="Variant.Filled" Color="Color.Primary">Start building</MudButton>
+                <MudButton Href="/guide" Variant="Variant.Outlined">Step-by-step guide</MudButton>
                 <MudButton Href="https://github.com/weslleymurdock/CGE" Target="_blank" Variant="Variant.Outlined">GitHub</MudButton>
             </MudStack>
         </MudPaper>
 
-        <MudText Typo="Typo.h4">What you get</MudText>
+        <MudText Typo="Typo.h4">What the implementation provides</MudText>
         <MudGrid>
             @foreach (var item in Concepts)
             {
@@ -30,56 +31,81 @@
         </MudGrid>
 
         <MudText Typo="Typo.h4" id="quickstart">Quick start</MudText>
+
         <MudPaper Class="pa-5">
-            <MudText Typo="Typo.h6">1. Create your application</MudText>
-            <MudText>Use a normal .NET 10 console, desktop, mobile or server application.</MudText>
+            <MudText Typo="Typo.h6">1. Install the package</MudText>
+            <MudText Class="mb-3">
+                The documentation targets the published CardGameEngine 1.0.0 package.
+            </MudText>
             <pre><code>dotnet new console -n MyCardGame
 cd MyCardGame
 dotnet add package CardGameEngine --version 1.0.0</code></pre>
         </MudPaper>
 
         <MudPaper Class="pa-5">
-            <MudText Typo="Typo.h6">2. Create the game</MudText>
+            <MudText Typo="Typo.h6">2. Create players and the game</MudText>
+            <MudText Class="mb-3">
+                The game receives its players and exposes the active player and game state.
+            </MudText>
             <pre><code>var player = new Player();
 var opponent = new Player();
 
-var game = new Game(new List&lt;IPlayer&gt; { player, opponent });
-game.StartGame(initialHandSize: 3, initialPlayerLife: 20);</code></pre>
+var game = new Game(new List&lt;IPlayer&gt;
+{
+    player,
+    opponent
+});
+
+game.ActivePlayer = player;</code></pre>
         </MudPaper>
 
         <MudPaper Class="pa-5">
-            <MudText Typo="Typo.h6">3. Implement cards</MudText>
-            <MudText>
-                Derive game-specific cards from MonsterCard, TargetlessSpellCard or
-                TargetfulSpellCard. Put reusable behavior in card components.
+            <MudText Typo="Typo.h6">3. Start with real cards</MudText>
+            <MudText Class="mb-3">
+                Add cards to a Deck with Push, then call StartGame to initialize life, mana and the initial hands.
             </MudText>
+            <pre><code>var monster = new MonsterCard(
+    2, 5, 6, player, "Knight");
+
+player.Deck.Push(monster);
+
+game.StartGame(
+    initialHandSize: 1,
+    initialPlayerLife: 20);</code></pre>
         </MudPaper>
 
         <MudPaper Class="pa-5">
-            <MudText Typo="Typo.h6">4. Change state through actions</MudText>
-            <MudText>
-                Use Game.Execute(...) for state transitions. IAction.IsExecutable(...)
-                protects the action against a game state that changed before execution.
+            <MudText Typo="Typo.h6">4. Execute state transitions</MudText>
+            <MudText Class="mb-3">
+                Actions are validated against the current game state immediately before execution.
             </MudText>
-            <pre><code>game.Execute(new DrawCardAction(player));
-game.NextTurn();</code></pre>
+            <pre><code>game.Execute(
+    new ModifyManaStatAction(
+        player,
+        4,
+        4));
+
+game.Execute(new DrawCardAction(player));</code></pre>
         </MudPaper>
 
         <MudPaper Class="pa-5">
-            <MudText Typo="Typo.h6">5. Add rules with events and reactions</MudText>
+            <MudText Typo="Typo.h6">5. Add cards, events and reactions</MudText>
             <MudText>
-                Events mark lifecycle points such as turn start/end and card play.
-                Reactions translate those events/actions into additional actions.
+                Monster cards, targetless spells and targetful spells use concrete components.
+                Events mark lifecycle points and reactions can execute additional actions.
             </MudText>
         </MudPaper>
 
-        <MudText Typo="Typo.h4">Next steps</MudText>
+        <MudAlert Severity="Severity.Info">
+            For the complete API walkthrough, including valid-target calculation, combat, cloning and
+            game termination, open the <a href="/guide">Step-by-step guide</a>.
+        </MudAlert>
+
+        <MudText Typo="Typo.h4">Repository reference</MudText>
         <MudList T="string">
-            <MudListItem>Read the complete README in the repository.</MudListItem>
-            <MudListItem>Run examples/CardGameEngine.Demo to see the complete pipeline.</MudListItem>
-            <MudListItem>Build a custom MonsterCard and spell components.</MudListItem>
-            <MudListItem>Add your game's reactions and turn rules.</MudListItem>
-            <MudListItem>Use grouped actions when several state transitions must happen before reactions.</MudListItem>
+            <MudListItem>README — API and behavior documented from the current implementation.</MudListItem>
+            <MudListItem>examples/CardGameEngine.Demo — executable end-to-end example.</MudListItem>
+            <MudListItem>tests/CardGameEngine.Tests — regression coverage for action invariants.</MudListItem>
         </MudList>
     </MudStack>
 </MudContainer>
@@ -87,12 +113,12 @@ game.NextTurn();</code></pre>
 @code {
     private static readonly IReadOnlyList<Concept> Concepts =
     [
-        new("Game state", "Players, decks, hands, boards, graveyards and the current turn."),
-        new("Action pipeline", "Validated state transitions through executable actions."),
-        new("Cards & components", "Compose monsters and spells from reusable card components."),
-        new("Events", "Lifecycle notifications for turns, cards and other game events."),
-        new("Reactions", "Turn events and actions into additional rule-driven actions."),
-        new("Turn lifecycle", "Start and end turns while keeping game rules in the pipeline.")
+        new("Game state", "Game, players, active player, decks, hands, boards and graveyards."),
+        new("Action pipeline", "IAction validation and state transitions through Game.Execute(...)."),
+        new("Cards & components", "MonsterCard plus targetless and targetful spell cards and components."),
+        new("Events", "Lifecycle actions such as StartOfTurnEvent, EndOfTurnEvent and card events."),
+        new("Reactions", "IReaction implementations that observe IActionEvent and can execute actions."),
+        new("Turn lifecycle", "StartGame and NextTurn with the built-in turn reactions.")
     ];
 
     private sealed record Concept(string Title, string Description);
