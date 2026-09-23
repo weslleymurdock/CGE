@@ -6,38 +6,225 @@
     <MudText Typo="Typo.h3">Step-by-step guide</MudText>
     <MudText Class="mt-2 mb-6">
         Follow these steps to move from an empty .NET project to a playable card-game prototype.
+        Each step explains the purpose of the API and shows a minimal example you can adapt to your game.
     </MudText>
 
     <MudStepper Vertical="true">
-        <MudStep Title="Install CardGameEngine">
-            <code>dotnet add package CardGameEngine --version 1.0.0</code>
+        <MudStep Title="1. Install CardGameEngine">
+            <MudText Typo="Typo.h6">Objective</MudText>
+            <MudText Class="mb-4">
+                Add the published framework package to your .NET 10 application. CGE is intentionally
+                independent from the application UI, so the same package can be used from console,
+                desktop, mobile or server applications.
+            </MudText>
+            <pre><code>dotnet new console -n MyCardGame
+cd MyCardGame
+dotnet add package CardGameEngine --version 1.0.0</code></pre>
         </MudStep>
-        <MudStep Title="Create players and game">
-            <code>var game = new Game(new List&lt;IPlayer&gt;&#10;{ new Player(), new Player() });&#10;game.StartGame(initialHandSize: 3, initialPlayerLife: 20);</code>
+
+        <MudStep Title="2. Create players and game">
+            <MudText Typo="Typo.h6">Objective</MudText>
+            <MudText Class="mb-4">
+                Create the participants and give the engine ownership of the game state. A Game contains
+                the players, active player and the state required by the action pipeline.
+            </MudText>
+            <pre><code>using CardGameEngine;
+
+var player = new Player();
+var opponent = new Player();
+
+var game = new Game(new List&lt;IPlayer&gt;
+{
+    player,
+    opponent
+});
+
+game.StartGame(
+    initialHandSize: 3,
+    initialPlayerLife: 20);</code></pre>
         </MudStep>
-        <MudStep Title="Build your deck">
-            <MudText>Populate each player's Deck with your game-specific cards.</MudText>
+
+        <MudStep Title="3. Build your deck">
+            <MudText Typo="Typo.h6">Objective</MudText>
+            <MudText Class="mb-4">
+                Populate each player's deck with the cards that belong to your game. The engine manages
+                the deck as part of the player state; your application decides which cards exist and how
+                a deck is assembled.
+            </MudText>
+            <pre><code>var knight = new KnightCard();
+var fireball = new FireballCard();
+
+player.Deck.Add(knight);
+player.Deck.Add(fireball);
+
+// Add the cards required by your game rules before starting the match.</code></pre>
+            <MudAlert Severity="Severity.Info" Class="mt-4">
+                Keep deck construction in your game/application layer. CardGameEngine supplies the
+                containers and execution rules, not a fixed deck-building strategy.
+            </MudAlert>
         </MudStep>
-        <MudStep Title="Create monster cards">
-            <MudText>Use MonsterCard for board creatures with attack and life.</MudText>
+
+        <MudStep Title="4. Create monster cards">
+            <MudText Typo="Typo.h6">Objective</MudText>
+            <MudText Class="mb-4">
+                Define creatures that occupy board slots and can participate in combat. Derive your
+                game-specific card from <code>MonsterCard</code> and provide the statistics and behavior
+                required by your game.
+            </MudText>
+            <pre><code>public sealed class KnightCard : MonsterCard
+{
+    // Configure the card's name, mana cost, attack and life
+    // according to the MonsterCard API used by your game.
+}
+
+// A monster is played through the game/player action API:
+player.CastMonster(game, knight, boardIndex: 0);</code></pre>
+            <MudAlert Severity="Severity.Info" Class="mt-4">
+                The cast action validates that the player is active, owns the card, can summon it and
+                has a free board slot before changing the state.
+            </MudAlert>
         </MudStep>
-        <MudStep Title="Create spells">
-            <MudText>Use TargetlessSpellCard for effects without a target and TargetfulSpellCard when a target must be selected.</MudText>
+
+        <MudStep Title="5. Create spells">
+            <MudText Typo="Typo.h6">Objective</MudText>
+            <MudText Class="mb-4">
+                Choose between a spell with no selected target and one that requires a target.
+                Use <code>TargetlessSpellCard</code> for effects such as healing yourself, and
+                <code>TargetfulSpellCard</code> for effects such as damaging a selected character.
+            </MudText>
+            <pre><code>// No target:
+public sealed class HealCard : TargetlessSpellCard
+{
+    // Compose the card with a TargetlessSpellCardComponent.
+}
+
+// With a target:
+public sealed class FireballCard : TargetfulSpellCard
+{
+    // Compose the card with a TargetfulSpellCardComponent.
+}</code></pre>
         </MudStep>
-        <MudStep Title="Implement components">
-            <MudText>Implement spell components to describe their cost, effect and valid targets.</MudText>
+
+        <MudStep Title="6. Implement components">
+            <MudText Typo="Typo.h6">Objective</MudText>
+            <MudText Class="mb-4">
+                Put reusable card effects into components instead of coupling the effect directly to the
+                game loop. Components can execute normal engine actions, while targetful components also
+                calculate valid targets from the current <code>IGameState</code>.
+            </MudText>
+            <pre><code>public sealed class HealComponent : TargetlessSpellCardComponent
+{
+    // When the spell resolves:
+    game.Execute(
+        new ModifyLifeStatAction(
+            game.ActivePlayer,
+            3));
+}
+
+public sealed class FireballComponent : TargetfulSpellCardComponent
+{
+    public override HashSet&lt;ICharacter&gt; GetPotentialTargets(
+        IGameState gameState)
+    {
+        var targets = new HashSet&lt;ICharacter&gt;();
+
+        foreach (var player in gameState.NonActivePlayers)
+        {
+            foreach (var character in player.Characters)
+            {
+                targets.Add(character);
+            }
+        }
+
+        return targets;
+    }
+}</code></pre>
+            <MudAlert Severity="Severity.Info" Class="mt-4">
+                The target set should be calculated from the current game state. Do not keep a stale list
+                of targets that may no longer be valid when the action executes.
+            </MudAlert>
         </MudStep>
-        <MudStep Title="Use actions">
-            <MudText>Execute all state transitions through Game.Execute(...).</MudText>
+
+        <MudStep Title="7. Use actions">
+            <MudText Typo="Typo.h6">Objective</MudText>
+            <MudText Class="mb-4">
+                Treat actions as the units of state transition. Execute them through
+                <code>Game.Execute(...)</code> so validation, events and reactions remain part of the
+                same pipeline.
+            </MudText>
+            <pre><code>// Draw a card:
+game.Execute(new DrawCardAction(player));
+
+// Move to the next turn:
+game.NextTurn();</code></pre>
+            <MudAlert Severity="Severity.Warning" Class="mt-4">
+                Avoid directly changing engine-owned collections or statistics. Put preconditions in
+                <code>IsExecutable(IGameState)</code> and let the engine evaluate them immediately before execution.
+            </MudAlert>
         </MudStep>
-        <MudStep Title="Add reactions">
-            <MudText>React to actions and events to implement automatic game rules.</MudText>
+
+        <MudStep Title="8. Add reactions">
+            <MudText Typo="Typo.h6">Objective</MudText>
+            <MudText Class="mb-4">
+                Reactions implement automatic rules triggered by actions or lifecycle events. A reaction
+                can return additional actions, which are processed through the same execution pipeline.
+            </MudText>
+            <pre><code>public sealed class DrawReaction : IReaction
+{
+    public IEnumerable&lt;IAction&gt; React(
+        IAction action,
+        IGameState gameState)
+    {
+        if (action is not DrawCardAction)
+            return [];
+
+        // Return additional actions required by your rule.
+        return [];
+    }
+}</code></pre>
+            <MudAlert Severity="Severity.Info" Class="mt-4">
+                Use events to expose meaningful lifecycle points, and reactions to attach automatic rules
+                to those points without hard-coding every rule into the main game loop.
+            </MudAlert>
         </MudStep>
-        <MudStep Title="Run the game">
-            <code>game.NextTurn();&#10;player.CastMonster(game, monster, 0);&#10;player.CastSpell(game, spell);</code>
+
+        <MudStep Title="9. Run the game">
+            <MudText Typo="Typo.h6">Objective</MudText>
+            <MudText Class="mb-4">
+                Start the turn lifecycle and perform legal actions. CGE validates the action against the
+                current state, then processes the resulting events and reactions.
+            </MudText>
+            <pre><code>game.NextTurn();
+
+player.CastMonster(
+    game,
+    knight,
+    boardIndex: 0);
+
+player.CastSpell(
+    game,
+    fireball);</code></pre>
+            <MudAlert Severity="Severity.Info" Class="mt-4">
+                Combat follows the same principle: the attacker must belong to the active player's board,
+                be ready to attack and have the selected target among its valid targets.
+            </MudAlert>
         </MudStep>
-        <MudStep Title="Validate and test">
-            <MudText>Run the included console demo and add regression tests for your own rules.</MudText>
+
+        <MudStep Title="10. Validate and test">
+            <MudText Typo="Typo.h6">Objective</MudText>
+            <MudText Class="mb-4">
+                Verify your rules against both normal and invalid game states. The action pipeline is
+                designed to make these invariants explicit and testable.
+            </MudText>
+            <pre><code>dotnet build CGE.slnx -c Release
+dotnet test CGE.slnx -c Release
+
+dotnet run --project examples/CardGameEngine.Demo/CardGameEngine.Demo.csproj</code></pre>
+            <MudText Class="mt-4">
+                Add regression tests for your own rules, especially cases where a player is not active,
+                a card is not in the hand, a board slot is occupied, a hand is full or a target is no
+                longer valid.
+            </MudText>
         </MudStep>
     </MudStepper>
 </MudContainer>
