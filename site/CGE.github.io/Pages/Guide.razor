@@ -1,0 +1,43 @@
+@page "/guide"
+
+<PageTitle>CardGameEngine — Step-by-step guide</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="py-8">
+    <MudText Typo="Typo.h3">Step-by-step guide</MudText>
+    <MudText Class="mt-2 mb-6">
+        Follow these steps to move from an empty .NET project to a playable card-game prototype.
+    </MudText>
+
+    <MudStepper Vertical="true">
+        <MudStep Title="Install CardGameEngine">
+            <MudCodeBlock Code="dotnet add package CardGameEngine --version 1.0.0" Language="bash" />
+        </MudStep>
+        <MudStep Title="Create players and game">
+            <MudCodeBlock Code="var game = new Game(new List&lt;IPlayer&gt;&#10;{ new Player(), new Player() });&#10;game.StartGame(initialHandSize: 3, initialPlayerLife: 20);" Language="csharp" />
+        </MudStep>
+        <MudStep Title="Build your deck">
+            <MudText>Populate each player's Deck with your game-specific cards.</MudText>
+        </MudStep>
+        <MudStep Title="Create monster cards">
+            <MudText>Use MonsterCard for board creatures with attack and life.</MudText>
+        </MudStep>
+        <MudStep Title="Create spells">
+            <MudText>Use TargetlessSpellCard for effects without a target and TargetfulSpellCard when a target must be selected.</MudText>
+        </MudStep>
+        <MudStep Title="Implement components">
+            <MudText>Implement spell components to describe their cost, effect and valid targets.</MudText>
+        </MudStep>
+        <MudStep Title="Use actions">
+            <MudText>Execute all state transitions through Game.Execute(...).</MudText>
+        </MudStep>
+        <MudStep Title="Add reactions">
+            <MudText>React to actions and events to implement automatic game rules.</MudText>
+        </MudStep>
+        <MudStep Title="Run the game">
+            <MudCodeBlock Code="game.NextTurn();&#10;player.CastMonster(game, monster, 0);&#10;player.CastSpell(game, spell);" Language="csharp" />
+        </MudStep>
+        <MudStep Title="Validate and test">
+            <MudText>Run the included console demo and add regression tests for your own rules.</MudText>
+        </MudStep>
+    </MudStepper>
+</MudContainer>
