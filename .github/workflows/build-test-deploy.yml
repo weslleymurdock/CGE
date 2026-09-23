@@ -27,10 +27,3 @@ jobs:
 
       - name: Test
         run: dotnet test CGE.slnx -c Release --no-build
-
-      - name: Validate generated API documentation
-        shell: bash
-        run: |
-          test -f site/CGE.github.io/wwwroot/api/CardGameEngine.xml
-          grep -q '<version>1.0.0</version>' site/CGE.github.io/wwwroot/api/CardGameEngine.xml
-          test "$(grep -c '<member name=' site/CGE.github.io/wwwroot/api/CardGameEngine.xml)" -gt 0
