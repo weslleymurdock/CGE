@@ -7,21 +7,11 @@ This document describes the API that exists in the `fix/misc` branch and is inte
 ## Requirements
 
 - .NET 10 SDK
-- A .NET application that can reference the `CardGameEngine` NuGet package
+- A .NET application that references the CardGameEngine source project while the package is under development
 
-## Install the package
+The NuGet package is not published yet. The repository documentation and website therefore do not require a NuGet package reference.
 
-The repository is prepared to consume the published `CardGameEngine 1.0.0` package:
-
-```bash
-dotnet add package CardGameEngine --version 1.0.0
-```
-
-Or:
-
-```xml
-<PackageReference Include="CardGameEngine" Version="1.0.0" />
-```
+The website API reference is generated directly from the engine assembly during the build.
 
 ## The execution model
 
