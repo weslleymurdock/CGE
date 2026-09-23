@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 
 namespace CardGameEngine;
@@ -37,6 +37,9 @@ public class DrawCardAction : Action
 
     public override bool IsExecutable(IGameState gameState)
     {
-        return !Player.Deck.IsEmpty;
+        // Drawing is a composite action: every subsequent action must be
+        // executable before the card is removed from the deck.
+        return !Player.Deck.IsEmpty
+            && Player.Hand.Size < Player.Hand.MaxSize;
     }
 }
