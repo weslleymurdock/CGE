@@ -439,6 +439,12 @@ Run it with:
 dotnet run --project examples/CardGameEngine.Demo/CardGameEngine.Demo.csproj
 ```
 
+## API reference
+
+The website exposes a generated API reference at `/api`. The XML document is produced as part of the CardGameEngine project build and is written to `site/CGE.github.io/wwwroot/api/CardGameEngine.xml`.
+
+The generated document includes public and non-public types and declared members discovered from the built assembly. Its `version` element comes from the `PackageVersion` used by the engine project, so the website displays the package version without referencing an unpublished NuGet package.
+
 ## Tests
 
 The test project contains regression coverage for action invariants, including:
