@@ -135,19 +135,15 @@
                 .Where(x => x.Kind == "type")
                 .ToDictionary(x => x.Name, StringComparer.Ordinal);
 
-            _types = _members
-                .Where(x => x.Kind != "type")
-                .GroupBy(x => DeclaringTypeName(x.Name), StringComparer.Ordinal)
-                .Select(group =>
-                {
-                    typeMembers.TryGetValue(group.Key, out var type);
-                    return new ApiTypeGroup(
-                        group.Key,
-                        type,
-                        group.OrderBy(x => x.Kind, StringComparer.Ordinal)
-                             .ThenBy(x => x.DisplayName, StringComparer.Ordinal)
-                             .ToList());
-                })
+            _types = typeMembers
+                .Select(pair => new ApiTypeGroup(
+                    pair.Key,
+                    pair.Value,
+                    _members
+                        .Where(x => x.Kind != "type" && DeclaringTypeName(x.Name) == pair.Key)
+                        .OrderBy(x => x.Kind, StringComparer.Ordinal)
+                        .ThenBy(x => x.DisplayName, StringComparer.Ordinal)
+                        .ToList()))
                 .OrderBy(x => x.Name, StringComparer.Ordinal)
                 .ToList();
         }
