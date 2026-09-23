@@ -4,7 +4,7 @@ using System.Xml.Linq;
 if (args.Length != 3)
 {
     Console.Error.WriteLine("Usage: CardGameEngine.ApiDocGenerator <assembly> <xml-output> <package-version>");
-    return 1;
+    Environment.Exit(1);
 }
 
 var assemblyPath = Path.GetFullPath(args[0]);
@@ -54,7 +54,7 @@ foreach (var type in assembly.GetTypes().OrderBy(x => x.FullName, StringComparer
         AddMember(
             "M:" + TypeDocName(type) + ".ctor#" + constructor.MetadataToken,
             "constructor",
-            GetAccessibility(constructor),
+            GetMemberAccessibility(constructor),
             ".ctor",
             MethodSignature(constructor),
             constructor.GetParameters());
@@ -65,7 +65,7 @@ foreach (var type in assembly.GetTypes().OrderBy(x => x.FullName, StringComparer
         AddMember(
             "M:" + TypeDocName(type) + "." + method.Name + "#" + method.MetadataToken,
             "method",
-            GetAccessibility(method),
+            GetMemberAccessibility(method),
             method.Name,
             MethodSignature(method),
             method.GetParameters(),
@@ -77,7 +77,7 @@ foreach (var type in assembly.GetTypes().OrderBy(x => x.FullName, StringComparer
         AddMember(
             "P:" + TypeDocName(type) + "." + property.Name + "#" + property.MetadataToken,
             "property",
-            GetAccessibility(property),
+            GetPropertyAccessibility(property),
             property.Name,
             PropertySignature(property));
     }
@@ -87,7 +87,7 @@ foreach (var type in assembly.GetTypes().OrderBy(x => x.FullName, StringComparer
         AddMember(
             "F:" + TypeDocName(type) + "." + field.Name + "#" + field.MetadataToken,
             "field",
-            GetAccessibility(field),
+            GetFieldAccessibility(field),
             field.Name,
             FieldSignature(field));
     }
@@ -97,7 +97,7 @@ foreach (var type in assembly.GetTypes().OrderBy(x => x.FullName, StringComparer
         AddMember(
             "E:" + TypeDocName(type) + "." + @event.Name + "#" + @event.MetadataToken,
             "event",
-            GetAccessibility(@event),
+            GetEventAccessibility(@event),
             @event.Name,
             EventSignature(@event));
     }
@@ -181,7 +181,7 @@ static string GetAccessibility(Type type)
         : "private"
         : type.IsPublic ? "public" : "internal";
 
-static string GetAccessibility(MethodBase method)
+static string GetMemberAccessibility(MethodBase method)
     => method.IsPublic ? "public"
     : method.IsFamily ? "protected"
     : method.IsFamilyOrAssembly ? "protected internal"
@@ -189,12 +189,12 @@ static string GetAccessibility(MethodBase method)
     : method.IsAssembly ? "internal"
     : "private";
 
-static string GetAccessibility(PropertyInfo property)
-    => property.GetMethod is not null ? GetAccessibility(property.GetMethod)
-    : property.SetMethod is not null ? GetAccessibility(property.SetMethod)
+static string GetPropertyAccessibility(PropertyInfo property)
+    => property.GetMethod is not null ? GetMemberAccessibility(property.GetMethod)
+    : property.SetMethod is not null ? GetMemberAccessibility(property.SetMethod)
     : "private";
 
-static string GetAccessibility(FieldInfo field)
+static string GetFieldAccessibility(FieldInfo field)
     => field.IsPublic ? "public"
     : field.IsFamily ? "protected"
     : field.IsFamilyOrAssembly ? "protected internal"
@@ -202,9 +202,9 @@ static string GetAccessibility(FieldInfo field)
     : field.IsAssembly ? "internal"
     : "private";
 
-static string GetAccessibility(EventInfo @event)
-    => @event.AddMethod is not null ? GetAccessibility(@event.AddMethod)
-    : @event.RemoveMethod is not null ? GetAccessibility(@event.RemoveMethod)
+static string GetEventAccessibility(EventInfo @event)
+    => @event.AddMethod is not null ? GetMemberAccessibility(@event.AddMethod)
+    : @event.RemoveMethod is not null ? GetMemberAccessibility(@event.RemoveMethod)
     : "private";
 
 static string TypeKind(Type type)
