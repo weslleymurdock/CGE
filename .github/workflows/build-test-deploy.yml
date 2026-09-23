@@ -42,8 +42,8 @@ jobs:
         dotnet-version: '10.0.x' 
 
     - name: Publish
-      working-directory: ${{ github.workspace }}/src/GCE.github.io/
-      run: dotnet publish ./GCE.github.io.csproj -c Release -o ${{ github.workspace }}/release /p:BlazorEnableCompression=false
+      working-directory: ${{ github.workspace }}/src/CGE.github.io/
+      run: dotnet publish ./CGE.github.io.csproj -c Release -o ${{ github.workspace }}/release /p:BlazorEnableCompression=false
 
     - name: Setup base path
       run: |
