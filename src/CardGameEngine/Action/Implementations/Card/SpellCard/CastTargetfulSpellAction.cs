@@ -45,6 +45,6 @@ public class CastTargetfulSpellAction : CastSpellAction
             && Player.Hand.Contains(SpellCard)
             && Target != null
             && SpellCard.IsCastable(gameState)
-            && SpellCard.GetPotentialTargets(gameState).Contains(Target);
+            && ((ITargetfulSpellCard)SpellCard).GetPotentialTargets(gameState).Contains(Target);
     }
 }
