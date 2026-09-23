@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 
 namespace CardGameEngine;
@@ -41,6 +41,10 @@ public class CastTargetfulSpellAction : CastSpellAction
 
     public override bool IsExecutable(IGameState gameState)
     {
-        return SpellCard.IsCastable(gameState);
+        return Player == gameState.ActivePlayer
+            && Player.Hand.Contains(SpellCard)
+            && Target != null
+            && SpellCard.IsCastable(gameState)
+            && SpellCard.GetPotentialTargets(gameState).Contains(Target);
     }
 }
