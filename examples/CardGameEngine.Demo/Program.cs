@@ -75,7 +75,7 @@ internal static class Program
         Console.WriteLine("\n7. Clone the game state");
         var clone = (Game)game.Clone();
         Console.WriteLine($"Clone players: {clone.Players.Count}");
-        Console.WriteLine($"Clone active player: {PlayerName(clone.ActivePlayer)}");
+        Console.WriteLine($"Clone active player: {PlayerName(clone, clone.ActivePlayer)}");
 
         Console.WriteLine("\n8. End the game through an action");
         game.Execute(new ModifyLifeStatAction(opponent, -opponent.LifeValue));
@@ -96,8 +96,8 @@ internal static class Program
         Console.WriteLine($"All cards on board: {game.AllCardsOnTheBoard.Count}");
     }
 
-    private static string PlayerName(IPlayer player) =>
-        player == null ? "<none>" : ReferenceEquals(player, player) ? (player == null ? "<none>" : "player") : "player";
+    private static string PlayerName(Game game, IPlayer player) =>
+        player == null ? "<none>" : $"Player {game.Players.IndexOf(player) + 1}";
 }
 
 internal sealed class HealComponent : TargetlessSpellCardComponent
