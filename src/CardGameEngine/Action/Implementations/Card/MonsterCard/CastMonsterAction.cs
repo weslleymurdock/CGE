@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 
 namespace CardGameEngine;
@@ -44,7 +44,9 @@ public class CastMonsterAction : Action
 
     public override bool IsExecutable(IGameState gameState)
     {
-        return MonsterCard.IsSummonable(gameState)
+        return Player == gameState.ActivePlayer
+            && Player.Hand.Contains(MonsterCard)
+            && MonsterCard.IsSummonable(gameState)
             && Player.Board.IsFreeSlot(BoardIndex);
     }
 }
