@@ -1,158 +1,48 @@
 # CardGameEngine
 
-CardGameEngine (CGE) is a .NET 10 framework for building turn-based card games in C#.
+CardGameEngine (CGE) is a .NET 10 framework for implementing turn-based card games in C#.
 
-The framework provides the game state model, players, cards, decks, hands, boards, actions, events, reactions, statistics and the execution pipeline. A game-specific project supplies the rules and card effects.
-
-The repository contains the framework source, tests, a console demonstration and this documentation site.
+This document describes the API that exists in the `fix/misc` branch and is intended to be merged into `main`. Examples below use only types and members present in that implementation.
 
 ## Requirements
 
 - .NET 10 SDK
-- C# / .NET application capable of referencing NuGet packages
+- A .NET application that can reference the `CardGameEngine` NuGet package
 
-## Install
+## Install the package
 
-The framework is distributed as the NuGet package `CardGameEngine`.
-
-For the published 1.0.0 package:
+The repository is prepared to consume the published `CardGameEngine 1.0.0` package:
 
 ```bash
 dotnet add package CardGameEngine --version 1.0.0
 ```
 
-Or add the package reference manually:
+Or:
 
 ```xml
 <PackageReference Include="CardGameEngine" Version="1.0.0" />
 ```
 
-## Architecture
+## The execution model
 
-CGE separates the generic game engine from game-specific rules.
+CGE represents a game as a mutable `Game` state. State transitions are performed through `IAction` instances passed to `Game.Execute(...)`.
 
-A typical game project contains:
+An action has two important methods:
 
-```text
-MyCardGame/
-├── Cards/
-│   ├── KnightCard.cs
-│   ├── FireballCard.cs
-│   └── HealCard.cs
-├── Components/
-│   ├── FireballComponent.cs
-│   └── HealComponent.cs
-├── Reactions/
-│   └── ...
-└── Program.cs
+- `IsExecutable(IGameState)` — verifies that the action is still valid for the current state.
+- `Execute(IGame)` — performs the transition by issuing engine actions.
+
+The action queue checks `IsExecutable` immediately before execution. If an action is not executable, it is not executed and its action reactions are not triggered.
+
+```csharp
+game.Execute(new DrawCardAction(player));
 ```
 
-The engine owns the state and execution pipeline. Your application defines the actual cards and rules.
+Do not assume that directly changing an engine-owned collection is equivalent to executing an action. The built-in game operations use the action pipeline.
 
-## Core concepts
+## Game and players
 
-### Game
-
-`Game` is the mutable game state and the entry point for executing actions.
-
-It contains the players, active player and board state and provides operations such as:
-
-- starting a game;
-- changing turns;
-- executing actions;
-- cloning the game state.
-
-`IGameState` exposes the state needed by rules without granting unrestricted mutation.
-
-### Player
-
-`Player` represents a participant.
-
-A player owns:
-
-- `Deck` — cards available to draw;
-- `Hand` — cards currently held;
-- `Board` — cards currently in play;
-- `Graveyard` — cards that have left play.
-
-Players are also characters, so they have life and mana statistics.
-
-### Cards
-
-The main card categories are:
-
-- `MonsterCard` — a creature that occupies a board slot and can attack;
-- `TargetlessSpellCard` — a spell with no selected target;
-- `TargetfulSpellCard` — a spell that requires a valid target.
-
-Cards are assembled from components so that reusable rules can be shared between cards.
-
-### Components
-
-Components encapsulate card-specific behavior.
-
-For spells, derive from:
-
-- `TargetlessSpellCardComponent`
-- `TargetfulSpellCardComponent`
-
-A targetful component must expose the valid targets for the current `IGameState`.
-
-This allows the engine to validate an action before its effect is executed.
-
-### Statistics
-
-CGE provides reusable statistics such as:
-
-- mana;
-- mana cost;
-- life;
-- attack.
-
-Statistics expose a current value and a base value.
-
-### Actions
-
-An `IAction` is the unit of state transition.
-
-Game state should be changed through `Game.Execute(...)`, rather than by directly mutating collections or statistics.
-
-Every action has an `IsExecutable(IGameState)` check. The check runs immediately before execution because the game state may have changed since the action was created.
-
-If an action is no longer executable, it is discarded and its reactions are not triggered.
-
-### Events
-
-Events are actions used as markers in the game flow.
-
-Examples include start/end events for:
-
-- turns;
-- attacks;
-- drawing cards;
-- playing monster cards;
-- playing targetless spells;
-- playing targetful spells.
-
-Events allow reactions to observe meaningful points in the game lifecycle without implementing the state transition themselves.
-
-### Reactions
-
-`IReaction` allows cards and other reactive objects to respond to executed actions.
-
-A reaction can return additional actions. Those actions are processed through the same execution pipeline, allowing rules to be composed without coupling every card directly to the game loop.
-
-## Your first game
-
-Create a console application:
-
-```bash
-dotnet new console -n MyCardGame
-cd MyCardGame
-dotnet add package CardGameEngine --version 1.0.0
-```
-
-Create two players:
+A game is created from a list of players:
 
 ```csharp
 using CardGameEngine;
@@ -165,191 +55,422 @@ var game = new Game(new List<IPlayer>
     player,
     opponent
 });
+
+game.ActivePlayer = player;
 ```
 
-Start the match:
+`Game` exposes:
+
+- `Players`
+- `ActivePlayer`
+- `NonActivePlayers`
+- `AllCards`
+- `AllCardsOnTheBoard`
+- `StartGame(...)`
+- `NextTurn()`
+- `Execute(IAction)`
+- `Clone()`
+
+Start a game with initial hand size and life:
 
 ```csharp
 game.StartGame(
-    initialHandSize: 3,
+    initialHandSize: 2,
     initialPlayerLife: 20);
 ```
 
-At this point the engine owns the game lifecycle. Your code can now define cards and issue player actions.
+During `StartGame`, CGE initializes player life and mana, draws the initial hands, then executes `StartOfGameEvent` and `StartOfTurnEvent`. The built-in game reactions handle turn-start behavior such as drawing a card and updating mana.
 
-## Creating a monster card
+## Player collections
 
-A monster card needs mana, attack and life information.
+Each `Player` owns:
 
-Game-specific cards can inherit from `MonsterCard` and expose the behavior appropriate for the game.
+- `Deck`
+- `Hand`
+- `Board`
+- `Graveyard`
 
-Once a monster is in a player's hand, it can be played through the player/game action API.
-
-Conceptually:
+A `Deck` is a stack. Cards are inserted with `Push` and drawn with `Pop`.
 
 ```csharp
-player.CastMonster(game, monster, boardIndex: 0);
+player.Deck.Push(new MonsterCard(1, 2, 3, player, "Scout"));
+player.Deck.Push(new MonsterCard(2, 5, 6, player, "Knight"));
 ```
 
-The framework validates that the player is active, owns the card, can summon it and has a free board slot before executing the state transition.
+Because `Pop()` removes the top card, the console demo pushes cards in reverse of the desired draw order.
 
-## Creating a targetless spell
+A `Hand` has a fixed maximum size of 10 cards. `DrawCardAction.IsExecutable` verifies both that the deck is not empty and that the hand has capacity.
 
-Create a component derived from `TargetlessSpellCardComponent` and implement its effect by executing engine actions.
+## Monster cards
 
-For example, a healing component can execute:
+`MonsterCard` represents a card that can be placed on a player's board.
+
+The public constructor accepts mana, attack, life, owner and an optional name:
 
 ```csharp
-game.Execute(
-    new ModifyLifeStatAction(
-        game.ActivePlayer,
-        3));
+var knight = new MonsterCard(
+    mana: 2,
+    attack: 5,
+    life: 6,
+    owner: player,
+    name: "Knight");
 ```
 
-Then compose the component into a targetless spell card.
-
-## Creating a targetful spell
-
-A targetful spell derives from `TargetfulSpellCardComponent`.
-
-It must define both:
-
-1. what happens when the spell is cast;
-2. which characters are valid targets for the current game state.
-
-For example:
+A game-specific card can derive from it:
 
 ```csharp
-public override HashSet<ICharacter> GetPotentialTargets(
-    IGameState gameState)
+public sealed class KnightCard : MonsterCard
 {
-    var targets = new HashSet<ICharacter>();
-
-    foreach (var player in gameState.NonActivePlayers)
+    public KnightCard(IPlayer owner)
+        : base(2, 5, 6, owner, "Knight")
     {
-        foreach (var character in player.Characters)
-        {
-            targets.Add(character);
-        }
     }
-
-    return targets;
 }
 ```
 
-The corresponding action validates the selected target before paying the cost and executing the effect.
+A monster is played with:
+
+```csharp
+player.CastMonster(game, knight, boardIndex: 0);
+```
+
+The underlying `CastMonsterAction` is executable only when:
+
+- the player is the active player;
+- the card is in that player's hand;
+- the card is summonable;
+- the requested board slot is free.
+
+## Monster components
+
+Monster statistics can also be represented by `MonsterCardComponent`. A default monster created with the `MonsterCard(int mana, int attack, int life, ...)` constructor receives a `MonsterCardComponent` containing those values.
+
+The component exposes:
+
+- `ManaValue` / `ManaBaseValue`
+- `AttackValue` / `AttackBaseValue`
+- `LifeValue` / `LifeBaseValue`
+- `GetPotentialTargets(IGameState)`
+
+## Spells
+
+CGE has two concrete spell card types.
+
+### TargetlessSpellCard
+
+A targetless spell receives one or more `ITargetlessSpellCardComponent` components:
+
+```csharp
+var heal = new TargetlessSpellCard(
+    new HealComponent(1),
+    player,
+    "Heal");
+```
+
+A component derives from `TargetlessSpellCardComponent` and must implement `Cast(IGame)`:
+
+```csharp
+internal sealed class HealComponent : TargetlessSpellCardComponent
+{
+    public HealComponent(int mana) : base(mana)
+    {
+    }
+
+    public override void Cast(IGame game)
+    {
+        game.Execute(
+            new ModifyLifeStatAction(
+                game.ActivePlayer,
+                3));
+    }
+
+    public override object Clone() =>
+        new HealComponent(ManaValue);
+}
+```
+
+Cast it through the player:
+
+```csharp
+player.CastSpell(game, heal);
+```
+
+### TargetfulSpellCard
+
+A targetful spell receives an `ISpellCardComponent` and requires a target when cast:
+
+```csharp
+var lightning = new TargetfulSpellCard(
+    new LightningComponent(2),
+    player,
+    "Lightning");
+```
+
+A targetful component must implement both `Cast(IGame, ICharacter)` and `GetPotentialTargets(IGameState)`:
+
+```csharp
+internal sealed class LightningComponent : TargetfulSpellCardComponent
+{
+    public LightningComponent(int mana) : base(mana)
+    {
+    }
+
+    public override void Cast(IGame game, ICharacter target)
+    {
+        game.Execute(new ModifyLifeStatAction(target, -4));
+    }
+
+    public override HashSet<ICharacter> GetPotentialTargets(
+        IGameState gameState)
+    {
+        var targets = new HashSet<ICharacter>();
+
+        foreach (var opponent in gameState.NonActivePlayers)
+        {
+            foreach (var character in opponent.Characters)
+            {
+                targets.Add(character);
+            }
+        }
+
+        return targets;
+    }
+
+    public override object Clone() =>
+        new LightningComponent(ManaValue);
+}
+```
+
+Cast it with a valid target:
+
+```csharp
+player.CastSpell(game, lightning, opponent);
+```
+
+The underlying `CastTargetfulSpellAction` checks the active player, card ownership through the hand, mana availability, non-null target and membership in `GetPotentialTargets(IGameState)`.
+
+## Mana and statistics
+
+Players and cards expose current and base statistics.
+
+For a player:
+
+```csharp
+player.ManaValue
+player.ManaBaseValue
+player.LifeValue
+player.LifeBaseValue
+player.AttackValue
+player.AttackBaseValue
+```
+
+For a monster:
+
+```csharp
+monster.ManaValue
+monster.LifeValue
+monster.AttackValue
+monster.IsReadyToAttack
+```
+
+State-changing statistics should normally be changed through the corresponding actions, for example:
+
+```csharp
+game.Execute(new ModifyManaStatAction(player, 4, 4));
+game.Execute(new ModifyLifeStatAction(player, -3));
+```
 
 ## Drawing cards
 
-Drawing is represented by an action:
+Use `DrawCardAction` or the player convenience method:
 
 ```csharp
+player.DrawCard(game);
+
+// Equivalent action:
 game.Execute(new DrawCardAction(player));
 ```
 
-The action verifies that the deck contains a card and that the hand has capacity before removing the card from the deck.
+The action first verifies that both required transitions are possible:
 
-This invariant is important because a draw is a composite state transition.
+- the deck contains a card;
+- the hand is not full.
+
+This prevents a card from being removed from the deck when it cannot subsequently be added to the hand.
 
 ## Turns
 
-Advance the game with:
+Advance the turn with:
 
 ```csharp
 game.NextTurn();
 ```
 
-Turn-related events and reactions can then perform rules such as refreshing mana, drawing a card or making monsters ready to attack.
+`NextTurn()` executes `EndOfTurnEvent`, then `StartOfTurnEvent`.
+
+The default game reactions include:
+
+- changing the active player at the end of the turn;
+- updating the active player's mana at the start of the turn;
+- drawing a card at the start of the turn.
+
+Monster cards also receive a built-in reaction that makes them ready to attack when their owner becomes the active player.
 
 ## Combat
 
-A monster can attack a valid target through the player/game API.
+A monster attacks through:
 
-The engine verifies that:
+```csharp
+monster.Attack(game, opponent);
+```
 
-- the attacker belongs to the active player's board;
+The underlying `AttackAction` is executable only when:
+
+- an attacker exists;
+- a target exists;
+- the attacker is on the active player's board;
 - the attacker is ready to attack;
-- the target is a valid target.
+- the target is in the attacker's potential targets.
 
-The resulting state changes are represented by actions, allowing deaths and other consequences to be handled through reactions.
+When executed, the action applies damage to the target, applies the target's attack value to the attacker and marks the attacker as no longer ready to attack.
 
-## Executing multiple actions
+The current `AttackAction` does **not** automatically call `NextTurn()`.
 
-CGE supports executing a sequence of actions as a group.
+## Events and reactions
 
-This distinction matters when several state changes must happen before reactions are processed.
+CGE uses events as actions that mark lifecycle points. Examples implemented in the framework include:
 
-For example, combat involving two creatures may require both life values to be reduced before death reactions move either creature to a graveyard.
+- `StartOfGameEvent`
+- `EndOfGameEvent`
+- `StartOfTurnEvent`
+- `EndOfTurnEvent`
+- start/end draw-card events;
+- start/end play-card events;
+- start/end attack events.
 
-Use the multi-action execution API when the rules require those transitions to be evaluated as one logical operation.
+`IReaction` does not return a collection of actions. Its actual contract is:
+
+```csharp
+public interface IReaction : ICloneable
+{
+    void ReactTo(IGame game, IActionEvent actionEvent);
+
+    ICard FindParentCard(IGameState gameState);
+
+    IPlayer FindParentPlayer(IGameState gameState);
+}
+```
+
+A custom reaction can therefore execute additional actions directly:
+
+```csharp
+public sealed class ExampleReaction : Reaction
+{
+    public override void ReactTo(
+        IGame game,
+        IActionEvent actionEvent)
+    {
+        if (actionEvent.IsAfter(typeof(StartOfTurnEvent)))
+        {
+            game.Execute(
+                new ModifyLifeStatAction(
+                    game.ActivePlayer,
+                    1));
+        }
+    }
+
+    public override object Clone() =>
+        new ExampleReaction();
+}
+```
+
+The reaction must be attached to a reactive object such as a player, card or component for `AllReactions()` to discover it.
+
+## End of game
+
+The action queue tracks the game-over state after an `EndOfGameEvent` is executed:
+
+```csharp
+game.Execute(new EndOfGameEvent());
+```
+
+After that point, subsequent actions are not executed.
+
+Changing a player's life to zero does not, by itself, set the action queue's game-over flag. A game-specific rule must execute `EndOfGameEvent` when the game considers the match finished.
 
 ## Cloning
 
-The game state can be cloned:
+`Game.Clone()` creates a cloned game state:
 
 ```csharp
-var copy = (Game)game.Clone();
+var clone = (Game)game.Clone();
 ```
 
-Cloning is useful for simulations, AI decision making and state snapshots.
+The implementation clones players, their collections, reactions and the action queue. This can be used for state snapshots or simulations.
 
-## Design rules
+## Multiple actions
 
-When implementing a game, follow these rules:
+`Game.Execute(List<IAction>)` exists and executes each action by calling `Execute(IAction)` sequentially:
 
-1. Treat `Game` as the owner of the mutable game state.
-2. Use `Game.Execute` for state transitions.
-3. Put preconditions in `IAction.IsExecutable`.
-4. Use events to expose meaningful lifecycle points.
-5. Use reactions for rules triggered by existing actions.
-6. Keep reusable card behavior in components.
-7. Calculate target sets from `IGameState`, rather than storing transient target lists.
-8. Prefer grouped actions when multiple state changes must occur before reactions.
-9. Do not bypass the action pipeline by directly changing engine state.
+```csharp
+game.Execute(new List<IAction>
+{
+    new ModifyLifeStatAction(opponent, -2),
+    new ModifyLifeStatAction(player, -1)
+});
+```
 
-## Repository examples
+This is convenience sequencing; it is **not** a transaction or a grouped-action mechanism. Each action goes through the normal action queue independently, including its own executable check and reactions.
 
-The repository contains a complete console example under:
+## Repository demo
+
+The repository contains an executable console example at:
 
 `examples/CardGameEngine.Demo`
 
-It demonstrates:
+The demo is the canonical usage example for this branch. It demonstrates:
 
-- game creation;
-- initial hands;
-- turn processing;
-- mana;
-- monster cards;
-- targetful spells;
-- targetless spells;
-- combat;
-- graveyards;
+- creating players and a game;
+- populating decks with `Deck.Push`;
+- selecting the active player;
+- starting the game;
+- executing a direct mana action;
+- casting a monster;
+- casting a targetful spell;
+- casting a targetless spell;
+- changing turns;
+- attacking;
 - cloning;
-- game termination;
-- action validation.
+- explicitly ending the game with `EndOfGameEvent`.
 
-Use that example as a reference implementation after reading this guide.
-
-## Development
-
-Build:
-
-```bash
-dotnet build CGE.slnx -c Release
-```
-
-Run tests:
-
-```bash
-dotnet test CGE.slnx -c Release
-```
-
-Run the console demonstration:
+Run it with:
 
 ```bash
 dotnet run --project examples/CardGameEngine.Demo/CardGameEngine.Demo.csproj
 ```
 
-## License
+## Tests
 
-See the repository license for the terms applicable to CardGameEngine.
+The test project contains regression coverage for action invariants, including:
+
+- drawing with a full hand;
+- casting a monster while not active;
+- casting a spell that is not in the player's hand;
+- casting a targetful spell against an invalid target;
+- attacking with a monster that is not on the active player's board.
+
+Run the test suite with:
+
+```bash
+dotnet test CGE.slnx -c Release
+```
+
+## Build
+
+```bash
+dotnet build CGE.slnx -c Release
+```
+
+## Scope of this guide
+
+This README intentionally documents only APIs and behavior verified in the `fix/misc` implementation. It does not describe transactional/grouped actions, automatic game-over detection from life totals, or other behavior that is not implemented by this branch.
