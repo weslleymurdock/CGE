@@ -39,7 +39,7 @@ internal static class Program
 
         Console.WriteLine("=== CardGameEngine console demo ===");
         Console.WriteLine("Starting game...");
-        game.StartGame(initialHandSize: 2, initialPlayerLife: 20);
+        game.StartGame(initialHandSize: 3, initialPlayerLife: 20);
 
         Console.WriteLine($"Active player: {PlayerName(game, game.ActivePlayer)}");
         Console.WriteLine($"Player hand: {player.Hand.Size}, deck: {player.Deck.Size}");
@@ -77,9 +77,9 @@ internal static class Program
         Console.WriteLine($"Clone players: {clone.Players.Count}");
         Console.WriteLine($"Clone active player: {PlayerName(clone, clone.ActivePlayer)}");
 
-        Console.WriteLine("\n8. End the game through an action");
-        game.Execute(new ModifyLifeStatAction(opponent, -opponent.LifeValue));
-        Console.WriteLine($"Opponent alive: {opponent.IsAlive}");
+        Console.WriteLine("\n8. End the game through an event");
+        game.Execute(new EndOfGameEvent());
+        Console.WriteLine("Game-over event executed.");
 
         Console.WriteLine("\n9. Attempt an action after game over");
         var deckBefore = player.Deck.Size;
