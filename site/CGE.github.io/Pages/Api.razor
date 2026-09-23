@@ -27,16 +27,16 @@
         {
             <MudPaper Class="pa-5">
                 <MudStack Row="true" Wrap="Wrap.Wrap" Spacing="2">
-                    <MudChip Color="Color.Primary" Variant="Variant.Outlined">
+                    <MudChip T="string" Color="Color.Primary" Variant="Variant.Outlined">
                         NuGet version: @_version
                     </MudChip>
-                    <MudChip Variant="Variant.Outlined">
+                    <MudChip T="string" Variant="Variant.Outlined">
                         Types: @_types.Count
                     </MudChip>
-                    <MudChip Variant="Variant.Outlined">
+                    <MudChip T="string" Variant="Variant.Outlined">
                         Members: @_members.Count
                     </MudChip>
-                    <MudChip Variant="Variant.Outlined">
+                    <MudChip T="string" Variant="Variant.Outlined">
                         Generated: @_generatedAt
                     </MudChip>
                 </MudStack>
@@ -67,7 +67,7 @@
                                 <MudStack Spacing="1">
                                     <MudText Typo="Typo.body2">@member.Signature</MudText>
                                     <MudText Typo="Typo.body2">@member.Summary</MudText>
-                                    <MudChip Size="Size.Small" Variant="Variant.Outlined">
+                                    <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">
                                         @member.Accessibility @member.Kind
                                     </MudChip>
 
