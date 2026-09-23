@@ -32,15 +32,10 @@
 
         <MudText Typo="Typo.h4" id="quickstart">Quick start</MudText>
 
-        <MudPaper Class="pa-5">
-            <MudText Typo="Typo.h6">1. Install the package</MudText>
-            <MudText Class="mb-3">
-                The documentation targets the published CardGameEngine 1.0.0 package.
-            </MudText>
-            <pre><code>dotnet new console -n MyCardGame
-cd MyCardGame
-dotnet add package CardGameEngine --version 1.0.0</code></pre>
-        </MudPaper>
+        <MudAlert Severity="Severity.Info">
+            CardGameEngine is not published to NuGet yet. The website therefore does not reference the package.
+            The API reference is generated directly from the engine project during the build.
+        </MudAlert>
 
         <MudPaper Class="pa-5">
             <MudText Typo="Typo.h6">2. Create players and the game</MudText>
@@ -99,6 +94,7 @@ game.Execute(new DrawCardAction(player));</code></pre>
         <MudAlert Severity="Severity.Info">
             For the complete API walkthrough, including valid-target calculation, combat, cloning and
             game termination, open the <a href="/guide">Step-by-step guide</a>.
+            For the generated API surface, open the <a href="/api">API reference</a>.
         </MudAlert>
 
         <MudText Typo="Typo.h4">Repository reference</MudText>
