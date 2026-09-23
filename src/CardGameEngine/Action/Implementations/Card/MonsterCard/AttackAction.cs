@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 
 namespace CardGameEngine;
@@ -38,7 +38,10 @@ public class AttackAction : Action
 
     public override bool IsExecutable(IGameState gameState)
     {
-        return Attacker.IsReadyToAttack
+        return Attacker != null
+            && Target != null
+            && gameState.ActivePlayer.Board.Contains(Attacker)
+            && Attacker.IsReadyToAttack
             && Attacker.GetPotentialTargets(gameState).Contains(Target);
     }
 }
