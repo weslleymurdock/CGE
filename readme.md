@@ -1,216 +1,355 @@
-# C# Battle Card Game Framework (CSBCGF)
+# CardGameEngine
 
-## Overview
+CardGameEngine (CGE) is a .NET 10 framework for building turn-based card games in C#.
 
-The C# Battle Card Game Framework facilitates the process of developing a custom
-battle card game (such as Magic The Gathering, Pokémon and Hearthstone) in C#.
-It already provides a basic event-driven game loop and classes to derive from.
+The framework provides the game state model, players, cards, decks, hands, boards, actions, events, reactions, statistics and the execution pipeline. A game-specific project supplies the rules and card effects.
 
-(see also the [Official CSBCGF Homepage](https://finkmoritz.github.io/pages/csbcgf/index.html))
+The repository contains the framework source, tests, a console demonstration and this documentation site.
 
-## Contents
+## Requirements
 
-- [Getting Started](#getting-started)
-- [Classes & Interfaces](#classes-and-interfaces)
-- [FAQ](#faq)
-- [Impressum](#impressum)
+- .NET 10 SDK
+- C# / .NET application capable of referencing NuGet packages
 
----
+## Install
 
-# Getting Started
+The framework is distributed as the NuGet package `CardGameEngine`.
 
-Check out how easy it is to setup your own battle card game using **CSBCGF** by
-playing the [demo console application](https://github.com/finkmoritz/csbcgf/tree/main/csbcgfdemo).
+For the published 1.0.0 package:
 
----
+```bash
+dotnet add package CardGameEngine --version 1.0.0
+```
 
-# Classes and Interfaces
+Or add the package reference manually:
 
-## IGame interface & Game class
+```xml
+<PackageReference Include="CardGameEngine" Version="1.0.0" />
+```
 
-The ``Game`` class is the central object within the framework implementing the
-``IGame`` interface. It contains the whole state of a battle card match and
-provides methods to alter its state:
-- NextTurn: Ends the current turn and starts a new turn, activating the next player.
-- Queue & Process: see section IAction.
+## Architecture
 
-There is also a ``IGameState`` interface which represents an ``IGame``, but without
-the ability to alter the game's state.
+CGE separates the generic game engine from game-specific rules.
 
-## IPlayer interface & Player class
+A typical game project contains:
 
-The ``Player`` class represents a participant in a game. It holds the player's
-cards in four different collections:
-- Deck: Source of cards that the player draws.
-- Hand: Source of cards that the player might bring onto the board.
-- Board: Location of monster cards that actively participate in the battle.
-- Graveyard: Depot for discarded cards.
+```text
+MyCardGame/
+├── Cards/
+│   ├── KnightCard.cs
+│   ├── FireballCard.cs
+│   └── HealCard.cs
+├── Components/
+│   ├── FireballComponent.cs
+│   └── HealComponent.cs
+├── Reactions/
+│   └── ...
+└── Program.cs
+```
 
-Implementing the ``IPlayer`` interface, the ``Player`` class provides methods
-to interact with those cards:
-- DrawCard: Draw a card from the deck.
-- PlayMonster: Add a monster card from the player's hand to the player's board.
-- PlaySpell: Play a spell card from the player's hand.
-- Attack: Initiate a fight between a befriended and an opposing monster card.
+The engine owns the state and execution pipeline. Your application defines the actual cards and rules.
 
-## IDeck interface & Deck implementations
+## Core concepts
 
-The ``IDeck`` interface provides some useful methods to interact with a
-collection of cards. This framework includes the following implementations:
-- Board: Array of a fixed number of card slots that can either contain a card
-or be empty.
-- Hand: List of an arbitrary amount of cards (up to a defined maximum).
-- StackedDeck: Stack of cards (e.g. to be used as deck or graveyard).
+### Game
 
-## ICard interface & Card class
+`Game` is the mutable game state and the entry point for executing actions.
 
-The ``ICard`` interface exposes the ManaValue property (i.e. the card's costs
-in Mana) and a method ``IsCastable`` that checks whether this card can be
-played (i.e. cast a spell card or add a monster card to the board) by the
-active player.
+It contains the players, active player and board state and provides operations such as:
 
-### IMonsterCard interface & MonsterCard class
+- starting a game;
+- changing turns;
+- executing actions;
+- cloning the game state.
 
-The ``MonsterCard`` class is an abstract base class for monster cards that can
-be played onto the board and attack other characters (i.e. monster cards or players).
+`IGameState` exposes the state needed by rules without granting unrestricted mutation.
 
-### ISpellCard interface & SpellCard implementations
+### Player
 
-The ``SpellCard`` class is an abstract base class for spell cards that have an
-immediate effect once played from the player's hand. There are two subtypes:
-- TargetlessSpellCard: A spell card that can be played without specifying a
-target character.
-- TargetfulSpellCard: A spell card that can only be played by specifying a
-target character first.
+`Player` represents a participant.
 
-### ICardComponent interface
+A player owns:
 
-``Card``s consist of ``CardComponent``s that combinedly make up the ``Card``'s
-stats and behaviour. Those components can dynamically be added and removed
-from the ``Card`` (e.g. to simulate certain enhancements or enchantments).
+- `Deck` — cards available to draw;
+- `Hand` — cards currently held;
+- `Board` — cards currently in play;
+- `Graveyard` — cards that have left play.
 
-While ``SpellCardComponents`` only contain mana costs, ``Action``s to be
-executed when the card is played and ``Reaction``s (see IReaction section),
-``MonsterCardComponents`` also contain attack and life stats.
+Players are also characters, so they have life and mana statistics.
 
-## IStat interface & Stat implementations
+### Cards
 
-A ``Stat`` is an atomic value that is part of a game objects state. It provides
-the following properties:
-- Value: The current integer value.
-- BaseValue: The base integer value is used to hold the ``Stat``'s initial (e.g.
-life) or maximum (e.g. player mana) value.
+The main card categories are:
 
-This framework features the following ``IStat`` implementations:
-- ManaCostStat: Represents the costs for playing a card.
-- ManaPoolStat: Represents the mana available to a player.
-- LifeStat: Represents the life points of the character.
-- AttackStat: Represents the potential damage dealt in a fight with this
-character.
+- `MonsterCard` — a creature that occupies a board slot and can attack;
+- `TargetlessSpellCard` — a spell with no selected target;
+- `TargetfulSpellCard` — a spell that requires a valid target.
 
-## ICharacter interface
+Cards are assembled from components so that reusable rules can be shared between cards.
 
-A character is a participant with an ``AttackStat`` and a ``LifeStat`` that
-dies once its life reaches a value of zero. The ``IPlayer`` and ``IMonsterCard``
-interfaces inherit the ``ICharacter`` interface, i.e. within this framework
-a character can either be a player or a monster card.
+### Components
 
-## IAction interface & how to properly change a Game's state
+Components encapsulate card-specific behavior.
 
-Changes to the game state should only be performed via actions (i.e. classes
-implementing ``IAction``)! More specifically only in the ``Game.Execute`` method.
-This method takes one or more ``IAction``s, adds them to the queue and
-executes them one by one. ``IReaction``s triggered by those ``IAction``s
-are being executed afterwards (which in turn can trigger further ``IReaction``s).
+For spells, derive from:
 
-Since the game state might change before ``IAction.Execute`` is executed,
-the ``IAction`` provides a check ``IAction.IsExecutable`` which is executed
-immediately before ``IAction.Execute``. If this method evaluates to ``false``
-the ``IAction`` will not be executed and simply discarded (i.e. also no
-``IReaction``s will be triggered).
+- `TargetlessSpellCardComponent`
+- `TargetfulSpellCardComponent`
 
-### Event
+A targetful component must expose the valid targets for the current `IGameState`.
 
-An event is an abstract implementation of an ``IAction`` that does not execute
-a game state change but rather serves as marker/trigger. One example would be
-the ``StartOfTurnEvent`` which is triggered at the start of each turn.
+This allows the engine to validate an action before its effect is executed.
 
-Additionally, they may be used to mark the start and end of a certain series of
-``IAction``s and thereby provide useful information. E.g. before a player draws
-a card, a ``StartDrawCardEvent`` is triggered. After the player has drawn the
-card, a ``EndDrawCardEvent`` is triggered that also provides the drawn card.
+### Statistics
 
-Other useful ``Event``s to listen to and that are provided out of the box are:
-- ``[Start/End]AttackEvent``: Provides attacking monster card and target character.
-- ``[Start/End]PlayMonsterCardEvent``: Provides monster card and board index.
-- ``[Start/End]PlayTargetlessSpellCardEvent``: Provides the spell card.
-- ``[Start/End]PlayTargetfulSpellCardEvent``: Provides the spell card and target
-character.
+CGE provides reusable statistics such as:
 
-## IReactive & IReaction interfaces
+- mana;
+- mana cost;
+- life;
+- attack.
 
-``Card``s implement the ``IReactive`` interface which means that implementations
-of the ``IReaction`` interface can be added/removed to/from cards. After the
-execution of each ``Action`` (via Game.Process method), this ``Action`` is fed into
-the ``ReactTo`` method of every ``Action`` in every ``Card`` and all ``Action``s
-returned from this method are in turn again fed into the action queue and
-subsequently processed.
+Statistics expose a current value and a base value.
 
----
+### Actions
 
-# FAQ
+An `IAction` is the unit of state transition.
 
-**When should I use card components to assemble cards?**
+Game state should be changed through `Game.Execute(...)`, rather than by directly mutating collections or statistics.
 
-As often as possible. You can of course change the card's mana costs (``ManaValue``)
-or reactions (``AddReaction``/``RemoveReaction``) directly, but this might lead
-to unexpected side effects. It is good practice to always add/remove ``IReaction``s/
-``IStat``s as components.
+Every action has an `IsExecutable(IGameState)` check. The check runs immediately before execution because the game state may have changed since the action was created.
 
+If an action is no longer executable, it is discarded and its reactions are not triggered.
 
-**How to properly execute multiple actions?**
+### Events
 
-Apparently there are two ways to execute multiple ``IAction``s:
-1. Call ``Game.Execute(IAction)`` multiple times. At each call the ``IAction`` itself
-plus all triggered ``IReaction``s are executed if not forbidden by ``IAction.IsExecutable``.
-Note that also the triggered ``IReaction``s could in turn trigger further ``IReaction``s.
-2. Call ``Game.Execute(List<IAction>)`` with all ``IAction``s. Now all ``IAction``s in
-the list will be executed first (if not forbidden by ``IAction.IsExecutable``). Only after
-that has happened, all ``IReaction``s triggered by all those ``IAction``s will be executed.
-This goes on until no ``IReaction``s have been triggered anymore.
+Events are actions used as markers in the game flow.
 
-So there is definitely a difference between both approaches. Consider e.g. a fight between
-two monster cards, where you want both monsters to lower each others life stats
-'simultaneously'. If you pick the first approach, the first monster to attack would maybe
-kill the second monster and - as reaction - send it to the graveyard. Now the attack from
-the second monster could not take place anymore and the first monster leaves the fight
-unharmed. In this case you should definitely go with the second approach, which would
-modify the life stats of both monsters first, before sending them to the graveyard.
+Examples include start/end events for:
 
+- turns;
+- attacks;
+- drawing cards;
+- playing monster cards;
+- playing targetless spells;
+- playing targetful spells.
 
-**How can I implement a custom spell card?**
+Events allow reactions to observe meaningful points in the game lifecycle without implementing the state transition themselves.
 
-You can either inherit from ``TargetfulSpellCard`` or ``TargetlessSpellCard`` based on whether
-your card should feature ``ISpellCardComponent`` that require a target to be selected
-(``ITargetful``) or not (``ITargetless``). If at least one component requires a target
-you have to inherit from ``TargetfulSpellCard``.
+### Reactions
 
+`IReaction` allows cards and other reactive objects to respond to executed actions.
 
-**How can I implement a custom spell card component?**
+A reaction can return additional actions. Those actions are processed through the same execution pipeline, allowing rules to be composed without coupling every card directly to the game loop.
 
-You can either inherit from ``TargetfulSpellCardComponent`` or ``TargetlessSpellCardComponent``
-based on whether your component requires a target to be selected (``ITargetful``) or not
-(``ITargetless``).
+## Your first game
 
-- ``TargetlessSpellCardComponent``: Override the ``GetActions`` to return the ``IAction``s to
-be performed once the corresponding spell card is played.
-- ``TargetfulSpellCardComponent``: Override the ``GetActions`` to return the ``IAction``s to
-be performed once the corresponding spell card is played. Also override the ``GetPotentialTargets``
-method to provide a list of valid targets based on a given game state.
+Create a console application:
 
----
+```bash
+dotnet new console -n MyCardGame
+cd MyCardGame
+dotnet add package CardGameEngine --version 1.0.0
+```
 
-# Impressum
+Create two players:
 
-The C# Battle Card Game Framework was designed and implemented by
-[Moritz Fink](https://finkmoritz.github.io/).
+```csharp
+using CardGameEngine;
+
+var player = new Player();
+var opponent = new Player();
+
+var game = new Game(new List<IPlayer>
+{
+    player,
+    opponent
+});
+```
+
+Start the match:
+
+```csharp
+game.StartGame(
+    initialHandSize: 3,
+    initialPlayerLife: 20);
+```
+
+At this point the engine owns the game lifecycle. Your code can now define cards and issue player actions.
+
+## Creating a monster card
+
+A monster card needs mana, attack and life information.
+
+Game-specific cards can inherit from `MonsterCard` and expose the behavior appropriate for the game.
+
+Once a monster is in a player's hand, it can be played through the player/game action API.
+
+Conceptually:
+
+```csharp
+player.CastMonster(game, monster, boardIndex: 0);
+```
+
+The framework validates that the player is active, owns the card, can summon it and has a free board slot before executing the state transition.
+
+## Creating a targetless spell
+
+Create a component derived from `TargetlessSpellCardComponent` and implement its effect by executing engine actions.
+
+For example, a healing component can execute:
+
+```csharp
+game.Execute(
+    new ModifyLifeStatAction(
+        game.ActivePlayer,
+        3));
+```
+
+Then compose the component into a targetless spell card.
+
+## Creating a targetful spell
+
+A targetful spell derives from `TargetfulSpellCardComponent`.
+
+It must define both:
+
+1. what happens when the spell is cast;
+2. which characters are valid targets for the current game state.
+
+For example:
+
+```csharp
+public override HashSet<ICharacter> GetPotentialTargets(
+    IGameState gameState)
+{
+    var targets = new HashSet<ICharacter>();
+
+    foreach (var player in gameState.NonActivePlayers)
+    {
+        foreach (var character in player.Characters)
+        {
+            targets.Add(character);
+        }
+    }
+
+    return targets;
+}
+```
+
+The corresponding action validates the selected target before paying the cost and executing the effect.
+
+## Drawing cards
+
+Drawing is represented by an action:
+
+```csharp
+game.Execute(new DrawCardAction(player));
+```
+
+The action verifies that the deck contains a card and that the hand has capacity before removing the card from the deck.
+
+This invariant is important because a draw is a composite state transition.
+
+## Turns
+
+Advance the game with:
+
+```csharp
+game.NextTurn();
+```
+
+Turn-related events and reactions can then perform rules such as refreshing mana, drawing a card or making monsters ready to attack.
+
+## Combat
+
+A monster can attack a valid target through the player/game API.
+
+The engine verifies that:
+
+- the attacker belongs to the active player's board;
+- the attacker is ready to attack;
+- the target is a valid target.
+
+The resulting state changes are represented by actions, allowing deaths and other consequences to be handled through reactions.
+
+## Executing multiple actions
+
+CGE supports executing a sequence of actions as a group.
+
+This distinction matters when several state changes must happen before reactions are processed.
+
+For example, combat involving two creatures may require both life values to be reduced before death reactions move either creature to a graveyard.
+
+Use the multi-action execution API when the rules require those transitions to be evaluated as one logical operation.
+
+## Cloning
+
+The game state can be cloned:
+
+```csharp
+var copy = (Game)game.Clone();
+```
+
+Cloning is useful for simulations, AI decision making and state snapshots.
+
+## Design rules
+
+When implementing a game, follow these rules:
+
+1. Treat `Game` as the owner of the mutable game state.
+2. Use `Game.Execute` for state transitions.
+3. Put preconditions in `IAction.IsExecutable`.
+4. Use events to expose meaningful lifecycle points.
+5. Use reactions for rules triggered by existing actions.
+6. Keep reusable card behavior in components.
+7. Calculate target sets from `IGameState`, rather than storing transient target lists.
+8. Prefer grouped actions when multiple state changes must occur before reactions.
+9. Do not bypass the action pipeline by directly changing engine state.
+
+## Repository examples
+
+The repository contains a complete console example under:
+
+`examples/CardGameEngine.Demo`
+
+It demonstrates:
+
+- game creation;
+- initial hands;
+- turn processing;
+- mana;
+- monster cards;
+- targetful spells;
+- targetless spells;
+- combat;
+- graveyards;
+- cloning;
+- game termination;
+- action validation.
+
+Use that example as a reference implementation after reading this guide.
+
+## Development
+
+Build:
+
+```bash
+dotnet build CGE.slnx -c Release
+```
+
+Run tests:
+
+```bash
+dotnet test CGE.slnx -c Release
+```
+
+Run the console demonstration:
+
+```bash
+dotnet run --project examples/CardGameEngine.Demo/CardGameEngine.Demo.csproj
+```
+
+## License
+
+See the repository license for the terms applicable to CardGameEngine.
