@@ -121,8 +121,10 @@
             var xml = await Http.GetStringAsync("api/CardGameEngine.xml");
             _document = XDocument.Parse(xml);
 
-            _version = _document.Root?.Element("version")?.Value ?? "unknown";
-            _generatedAt = _document.Root?.Element("generatedAtUtc")?.Value ?? "unknown";
+            _version = _document.Root?.Element("version")?.Value
+                ?? _document.Root?.Element("packageVersion")?.Value
+                ?? "unknown";
+            _generatedAt = _document.Root?.Element("generatedAtUtc")?.Value ?? "compiler-generated";
 
             var elements = _document.Root?
                 .Element("members")?
