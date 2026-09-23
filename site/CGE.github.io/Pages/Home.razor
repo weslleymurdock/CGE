@@ -1,14 +1,78 @@
 @page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>CardGameEngine — .NET Card Game Framework</PageTitle>
 
-<MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
-<MudText Class="mb-8">Welcome to your new app, powered by MudBlazor and the .NET 10 Template!</MudText>
+<MudContainer MaxWidth="MaxWidth.Large" Class="py-8">
+    <MudStack Spacing="6">
+        <MudPaper Elevation="0" Class="pa-8 hero">
+            <MudText Typo="Typo.h2">Build your card game in C#.</MudText>
+            <MudText Typo="Typo.h6" Class="mt-3">
+                CardGameEngine provides the game state, action pipeline, events, reactions,
+                cards, components and turn lifecycle. You provide the rules and cards.
+            </MudText>
+            <MudStack Row="true" Spacing="2" Class="mt-6">
+                <MudButton Href="#quickstart" Variant="Variant.Filled" Color="Color.Primary">Start building</MudButton>
+                <MudButton Href="https://github.com/weslleymurdock/CGE" Target="_blank" Variant="Variant.Outlined">GitHub</MudButton>
+            </MudStack>
+        </MudPaper>
 
+        <MudText Typo="Typo.h4">What you get</MudText>
+        <MudGrid>
+            @foreach (var item in Concepts)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudPaper Class="pa-5 h-100">
+                        <MudText Typo="Typo.h6">@item.Title</MudText>
+                        <MudText Class="mt-2">@item.Description</MudText>
+                    </MudPaper>
+                </MudItem>
+            }
+        </MudGrid>
 
-<MudAlert Severity="Severity.Normal" ContentAlignment="HorizontalAlignment.Start">
-    You can find documentation and examples on our website here:
-    <MudLink Href="https://mudblazor.com" Target="_blank" Typo="Typo.body2" Color="Color.Primary">
-        <b>www.mudblazor.com</b>
-    </MudLink>
-</MudAlert>
+        <MudText Typo="Typo.h4" id="quickstart">Quick start</MudText>
+        <MudPaper Class="pa-5">
+            <MudText Typo="Typo.h6">1. Create your application</MudText>
+            <MudText>Use a normal .NET 10 console, desktop, mobile or server application.</MudText>
+            <MudCodeBlock Code="dotnet new console -n MyCardGame&#10;cd MyCardGame&#10;dotnet add package CardGameEngine --version 1.0.0" Language="bash" />
+        </MudPaper>
+
+        <MudPaper Class="pa-5">
+            <MudText Typo="Typo.h6">2. Create the game</MudText>
+            <MudCodeBlock Code="var player = new Player();&#10;var opponent = new Player();&#10;&#10;var game = new Game(new List&lt;IPlayer&gt; { player, opponent });&#10;game.StartGame(initialHandSize: 3, initialPlayerLife: 20);" Language="csharp" />
+        </MudPaper>
+
+        <MudPaper Class="pa-5">
+            <MudText Typo="Typo.h6">3. Implement cards</MudText>
+            <MudText>
+                Derive game-specific cards from MonsterCard, TargetlessSpellCard or
+                TargetfulSpellCard. Put reusable behavior in card components.
+            </MudText>
+        </MudPaper>
+
+        <MudPaper Class="pa-5">
+            <MudText Typo="Typo.h6">4. Change state through actions</MudText>
+            <MudText>
+                Use Game.Execute(...) for state transitions. IAction.IsExecutable(...)
+                protects the action against a game state that changed before execution.
+            </MudText>
+            <MudCodeBlock Code="game.Execute(new DrawCardAction(player));&#10;game.NextTurn();" Language="csharp" />
+        </MudPaper>
+
+        <MudPaper Class="pa-5">
+            <MudText Typo="Typo.h6">5. Add rules with events and reactions</MudText>
+            <MudText>
+                Events mark lifecycle points such as turn start/end and card play.
+                Reactions translate those events/actions into additional actions.
+            </MudText>
+        </MudPaper>
+
+        <MudText Typo="Typo.h4">Next steps</MudText>
+        <MudList T="string">
+            <MudListItem>Read the complete README in the repository.</MudListItem>
+            <MudListItem>Run examples/CardGameEngine.Demo to see the complete pipeline.</MudListItem>
+            <MudListItem>Build a custom MonsterCard and spell components.</MudListItem>
+            <MudListItem>Add your game's reactions and turn rules.</MudListItem>
+            <MudListItem>Use grouped actions when several state transitions must happen before reactions.</MudListItem>
+        </MudList>
+    </MudStack>
+</MudContainer>
