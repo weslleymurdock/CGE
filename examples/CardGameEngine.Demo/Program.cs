@@ -41,7 +41,7 @@ internal static class Program
         Console.WriteLine("Starting game...");
         game.StartGame(initialHandSize: 2, initialPlayerLife: 20);
 
-        Console.WriteLine($"Active player: {PlayerName(game.ActivePlayer)}");
+        Console.WriteLine($"Active player: {PlayerName(game, game.ActivePlayer)}");
         Console.WriteLine($"Player hand: {player.Hand.Size}, deck: {player.Deck.Size}");
         Console.WriteLine($"Player mana: {player.ManaValue}/{player.ManaBaseValue}");
 
@@ -62,11 +62,11 @@ internal static class Program
 
         Console.WriteLine("\n4. End the turn and activate the opponent");
         game.NextTurn();
-        Console.WriteLine($"Active player: {PlayerName(game.ActivePlayer)}");
+        Console.WriteLine($"Active player: {PlayerName(game, game.ActivePlayer)}");
 
         Console.WriteLine("\n5. End the opponent turn and reactivate the player");
         game.NextTurn();
-        Console.WriteLine($"Active player: {PlayerName(game.ActivePlayer)}");
+        Console.WriteLine($"Active player: {PlayerName(game, game.ActivePlayer)}");
 
         Console.WriteLine("\n6. Attack with the monster");
         monster.Attack(game, opponent);
