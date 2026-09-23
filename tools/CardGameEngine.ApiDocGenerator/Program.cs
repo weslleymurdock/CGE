@@ -182,15 +182,12 @@ static string GetAccessibility(Type type)
         : type.IsPublic ? "public" : "internal";
 
 static string GetAccessibility(MethodBase method)
-    => method switch
-    {
-        MethodInfo m when m.IsPublic => "public",
-        MethodInfo m when m.IsFamily => "protected",
-        MethodInfo m when m.IsFamilyOrAssembly => "protected internal",
-        MethodInfo m when m.IsFamilyAndAssembly => "private protected",
-        MethodInfo m when m.IsAssembly => "internal",
-        _ => "private"
-    };
+    => method.IsPublic ? "public"
+    : method.IsFamily ? "protected"
+    : method.IsFamilyOrAssembly ? "protected internal"
+    : method.IsFamilyAndAssembly ? "private protected"
+    : method.IsAssembly ? "internal"
+    : "private";
 
 static string GetAccessibility(PropertyInfo property)
     => property.GetMethod is not null ? GetAccessibility(property.GetMethod)
