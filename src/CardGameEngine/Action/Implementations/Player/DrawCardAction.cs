@@ -12,10 +12,10 @@ public class DrawCardAction : Action
     [JsonProperty]
     public ICard DrawnCard;
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="DrawCardAction"/> type.</summary>
 /// <param name="player">The player value.</param>
 /// <param name="isAborted">The isAborted value.</param>
+    [JsonConstructor]
     public DrawCardAction(IPlayer player, bool isAborted = false)
         : base(isAborted)
     {
