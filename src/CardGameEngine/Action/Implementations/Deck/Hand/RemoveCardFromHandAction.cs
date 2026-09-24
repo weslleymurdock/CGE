@@ -12,11 +12,11 @@ public class RemoveCardFromHandAction : Action
     [JsonProperty]
     public ICard Card;
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="RemoveCardFromHandAction"/> type.</summary>
 /// <param name="hand">The hand value.</param>
 /// <param name="card">The card value.</param>
 /// <param name="isAborted">The isAborted value.</param>
+    [JsonConstructor]
     public RemoveCardFromHandAction(IHand hand, ICard card, bool isAborted = false)
         : base(isAborted)
     {
