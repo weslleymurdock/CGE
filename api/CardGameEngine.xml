@@ -1,0 +1,1894 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CardGameEngine</name>
+    </assembly>
+    <members>
+        <member name="M:CardGameEngine.Action.#ctor(System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.Action"/> type.</summary>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.Action.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.Action.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Action.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ActionEvent.#ctor(CardGameEngine.IAction)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.ActionEvent"/> type.</summary>
+            <param name="action">The action value.</param>
+        </member>
+        <member name="M:CardGameEngine.ActionEvent.IsBefore(System.Type)">
+            <summary>Performs the IsBefore operation.</summary>
+            <param name="type">The type value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ActionEvent.IsAfter(System.Type)">
+            <summary>Performs the IsAfter operation.</summary>
+            <param name="type">The type value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.AfterActionEvent.#ctor(CardGameEngine.IAction)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.AfterActionEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.AfterActionEvent.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.AfterActionEvent.IsAfter(System.Type)">
+            <summary>Performs the IsAfter operation.</summary>
+            <param name="type">The type value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.AfterActionEvent.IsBefore(System.Type)">
+            <summary>Performs the IsBefore operation.</summary>
+            <param name="type">The type value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.BeforeActionEvent.#ctor(CardGameEngine.IAction)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.BeforeActionEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.BeforeActionEvent.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.BeforeActionEvent.IsAfter(System.Type)">
+            <summary>Performs the IsAfter operation.</summary>
+            <param name="type">The type value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.BeforeActionEvent.IsBefore(System.Type)">
+            <summary>Performs the IsBefore operation.</summary>
+            <param name="type">The type value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="P:CardGameEngine.IActionEvent.Action">
+            <summary>
+            Contains the Action this event refers to.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IActionEvent.IsBefore(System.Type)">
+            <summary>
+            Checks if this event is triggered directly before an Action that is
+            an instance of the specified type.
+            </summary>
+            <param name="type"></param>
+            <returns>True if this event is triggered directly before an Action
+            that is an instance of the specified type.</returns>
+        </member>
+        <member name="M:CardGameEngine.IActionEvent.IsAfter(System.Type)">
+            <summary>
+            Checks if this event is triggered directly after an Action that is
+            an instance of the specified type.
+            </summary>
+            <param name="type"></param>
+            <returns>True if this event is triggered directly after an Action
+            that is an instance of the specified type.</returns>
+        </member>
+        <member name="M:CardGameEngine.ActionQueue.#ctor(System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.ActionQueue"/> type.</summary>
+            <param name="executeReactions">The executeReactions value.</param>
+        </member>
+        <member name="M:CardGameEngine.ActionQueue.#ctor(System.Boolean,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.ActionQueue"/> type.</summary>
+            <param name="executeReactions">The executeReactions value.</param>
+            <param name="isGameOver">The isGameOver value.</param>
+        </member>
+        <member name="M:CardGameEngine.ActionQueue.Execute(CardGameEngine.IGame,CardGameEngine.IAction)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+            <param name="action">The action value.</param>
+        </member>
+        <member name="M:CardGameEngine.ActionQueue.ExecReactions(CardGameEngine.IGame,CardGameEngine.IActionEvent)">
+            <summary>Performs the ExecReactions operation.</summary>
+            <param name="game">The game value.</param>
+            <param name="actionEvent">The actionEvent value.</param>
+        </member>
+        <member name="M:CardGameEngine.ActionQueue.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="P:CardGameEngine.IActionQueue.ExecuteReactions">
+            <summary>
+            Marks if the ActionQueue also executes IReactions to the
+            executed IActions.
+            Can be e.g. set to false during Game initialization.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IActionQueue.Execute(CardGameEngine.IGame,CardGameEngine.IAction)">
+            <summary>
+            Execute all Actions in the queue if they are executable
+            (see IAction.IsExecutable). Actions that are not executable
+            at this time will be discarded.
+            </summary>
+            <param name="game"></param>
+            <param name="action"></param>
+        </member>
+        <member name="P:CardGameEngine.IAction.IsAborted">
+            <summary>
+            Aborted Actions will not be executed.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>
+            Check if this Action can be executed on the given Game state.
+            </summary>
+            <param name="gameState"></param>
+            <returns>True if this Action can be executed on the given Game state.</returns>
+        </member>
+        <member name="M:CardGameEngine.IAction.Execute(CardGameEngine.IGame)">
+            <summary>
+            Execute this Action in order to change the Game's state.
+            </summary>
+            <param name="game"></param>
+        </member>
+        <member name="M:CardGameEngine.AttackAction.#ctor(CardGameEngine.IMonsterCard,CardGameEngine.ICharacter,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.AttackAction"/> type.</summary>
+            <param name="attacker">The attacker value.</param>
+            <param name="target">The target value.</param>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.AttackAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.AttackAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.AttackAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CastMonsterAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CastMonsterAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.CastMonsterAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.DieAction.#ctor(CardGameEngine.IMonsterCard,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.DieAction"/> type.</summary>
+            <param name="monsterCard">The monsterCard value.</param>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.DieAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.DieAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.DieAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ModifyReadyToAttackAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ModifyReadyToAttackAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.ModifyReadyToAttackAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CastSpellAction.#ctor(CardGameEngine.IPlayer,CardGameEngine.ISpellCard,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.CastSpellAction"/> type.</summary>
+            <param name="player">The player value.</param>
+            <param name="spellCard">The spellCard value.</param>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.CastSpellAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.CastSpellAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CastTargetfulSpellAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CastTargetfulSpellAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.CastTargetfulSpellAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CastTargetlessSpellAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CastTargetlessSpellAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.CastTargetlessSpellAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.AddCardToBoardAction.#ctor(CardGameEngine.IBoard,CardGameEngine.ICard,System.Int32,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.AddCardToBoardAction"/> type.</summary>
+            <param name="board">The board value.</param>
+            <param name="card">The card value.</param>
+            <param name="boardIndex">The boardIndex value.</param>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.AddCardToBoardAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.AddCardToBoardAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.AddCardToBoardAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromBoardAction.#ctor(CardGameEngine.IBoard,CardGameEngine.ICard,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.RemoveCardFromBoardAction"/> type.</summary>
+            <param name="board">The board value.</param>
+            <param name="card">The card value.</param>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromBoardAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromBoardAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromBoardAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.AddCardToGraveyardAction.#ctor(CardGameEngine.IDeck,CardGameEngine.ICard,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.AddCardToGraveyardAction"/> type.</summary>
+            <param name="graveyard">The graveyard value.</param>
+            <param name="card">The card value.</param>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.AddCardToGraveyardAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.AddCardToGraveyardAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.AddCardToGraveyardAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromDeckAction.#ctor(CardGameEngine.IDeck,CardGameEngine.ICard,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.RemoveCardFromDeckAction"/> type.</summary>
+            <param name="deck">The deck value.</param>
+            <param name="card">The card value.</param>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromDeckAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromDeckAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromDeckAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.AddCardToHandAction.#ctor(CardGameEngine.IHand,CardGameEngine.ICard,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.AddCardToHandAction"/> type.</summary>
+            <param name="hand">The hand value.</param>
+            <param name="card">The card value.</param>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.AddCardToHandAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.AddCardToHandAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.AddCardToHandAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromHandAction.#ctor(CardGameEngine.IHand,CardGameEngine.ICard,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.RemoveCardFromHandAction"/> type.</summary>
+            <param name="hand">The hand value.</param>
+            <param name="card">The card value.</param>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromHandAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromHandAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromHandAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.AddCardToStackedGraveyardAction.#ctor(CardGameEngine.IStackedDeck,CardGameEngine.ICard,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.AddCardToStackedGraveyardAction"/> type.</summary>
+            <param name="graveyard">The graveyard value.</param>
+            <param name="card">The card value.</param>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.AddCardToStackedGraveyardAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.AddCardToStackedGraveyardAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.AddCardToStackedGraveyardAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromStackedDeckAction.#ctor(CardGameEngine.IStackedDeck,CardGameEngine.ICard,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.RemoveCardFromStackedDeckAction"/> type.</summary>
+            <param name="deck">The deck value.</param>
+            <param name="card">The card value.</param>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromStackedDeckAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromStackedDeckAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.RemoveCardFromStackedDeckAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ModifyActivePlayerAction.#ctor(CardGameEngine.IPlayer,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.ModifyActivePlayerAction"/> type.</summary>
+            <param name="newActivePlayer">The newActivePlayer value.</param>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.ModifyActivePlayerAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ModifyActivePlayerAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.ModifyActivePlayerAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.DrawCardAction.#ctor(CardGameEngine.IPlayer,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.DrawCardAction"/> type.</summary>
+            <param name="player">The player value.</param>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.DrawCardAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.DrawCardAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.DrawCardAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ModifyAttackStatAction.#ctor(CardGameEngine.IAttacking,System.Int32,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.ModifyAttackStatAction"/> type.</summary>
+            <param name="attacking">The attacking value.</param>
+            <param name="delta">The delta value.</param>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.ModifyAttackStatAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ModifyAttackStatAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.ModifyAttackStatAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ModifyLifeStatAction.#ctor(CardGameEngine.ILiving,System.Int32,System.Boolean)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.ModifyLifeStatAction"/> type.</summary>
+            <param name="living">The living value.</param>
+            <param name="delta">The delta value.</param>
+            <param name="isAborted">The isAborted value.</param>
+        </member>
+        <member name="M:CardGameEngine.ModifyLifeStatAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ModifyLifeStatAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.ModifyLifeStatAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ModifyManaStatAction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ModifyManaStatAction.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.ModifyManaStatAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Card.#ctor(System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.Card"/> type.</summary>
+            <param name="name">The name value.</param>
+            <param name="[][]">The [] value.</param>
+            <param name="name">The name value.</param>
+        </member>
+        <member name="M:CardGameEngine.Card.#ctor(System.Collections.Generic.List{CardGameEngine.ICardComponent},System.Collections.Generic.List{CardGameEngine.IReaction},CardGameEngine.IPlayer,System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.Card"/> type.</summary>
+            <param name="components">The components value.</param>
+            <param name="reactions">The reactions value.</param>
+            <param name="owner">The owner value.</param>
+            <param name="name">The name value.</param>
+        </member>
+        <member name="M:CardGameEngine.Card.IsCastable(CardGameEngine.IGameState)">
+            <summary>Determines whether this card can currently be cast.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Card.FindParentCard(CardGameEngine.IGameState)">
+            <summary>Finds the parent card in the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Card.FindParentPlayer(CardGameEngine.IGameState)">
+            <summary>Finds the parent player in the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CardComponent.#ctor(System.Int32)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.CardComponent"/> type.</summary>
+            <param name="mana">The mana value.</param>
+        </member>
+        <member name="M:CardGameEngine.CardComponent.#ctor(System.Int32,System.Int32)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.CardComponent"/> type.</summary>
+            <param name="manaValue">The manaValue value.</param>
+            <param name="manaBaseValue">The manaBaseValue value.</param>
+        </member>
+        <member name="M:CardGameEngine.CardComponent.#ctor(CardGameEngine.ManaCostStat,System.Collections.Generic.List{CardGameEngine.IReaction})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.CardComponent"/> type.</summary>
+            <param name="manaCostStat">The manaCostStat value.</param>
+            <param name="reactions">The reactions value.</param>
+        </member>
+        <member name="M:CardGameEngine.CardComponent.AllReactions">
+            <summary>Gets all reactions associated with this object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CardComponent.ReactTo(CardGameEngine.IGame,CardGameEngine.IActionEvent)">
+            <summary>Reacts to the specified action event.</summary>
+            <param name="game">The game value.</param>
+            <param name="actionEvent">The actionEvent value.</param>
+        </member>
+        <member name="M:CardGameEngine.CardComponent.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CardComponent.FindCard(CardGameEngine.IGameState)">
+            <summary>Performs the FindCard operation.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ICardComponent.FindCard(CardGameEngine.IGameState)">
+            <summary>
+            Find the ICard this ICardComponent is attached to.
+            </summary>
+            <param name="gameState"></param>
+            <returns>The ICard this ICardComponent is attached to or null
+            if it is not attached.</returns>
+        </member>
+        <member name="M:CardGameEngine.MonsterCardComponent.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.MonsterCardComponent"/> type.</summary>
+            <param name="mana">The mana value.</param>
+            <param name="attack">The attack value.</param>
+            <param name="life">The life value.</param>
+        </member>
+        <member name="M:CardGameEngine.MonsterCardComponent.#ctor(System.Int32,CardGameEngine.AttackStat,CardGameEngine.LifeStat)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.MonsterCardComponent"/> type.</summary>
+            <param name="mana">The mana value.</param>
+            <param name="attackStat">The attackStat value.</param>
+            <param name="lifeStat">The lifeStat value.</param>
+        </member>
+        <member name="M:CardGameEngine.MonsterCardComponent.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.MonsterCardComponent.GetPotentialTargets(CardGameEngine.IGameState)">
+            <summary>Gets the characters that can currently be targeted.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ITargetfulSpellCardComponent.Cast(CardGameEngine.IGame,CardGameEngine.ICharacter)">
+            <summary>
+            Called when the spell card is cast. Execute Actions here.
+            </summary>
+            <param name="game"></param>
+            <param name="target"></param>
+        </member>
+        <member name="M:CardGameEngine.TargetfulSpellCardComponent.#ctor(System.Int32)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.TargetfulSpellCardComponent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.TargetfulSpellCardComponent.Cast(CardGameEngine.IGame,CardGameEngine.ICharacter)">
+            <summary>Casts this spell using the specified game or target.</summary>
+            <param name="game">The game value.</param>
+            <param name="target">The target value.</param>
+        </member>
+        <member name="M:CardGameEngine.TargetfulSpellCardComponent.GetPotentialTargets(CardGameEngine.IGameState)">
+            <summary>Gets the characters that can currently be targeted.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ITargetlessSpellCardComponent.Cast(CardGameEngine.IGame)">
+            <summary>
+            Called when spell card is cast. Execute Actions here.
+            </summary>
+            <param name="game"></param>
+        </member>
+        <member name="M:CardGameEngine.TargetlessSpellCardComponent.#ctor(System.Int32)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.TargetlessSpellCardComponent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.TargetlessSpellCardComponent.Cast(CardGameEngine.IGame)">
+            <summary>Casts this spell using the specified game or target.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.Compound.#ctor(System.Collections.Generic.List{CardGameEngine.ICardComponent})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.Compound"/> type.</summary>
+            <param name="components">The components value.</param>
+        </member>
+        <member name="M:CardGameEngine.Compound.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="P:CardGameEngine.ICompound.Components">
+            <summary>
+            List of components that this Compound is made of.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.ReactiveCompound.#ctor(System.Collections.Generic.List{CardGameEngine.ICardComponent})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.ReactiveCompound"/> type.</summary>
+            <param name="components">The components value.</param>
+        </member>
+        <member name="M:CardGameEngine.ReactiveCompound.#ctor(System.Collections.Generic.List{CardGameEngine.ICardComponent},System.Collections.Generic.List{CardGameEngine.IReaction})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.ReactiveCompound"/> type.</summary>
+            <param name="components">The components value.</param>
+            <param name="reactions">The reactions value.</param>
+        </member>
+        <member name="M:CardGameEngine.ReactiveCompound.AllReactions">
+            <summary>Gets all reactions associated with this object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ReactiveCompound.ReactTo(CardGameEngine.IGame,CardGameEngine.IActionEvent)">
+            <summary>Reacts to the specified action event.</summary>
+            <param name="game">The game value.</param>
+            <param name="actionEvent">The actionEvent value.</param>
+        </member>
+        <member name="M:CardGameEngine.ReactiveCompound.FindParentCard(CardGameEngine.IGameState)">
+            <summary>Finds the parent card in the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ReactiveCompound.FindParentPlayer(CardGameEngine.IGameState)">
+            <summary>Finds the parent player in the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CompoundCard.#ctor(System.Collections.Generic.List{CardGameEngine.ICard},System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.CompoundCard"/> type.</summary>
+            <param name="components">The components value.</param>
+            <param name="Name">The Name value.</param>
+        </member>
+        <member name="M:CardGameEngine.CompoundCard.#ctor(CardGameEngine.ICard)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.CompoundCard"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.CompoundCard.AddComponent(CardGameEngine.ICard)">
+            <summary>Adds a component to this object.</summary>
+            <param name="card">The card value.</param>
+        </member>
+        <member name="M:CardGameEngine.CompoundCard.RemoveComponent(CardGameEngine.ICard)">
+            <summary>Removes a component from this object.</summary>
+            <param name="card">The card value.</param>
+        </member>
+        <member name="M:CardGameEngine.CompoundMonsterCard.#ctor(System.Collections.Generic.List{CardGameEngine.IMonsterCard})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.CompoundMonsterCard"/> type.</summary>
+            <param name="components">The components value.</param>
+        </member>
+        <member name="M:CardGameEngine.CompoundMonsterCard.#ctor(CardGameEngine.IMonsterCard)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.CompoundMonsterCard"/> type.</summary>
+            <param name="monsterCard">The monsterCard value.</param>
+        </member>
+        <member name="M:CardGameEngine.CompoundMonsterCard.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.CompoundMonsterCard"/> type.</summary>
+            <param name="mana">The mana value.</param>
+            <param name="attack">The attack value.</param>
+            <param name="life">The life value.</param>
+        </member>
+        <member name="M:CardGameEngine.CompoundMonsterCard.Attack(CardGameEngine.IGame,CardGameEngine.ICharacter)">
+            <summary>Performs an attack against the specified target.</summary>
+            <param name="game">The game value.</param>
+            <param name="targetCharacter">The targetCharacter value.</param>
+        </member>
+        <member name="M:CardGameEngine.CompoundMonsterCard.GetPotentialTargets(CardGameEngine.IGame)">
+            <summary>Gets the characters that can currently be targeted.</summary>
+            <param name="game">The game value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CompoundMonsterCard.AddComponent(CardGameEngine.ICard)">
+            <summary>Adds a component to this object.</summary>
+            <param name="card">The card value.</param>
+        </member>
+        <member name="M:CardGameEngine.CompoundMonsterCard.IsSummonable(CardGameEngine.IGameState)">
+            <summary>Determines whether this card can currently be summoned.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CompoundMonsterCard.GetPotentialTargets(CardGameEngine.IGameState)">
+            <summary>Gets the characters that can currently be targeted.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CompoundMonsterCard.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CompoundTargetfulSpellCard.#ctor(System.Collections.Generic.List{CardGameEngine.ISpellCard},System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.CompoundTargetfulSpellCard"/> type.</summary>
+            <param name="components">The components value.</param>
+            <param name="name">The name value.</param>
+        </member>
+        <member name="M:CardGameEngine.CompoundTargetfulSpellCard.#ctor(CardGameEngine.ISpellCard)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.CompoundTargetfulSpellCard"/> type.</summary>
+            <param name="spellCard">The spellCard value.</param>
+        </member>
+        <member name="M:CardGameEngine.CompoundTargetfulSpellCard.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CompoundTargetfulSpellCard.GetPotentialTargets(CardGameEngine.IGameState)">
+            <summary>Gets the characters that can currently be targeted.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CompoundTargetfulSpellCard.Cast(CardGameEngine.IGame,CardGameEngine.ICharacter)">
+            <summary>Casts this spell using the specified game or target.</summary>
+            <param name="game">The game value.</param>
+            <param name="targetCharacter">The targetCharacter value.</param>
+        </member>
+        <member name="M:CardGameEngine.CompoundTargetlessSpellCard.#ctor(System.Collections.Generic.List{CardGameEngine.ITargetlessSpellCard},System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.CompoundTargetlessSpellCard"/> type.</summary>
+            <param name="components">The components value.</param>
+            <param name="name">The name value.</param>
+        </member>
+        <member name="M:CardGameEngine.CompoundTargetlessSpellCard.#ctor(CardGameEngine.ITargetlessSpellCard,System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.CompoundTargetlessSpellCard"/> type.</summary>
+            <param name="spellCard">The spellCard value.</param>
+            <param name="name">The name value.</param>
+        </member>
+        <member name="M:CardGameEngine.CompoundTargetlessSpellCard.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CompoundTargetlessSpellCard.Cast(CardGameEngine.IGame)">
+            <summary>Casts this spell using the specified game or target.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.ICompoundCard.AddComponent(CardGameEngine.ICard)">
+            <summary>
+            Add a Card to this CompoundCard.
+            </summary>
+            <param name="card"></param>
+        </member>
+        <member name="M:CardGameEngine.ICompoundCard.RemoveComponent(CardGameEngine.ICard)">
+            <summary>
+            Remove a Card from this CompoundCard.
+            </summary>
+            <param name="card"></param>
+        </member>
+        <member name="P:CardGameEngine.IMonsterCard.IsReadyToAttack">
+            <summary>
+            Marks if this MonsterCard is ready to attack. Normally, MonsterCards
+            are unable to attack during the same turn that they have been
+            played. Also it only allows one attack per turn.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IMonsterCard.IsSummonable(CardGameEngine.IGameState)">
+            <summary>Determines whether the card can currently be summoned for the specified game state.</summary>
+        </member>
+        <member name="M:CardGameEngine.IMonsterCard.Attack(CardGameEngine.IGame,CardGameEngine.ICharacter)">
+            <summary>
+            Attack the given target Character.
+            </summary>
+            <param name="game"></param>
+            <param name="target"></param>
+        </member>
+        <member name="M:CardGameEngine.MonsterCard.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.MonsterCard"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.MonsterCard.#ctor(System.Int32,System.Int32,System.Int32,CardGameEngine.IPlayer,System.String)">
+            <summary>
+            Represents a certain type of Card that is played
+            onto the Player's Board.
+            </summary>
+            <param name="mana"></param>
+            <param name="attack"></param>
+            <param name="life"></param>
+        </member>
+        <member name="M:CardGameEngine.MonsterCard.#ctor(System.Collections.Generic.List{CardGameEngine.IMonsterCardComponent},CardGameEngine.IPlayer)">
+            <summary>
+            Represents a certain type of Card that is played
+            onto the Player's Board.
+            </summary>
+            <param name="components"></param>
+        </member>
+        <member name="M:CardGameEngine.MonsterCard.GetSum(System.Func{CardGameEngine.IMonsterCardComponent,System.Int32})">
+            <summary>Performs the GetSum operation.</summary>
+            <param name="GetValue">The GetValue value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.MonsterCard.Attack(CardGameEngine.IGame,CardGameEngine.ICharacter)">
+            <summary>Performs an attack against the specified target.</summary>
+            <param name="game">The game value.</param>
+            <param name="target">The target value.</param>
+        </member>
+        <member name="M:CardGameEngine.MonsterCard.GetPotentialTargets(CardGameEngine.IGameState)">
+            <summary>Gets the characters that can currently be targeted.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.MonsterCard.IsSummonable(CardGameEngine.IGameState)">
+            <summary>Determines whether this card can currently be summoned.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.MonsterCard.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.IPlayable.IsPlayable(CardGameEngine.IGameState)">
+            <summary>
+            Checks if this Card is playable.
+            </summary>
+            <returns>True if this Card can be played.</returns>
+        </member>
+        <member name="M:CardGameEngine.ISpellCard.IsCastable(CardGameEngine.IGameState)">
+            <summary>Determines whether the card can currently be cast for the specified game state.</summary>
+        </member>
+        <member name="M:CardGameEngine.SpellCard.#ctor(CardGameEngine.IPlayer,System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.SpellCard"/> type.</summary>
+            <param name="owner">The owner value.</param>
+            <param name="name">The name value.</param>
+        </member>
+        <member name="M:CardGameEngine.SpellCard.#ctor(System.Collections.Generic.List{CardGameEngine.ISpellCardComponent},CardGameEngine.IPlayer,System.String)">
+            <summary>
+            Represents a certain type of Card that has an
+            immediate effect on the Game's state.
+            </summary>
+            <param name="components"></param>
+            <param name="owner"></param>-
+            <param name="name"></param>-
+        </member>
+        <member name="M:CardGameEngine.SpellCard.#ctor(System.Collections.Generic.List{CardGameEngine.ICardComponent},System.Collections.Generic.List{CardGameEngine.IReaction},CardGameEngine.IPlayer,System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.SpellCard"/> type.</summary>
+            <param name="components">The components value.</param>
+            <param name="reactions">The reactions value.</param>
+            <param name="owner">The owner value.</param>
+            <param name="name">The name value.</param>
+        </member>
+        <member name="M:CardGameEngine.ITargetfulSpellCard.Cast(CardGameEngine.IGame,CardGameEngine.ICharacter)">
+            <summary>
+            Called when the spell card is cast.
+            </summary>
+            <param name="game"></param>
+            <param name="target"></param>
+        </member>
+        <member name="M:CardGameEngine.TargetfulSpellCard.#ctor(CardGameEngine.IPlayer,System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.TargetfulSpellCard"/> type.</summary>
+            <param name="owner">The owner value.</param>
+            <param name="name">The name value.</param>
+        </member>
+        <member name="M:CardGameEngine.TargetfulSpellCard.#ctor(CardGameEngine.ISpellCardComponent,CardGameEngine.IPlayer,System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.TargetfulSpellCard"/> type.</summary>
+            <param name="component">The component value.</param>
+            <param name="owner">The owner value.</param>
+            <param name="name">The name value.</param>
+        </member>
+        <member name="M:CardGameEngine.TargetfulSpellCard.#ctor(System.Collections.Generic.List{CardGameEngine.ISpellCardComponent},CardGameEngine.IPlayer,System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.TargetfulSpellCard"/> type.</summary>
+            <param name="components">The components value.</param>
+            <param name="owner">The owner value.</param>
+            <param name="name">The name value.</param>
+        </member>
+        <member name="M:CardGameEngine.TargetfulSpellCard.#ctor(System.Collections.Generic.List{CardGameEngine.ICardComponent},System.Collections.Generic.List{CardGameEngine.IReaction},CardGameEngine.IPlayer,System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.TargetfulSpellCard"/> type.</summary>
+            <param name="components">The components value.</param>
+            <param name="reactions">The reactions value.</param>
+            <param name="owner">The owner value.</param>
+            <param name="name">The name value.</param>
+        </member>
+        <member name="M:CardGameEngine.TargetfulSpellCard.GetPotentialTargets(CardGameEngine.IGameState)">
+            <summary>Gets the characters that can currently be targeted.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.TargetfulSpellCard.Cast(CardGameEngine.IGame,CardGameEngine.ICharacter)">
+            <summary>Casts this spell using the specified game or target.</summary>
+            <param name="game">The game value.</param>
+            <param name="target">The target value.</param>
+        </member>
+        <member name="M:CardGameEngine.TargetfulSpellCard.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ITargetlessSpellCard.Cast(CardGameEngine.IGame)">
+            <summary>
+            Called when the spell card is cast.
+            </summary>
+            <param name="game"></param>
+        </member>
+        <member name="M:CardGameEngine.TargetlessSpellCard.#ctor(CardGameEngine.IPlayer,System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.TargetlessSpellCard"/> type.</summary>
+            <param name="owner">The owner value.</param>
+            <param name="name">The name value.</param>
+        </member>
+        <member name="M:CardGameEngine.TargetlessSpellCard.#ctor(CardGameEngine.ITargetlessSpellCardComponent,CardGameEngine.IPlayer,System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.TargetlessSpellCard"/> type.</summary>
+            <param name="component">The component value.</param>
+            <param name="owner">The owner value.</param>
+            <param name="name">The name value.</param>
+        </member>
+        <member name="M:CardGameEngine.TargetlessSpellCard.#ctor(System.Collections.Generic.List{CardGameEngine.ITargetlessSpellCardComponent},CardGameEngine.IPlayer,System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.TargetlessSpellCard"/> type.</summary>
+            <param name="components">The components value.</param>
+            <param name="owner">The owner value.</param>
+            <param name="name">The name value.</param>
+        </member>
+        <member name="M:CardGameEngine.TargetlessSpellCard.#ctor(System.Collections.Generic.List{CardGameEngine.ICardComponent},System.Collections.Generic.List{CardGameEngine.IReaction},CardGameEngine.IPlayer,System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.TargetlessSpellCard"/> type.</summary>
+            <param name="components">The components value.</param>
+            <param name="reactions">The reactions value.</param>
+            <param name="owner">The owner value.</param>
+            <param name="name">The name value.</param>
+        </member>
+        <member name="M:CardGameEngine.TargetlessSpellCard.Cast(CardGameEngine.IGame)">
+            <summary>Casts this spell using the specified game or target.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.TargetlessSpellCard.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ITargetful.GetPotentialTargets(CardGameEngine.IGameState)">
+            <summary>
+            Get a set of potential target Characters based on the current
+            state of the Game.
+            </summary>
+            <param name="gameState"></param>
+            <returns>All valid target Characters.</returns>
+        </member>
+        <member name="F:CardGameEngine.Board.cards">
+            <summary>
+            Data container.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.Board.#ctor">
+            <summary>
+            Represents all Cards on a Player's Board.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.Board.#ctor(CardGameEngine.ICard[])">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.Board"/> type.</summary>
+            <param name="cards">The cards value.</param>
+        </member>
+        <member name="M:CardGameEngine.Board.Contains(CardGameEngine.ICard)">
+            <summary>Performs the Contains operation.</summary>
+            <param name="card">The card value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Board.AddAt(System.Int32,CardGameEngine.ICard)">
+            <summary>Performs the AddAt operation.</summary>
+            <param name="index">The index value.</param>
+            <param name="card">The card value.</param>
+        </member>
+        <member name="M:CardGameEngine.Board.Remove(CardGameEngine.ICard)">
+            <summary>Performs the Remove operation.</summary>
+            <param name="card">The card value.</param>
+        </member>
+        <member name="M:CardGameEngine.Board.IsFreeSlot(System.Int32)">
+            <summary>Performs the IsFreeSlot operation.</summary>
+            <param name="index">The index value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Board.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="P:CardGameEngine.IBoard.MaxSize">
+            <summary>
+            Maximum number of Cards that this Board can hold.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IBoard.Remove(CardGameEngine.ICard)">
+            <summary>
+            Remove the specified Card from this Board.
+            </summary>
+            <param name="card"></param>
+        </member>
+        <member name="M:CardGameEngine.IBoard.AddAt(System.Int32,CardGameEngine.ICard)">
+            <summary>
+            Add the given Card to the Board at position index.
+            </summary>
+            <param name="index"></param>
+            <param name="card"></param>
+        </member>
+        <member name="P:CardGameEngine.IBoard.Item(System.Int32)">
+            <summary>
+            Get the Card at position index.
+            </summary>
+            <param name="index"></param>
+            <returns>The Card at position index.</returns>
+        </member>
+        <member name="M:CardGameEngine.IBoard.IsFreeSlot(System.Int32)">
+            <summary>
+            Checks if the given position points to a free slot on this Board.
+            </summary>
+            <param name="index"></param>
+            <returns>True if the given position points to a free slot on
+            this Board.</returns>
+        </member>
+        <member name="M:CardGameEngine.CardCollection.#ctor">
+            <summary>
+            Abstract representation of a collection of Cards.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.CardCollection.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CardCollection.Contains(CardGameEngine.ICard)">
+            <summary>Performs the Contains operation.</summary>
+            <param name="card">The card value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Deck.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.Deck"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.Deck.#ctor(System.Collections.Generic.Stack{CardGameEngine.ICard})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.Deck"/> type.</summary>
+            <param name="cards">The cards value.</param>
+        </member>
+        <member name="M:CardGameEngine.Deck.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Deck.Contains(CardGameEngine.ICard)">
+            <summary>Performs the Contains operation.</summary>
+            <param name="card">The card value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Deck.Pop">
+            <summary>Performs the Pop operation.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Deck.Push(CardGameEngine.ICard)">
+            <summary>Performs the Push operation.</summary>
+            <param name="card">The card value.</param>
+        </member>
+        <member name="M:CardGameEngine.Deck.Shuffle">
+            <summary>Performs the Shuffle operation.</summary>
+        </member>
+        <member name="M:CardGameEngine.IDeck.Pop">
+            <summary>
+            Remove and return the top Card from this Deck.
+            </summary>
+            <returns>The top Card from this Deck.</returns>
+        </member>
+        <member name="M:CardGameEngine.IDeck.Push(CardGameEngine.ICard)">
+            <summary>
+            Push the given Card to this Deck.
+            </summary>
+            <param name="card"></param>
+        </member>
+        <member name="M:CardGameEngine.IDeck.Shuffle">
+            <summary>
+            Shuffle this Deck.
+            </summary>
+        </member>
+        <member name="F:CardGameEngine.Hand.cards">
+            <summary>
+            Data container.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.Hand.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.Hand"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.Hand.#ctor(System.Collections.Generic.List{CardGameEngine.ICard})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.Hand"/> type.</summary>
+            <param name="cards">The cards value.</param>
+        </member>
+        <member name="M:CardGameEngine.Hand.Contains(CardGameEngine.ICard)">
+            <summary>Performs the Contains operation.</summary>
+            <param name="card">The card value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Hand.Add(CardGameEngine.ICard)">
+            <summary>Performs the Add operation.</summary>
+            <param name="card">The card value.</param>
+        </member>
+        <member name="M:CardGameEngine.Hand.Remove(CardGameEngine.ICard)">
+            <summary>Performs the Remove operation.</summary>
+            <param name="card">The card value.</param>
+        </member>
+        <member name="M:CardGameEngine.Hand.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="P:CardGameEngine.IHand.MaxSize">
+            <summary>
+            Maximum number of Cards that this Hand can hold.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IHand.Remove(CardGameEngine.ICard)">
+            <summary>
+            Remove the specified Card from this Hand.
+            </summary>
+            <param name="card"></param>
+        </member>
+        <member name="M:CardGameEngine.IHand.Add(CardGameEngine.ICard)">
+            <summary>
+            Add the given Card to this Hand.
+            </summary>
+            <param name="card"></param>
+        </member>
+        <member name="P:CardGameEngine.IHand.Item(System.Int32)">
+            <summary>
+            Get the Card at position index.
+            </summary>
+            <param name="index"></param>
+            <returns>The Card at position index.</returns>
+        </member>
+        <member name="P:CardGameEngine.ICardCollection.AllCards">
+            <summary>
+            Get all cards in this Deck.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.ICardCollection.Size">
+            <summary>
+            Number of Cards currently in this Deck.
+            </summary>
+            <returns>The number of Cards in this Deck.</returns>
+        </member>
+        <member name="P:CardGameEngine.ICardCollection.IsEmpty">
+            <summary>
+            Checks if this Deck contains any Cards.
+            </summary>
+            <returns>True if this Deck does not contain any Cards.</returns>
+        </member>
+        <member name="M:CardGameEngine.ICardCollection.Contains(CardGameEngine.ICard)">
+            <summary>
+            Checks if this Deck contains the given Card.
+            </summary>
+            <param name="card"></param>
+            <returns>True if this Deck contains the given Card.</returns>
+        </member>
+        <member name="P:CardGameEngine.ICharacter.IsAlive">
+            <summary>
+            Indicates if this Character is still alive.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IStackedDeck.Pop">
+            <summary>
+            Remove and return the top Card from this Deck.
+            </summary>
+            <returns>The top Card from this Deck.</returns>
+        </member>
+        <member name="M:CardGameEngine.IStackedDeck.Push(CardGameEngine.ICard)">
+            <summary>
+            Push the given Card to this Deck.
+            </summary>
+            <param name="card"></param>
+        </member>
+        <member name="M:CardGameEngine.IStackedDeck.Shuffle">
+            <summary>
+            Shuffle this Deck.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.StackedDeck.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StackedDeck"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.StackedDeck.#ctor(System.Collections.Generic.Stack{CardGameEngine.ICard})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StackedDeck"/> type.</summary>
+            <param name="cards">The cards value.</param>
+        </member>
+        <member name="M:CardGameEngine.StackedDeck.Contains(CardGameEngine.ICard)">
+            <summary>Performs the Contains operation.</summary>
+            <param name="card">The card value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.StackedDeck.Pop">
+            <summary>Performs the Pop operation.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.StackedDeck.Push(CardGameEngine.ICard)">
+            <summary>Performs the Push operation.</summary>
+            <param name="card">The card value.</param>
+        </member>
+        <member name="M:CardGameEngine.StackedDeck.Shuffle">
+            <summary>Performs the Shuffle operation.</summary>
+        </member>
+        <member name="M:CardGameEngine.Event.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.Event"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.Event.Execute(CardGameEngine.IGame)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.Event.IsExecutable(CardGameEngine.IGameState)">
+            <summary>Determines whether this operation can be executed for the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.AttackEvent.#ctor(System.Func{CardGameEngine.IMonsterCard},System.Func{CardGameEngine.ICharacter})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.AttackEvent"/> type.</summary>
+            <param name="getAttacker">The getAttacker value.</param>
+            <param name="getTarget">The getTarget value.</param>
+        </member>
+        <member name="M:CardGameEngine.EndAttackEvent.#ctor(System.Func{CardGameEngine.IMonsterCard},System.Func{CardGameEngine.ICharacter})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndAttackEvent"/> type.</summary>
+            <param name="getAttacker">The getAttacker value.</param>
+            <param name="getTarget">The getTarget value.</param>
+        </member>
+        <member name="M:CardGameEngine.EndAttackEvent.#ctor(CardGameEngine.IMonsterCard,CardGameEngine.ICharacter)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndAttackEvent"/> type.</summary>
+            <param name="attacker">The attacker value.</param>
+            <param name="target">The target value.</param>
+        </member>
+        <member name="M:CardGameEngine.EndAttackEvent.#ctor(System.Func{CardGameEngine.IMonsterCard},CardGameEngine.ICharacter)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndAttackEvent"/> type.</summary>
+            <param name="getAttacker">The getAttacker value.</param>
+            <param name="target">The target value.</param>
+        </member>
+        <member name="M:CardGameEngine.EndAttackEvent.#ctor(CardGameEngine.IMonsterCard,System.Func{CardGameEngine.ICharacter})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndAttackEvent"/> type.</summary>
+            <param name="attacker">The attacker value.</param>
+            <param name="getTarget">The getTarget value.</param>
+        </member>
+        <member name="M:CardGameEngine.EndAttackEvent.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.StartAttackEvent.#ctor(System.Func{CardGameEngine.IMonsterCard},System.Func{CardGameEngine.ICharacter})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartAttackEvent"/> type.</summary>
+            <param name="getAttacker">The getAttacker value.</param>
+            <param name="getTarget">The getTarget value.</param>
+        </member>
+        <member name="M:CardGameEngine.StartAttackEvent.#ctor(CardGameEngine.IMonsterCard,CardGameEngine.ICharacter)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartAttackEvent"/> type.</summary>
+            <param name="attacker">The attacker value.</param>
+            <param name="target">The target value.</param>
+        </member>
+        <member name="M:CardGameEngine.StartAttackEvent.#ctor(System.Func{CardGameEngine.IMonsterCard},CardGameEngine.ICharacter)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartAttackEvent"/> type.</summary>
+            <param name="getAttacker">The getAttacker value.</param>
+            <param name="target">The target value.</param>
+        </member>
+        <member name="M:CardGameEngine.StartAttackEvent.#ctor(CardGameEngine.IMonsterCard,System.Func{CardGameEngine.ICharacter})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartAttackEvent"/> type.</summary>
+            <param name="attacker">The attacker value.</param>
+            <param name="getTarget">The getTarget value.</param>
+        </member>
+        <member name="M:CardGameEngine.StartAttackEvent.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CardEvent.#ctor(CardGameEngine.ICard)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.CardEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.CardEvent.#ctor(System.Func{CardGameEngine.ICard})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.CardEvent"/> type.</summary>
+            <param name="getCard">The getCard value.</param>
+        </member>
+        <member name="M:CardGameEngine.EndDrawCardEvent.#ctor(CardGameEngine.ICard)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndDrawCardEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.EndDrawCardEvent.#ctor(System.Func{CardGameEngine.ICard})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndDrawCardEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.EndDrawCardEvent.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.StartDrawCardEvent.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartDrawCardEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.StartDrawCardEvent.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.EndPlayCardEvent.#ctor(CardGameEngine.ICard)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndPlayCardEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.EndPlayCardEvent.#ctor(System.Func{CardGameEngine.ICard})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndPlayCardEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.EndPlayCardEvent.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.EndPlayMonsterCardEvent.#ctor(CardGameEngine.IMonsterCard,System.Int32)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndPlayMonsterCardEvent"/> type.</summary>
+            <param name="monsterCard">The monsterCard value.</param>
+            <param name="boardIndex">The boardIndex value.</param>
+        </member>
+        <member name="M:CardGameEngine.EndPlayMonsterCardEvent.#ctor(System.Func{CardGameEngine.IMonsterCard},System.Int32)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndPlayMonsterCardEvent"/> type.</summary>
+            <param name="getMonsterCard">The getMonsterCard value.</param>
+            <param name="boardIndex">The boardIndex value.</param>
+        </member>
+        <member name="M:CardGameEngine.StartPlayMonsterCardEvent.#ctor(CardGameEngine.IMonsterCard,System.Int32)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartPlayMonsterCardEvent"/> type.</summary>
+            <param name="monsterCard">The monsterCard value.</param>
+            <param name="boardIndex">The boardIndex value.</param>
+        </member>
+        <member name="M:CardGameEngine.StartPlayMonsterCardEvent.#ctor(System.Func{CardGameEngine.IMonsterCard},System.Int32)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartPlayMonsterCardEvent"/> type.</summary>
+            <param name="getMonsterCard">The getMonsterCard value.</param>
+            <param name="boardIndex">The boardIndex value.</param>
+        </member>
+        <member name="M:CardGameEngine.EndPlaySpellCardEvent.#ctor(CardGameEngine.ISpellCard)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndPlaySpellCardEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.EndPlaySpellCardEvent.#ctor(System.Func{CardGameEngine.ISpellCard})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndPlaySpellCardEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.EndPlayTargetfulSpellCardEvent.#ctor(CardGameEngine.ITargetfulSpellCard,CardGameEngine.ICharacter)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndPlayTargetfulSpellCardEvent"/> type.</summary>
+            <param name="spellCard">The spellCard value.</param>
+            <param name="target">The target value.</param>
+        </member>
+        <member name="M:CardGameEngine.EndPlayTargetfulSpellCardEvent.#ctor(System.Func{CardGameEngine.ITargetfulSpellCard},CardGameEngine.ICharacter)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndPlayTargetfulSpellCardEvent"/> type.</summary>
+            <param name="getSpellCard">The getSpellCard value.</param>
+            <param name="target">The target value.</param>
+        </member>
+        <member name="M:CardGameEngine.StartPlayTargetfulSpellCardEvent.#ctor(CardGameEngine.ITargetfulSpellCard,CardGameEngine.ICharacter)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartPlayTargetfulSpellCardEvent"/> type.</summary>
+            <param name="spellCard">The spellCard value.</param>
+            <param name="target">The target value.</param>
+        </member>
+        <member name="M:CardGameEngine.StartPlayTargetfulSpellCardEvent.#ctor(System.Func{CardGameEngine.ITargetfulSpellCard},CardGameEngine.ICharacter)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartPlayTargetfulSpellCardEvent"/> type.</summary>
+            <param name="getSpellCard">The getSpellCard value.</param>
+            <param name="target">The target value.</param>
+        </member>
+        <member name="M:CardGameEngine.EndPlayTargetlessSpellCardEvent.#ctor(CardGameEngine.ITargetlessSpellCard)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndPlayTargetlessSpellCardEvent"/> type.</summary>
+            <param name="spellCard">The spellCard value.</param>
+        </member>
+        <member name="M:CardGameEngine.EndPlayTargetlessSpellCardEvent.#ctor(System.Func{CardGameEngine.ITargetlessSpellCard})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndPlayTargetlessSpellCardEvent"/> type.</summary>
+            <param name="getSpellCard">The getSpellCard value.</param>
+        </member>
+        <member name="M:CardGameEngine.StartPlayTargetlessSpellCardEvent.#ctor(CardGameEngine.ITargetlessSpellCard)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartPlayTargetlessSpellCardEvent"/> type.</summary>
+            <param name="spellCard">The spellCard value.</param>
+        </member>
+        <member name="M:CardGameEngine.StartPlayTargetlessSpellCardEvent.#ctor(System.Func{CardGameEngine.ITargetlessSpellCard})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartPlayTargetlessSpellCardEvent"/> type.</summary>
+            <param name="getSpellCard">The getSpellCard value.</param>
+        </member>
+        <member name="M:CardGameEngine.StartPlaySpellCardEvent.#ctor(CardGameEngine.ISpellCard)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartPlaySpellCardEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.StartPlaySpellCardEvent.#ctor(System.Func{CardGameEngine.ISpellCard})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartPlaySpellCardEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.StartPlayCardEvent.#ctor(CardGameEngine.ICard)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartPlayCardEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.StartPlayCardEvent.#ctor(System.Func{CardGameEngine.ICard})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartPlayCardEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.StartPlayCardEvent.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.EndOfGameEvent.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndOfGameEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.EndOfGameEvent.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.StartOfGameEvent.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartOfGameEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.StartOfGameEvent.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.EndOfTurnEvent.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.EndOfTurnEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.EndOfTurnEvent.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.StartOfTurnEvent.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.StartOfTurnEvent"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.StartOfTurnEvent.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CardGameEngineException.#ctor">
+            <summary>
+            Library specific Exception. Usually thrown when the Game's
+            mechanics are being violated.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.CardGameEngineException.#ctor(System.String)">
+            <summary>
+            Library specific Exception. Usually thrown when the Game's
+            mechanics are being violated.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:CardGameEngine.CardGameEngineException.#ctor(System.String,System.Exception)">
+            <summary>
+            Library specific Exception. Usually thrown when the Game's
+            mechanics are being violated.
+            </summary>
+            <param name="message"></param>
+            <param name="inner"></param>
+        </member>
+        <member name="M:CardGameEngine.NotImplementedYetException.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.NotImplementedYetException"/> type.</summary>
+        </member>
+        <member name="M:CardGameEngine.NotImplementedYetException.#ctor(System.String)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.NotImplementedYetException"/> type.</summary>
+            <param name="message">The message value.</param>
+        </member>
+        <member name="M:CardGameEngine.NotImplementedYetException.#ctor(System.String,System.Exception)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.NotImplementedYetException"/> type.</summary>
+            <param name="message">The message value.</param>
+            <param name="message">The message value.</param>
+            <param name="innerException">The innerException value.</param>
+        </member>
+        <member name="F:CardGameEngine.Game.activePlayerIndex">
+            <summary>
+            Index of the active Player. Refers to the Players array.
+            Also see the ActivePlayer accessor.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.Game.#ctor">
+            <summary>
+            Represent the current Game state and provides methods to alter
+            this Game state.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.Game.#ctor(System.Collections.Generic.List{CardGameEngine.IPlayer})">
+            <summary>
+            Represent the current Game state and provides methods to alter
+            this Game state.
+            </summary>
+            <param name="players"></param>
+        </member>
+        <member name="M:CardGameEngine.Game.#ctor(System.Collections.Generic.List{CardGameEngine.IPlayer},System.Int32,CardGameEngine.ActionQueue,System.Collections.Generic.List{CardGameEngine.IReaction})">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.Game"/> type.</summary>
+            <param name="players">The players value.</param>
+            <param name="activePlayerIndex">The activePlayerIndex value.</param>
+            <param name="actionQueue">The actionQueue value.</param>
+            <param name="reactions">The reactions value.</param>
+        </member>
+        <member name="M:CardGameEngine.Game.AllReactions">
+            <summary>Gets all reactions associated with this object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Game.StartGame(System.Int32,System.Int32)">
+            <summary>Initializes the game and starts the first turn.</summary>
+            <param name="initialHandSize">The initialHandSize value.</param>
+            <param name="initialPlayerLife">The initialPlayerLife value.</param>
+        </member>
+        <member name="M:CardGameEngine.Game.NextTurn">
+            <summary>Advances the game to the next turn.</summary>
+        </member>
+        <member name="M:CardGameEngine.Game.Execute(CardGameEngine.IAction)">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="action">The action value.</param>
+        </member>
+        <member name="M:CardGameEngine.Game.Execute(System.Collections.Generic.List{CardGameEngine.IAction})">
+            <summary>Executes this operation against the specified game.</summary>
+            <param name="actions">The actions value.</param>
+        </member>
+        <member name="M:CardGameEngine.Game.ReactTo(CardGameEngine.IGame,CardGameEngine.IActionEvent)">
+            <summary>Reacts to the specified action event.</summary>
+            <param name="game">The game value.</param>
+            <param name="actionEvent">The actionEvent value.</param>
+        </member>
+        <member name="M:CardGameEngine.Game.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Game.FindParentCard(CardGameEngine.IGameState)">
+            <summary>Finds the parent card in the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Game.FindParentPlayer(CardGameEngine.IGameState)">
+            <summary>Finds the parent player in the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.IGame.StartGame(System.Int32,System.Int32)">
+            <summary>
+            Start the game.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IGame.NextTurn">
+            <summary>
+            Start the next turn.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IGame.Execute(CardGameEngine.IAction)">
+            <summary>
+            Queue an Action for execution. Changes on the Game state should
+            only be performed via Actions queued through this method!
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="P:CardGameEngine.IGameState.ActivePlayer">
+            <summary>
+            Convenience method to retrieve the active Player.
+            Equivalent to using
+            <code>Players[ActivePlayerIndex]</code>
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IGameState.NonActivePlayers">
+            <summary>
+            Convenience method to retrieve the non-active Players.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IGameState.Players">
+            <summary>
+            List of Players involved in the Game.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IGameState.AllCards">
+            <summary>
+            Get all Cards involved in the Game.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IGameState.AllCardsOnTheBoard">
+            <summary>
+            Convenience method to retrieve all Cards on the Boards of all players.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IOwnable.FindOwner(CardGameEngine.IGameState)">
+            <summary>
+            Find the owner of this IOwnable.
+            </summary>
+            <param name="gameState"></param>
+            <returns>The player that owns this IOwnable or null if it
+            is not owned by a player.</returns>
+        </member>
+        <member name="P:CardGameEngine.IPlayer.Deck">
+            <summary>
+            The Player's Deck of Cards.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IPlayer.Hand">
+            <summary>
+            The Player's Hand Cards.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IPlayer.Board">
+            <summary>
+            The Player's Cards on the Board.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IPlayer.Graveyard">
+            <summary>
+            The Player's Cards that have been removed from the Game.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IPlayer.AllCards">
+            <summary>
+            Get all Cards from the Player's Decks.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IPlayer.Characters">
+            <summary>
+            Convenience property to retrieve this player's characters, i.e.
+            the player himself and all cards on his/her board.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IPlayer.DrawCard(CardGameEngine.IGame)">
+            <summary>
+            Draw a Card from the Deck and add it to the Hand.
+            </summary>
+            <param name="game"></param>
+        </member>
+        <member name="M:CardGameEngine.IPlayer.CastMonster(CardGameEngine.IGame,CardGameEngine.IMonsterCard,System.Int32)">
+            <summary>
+            Cast a MonsterCard from the Player's Hand to the Board at
+            position boardIndex.
+            </summary>
+            <param name="game"></param>
+            <param name="monsterCard"></param>
+            <param name="boardIndex"></param>
+        </member>
+        <member name="M:CardGameEngine.IPlayer.CastSpell(CardGameEngine.IGame,CardGameEngine.ITargetlessSpellCard)">
+            <summary>
+            Cast a SpellCard from the Player's Hand that needs no target.
+            </summary>
+            <param name="game"></param>
+            <param name="spellCard"></param>
+        </member>
+        <member name="M:CardGameEngine.IPlayer.CastSpell(CardGameEngine.IGame,CardGameEngine.ITargetfulSpellCard,CardGameEngine.ICharacter)">
+            <summary>
+            Cast a SpellCard from the Player's Hand onto the specified
+            target Character.
+            </summary>
+            <param name="game"></param>
+            <param name="spellCard"></param>
+            <param name="target"></param>
+        </member>
+        <member name="M:CardGameEngine.Player.#ctor">
+            <summary>
+            Represents a Player and all his/her associated Cards.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.Player.#ctor(CardGameEngine.IDeck)">
+            <summary>
+            Represents a Player and all his/her associated Cards.
+            </summary>
+            <param name="deck"></param>
+        </member>
+        <member name="M:CardGameEngine.Player.AllReactions">
+            <summary>Gets all reactions associated with this object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Player.DrawCard(CardGameEngine.IGame)">
+            <summary>Draws a card for the player.</summary>
+            <param name="game">The game value.</param>
+        </member>
+        <member name="M:CardGameEngine.Player.CastMonster(CardGameEngine.IGame,CardGameEngine.IMonsterCard,System.Int32)">
+            <summary>Performs the CastMonster operation.</summary>
+            <param name="game">The game value.</param>
+            <param name="monsterCard">The monsterCard value.</param>
+            <param name="boardIndex">The boardIndex value.</param>
+        </member>
+        <member name="M:CardGameEngine.Player.CastSpell(CardGameEngine.IGame,CardGameEngine.ITargetlessSpellCard)">
+            <summary>Performs the CastSpell operation.</summary>
+            <param name="game">The game value.</param>
+            <param name="spellCard">The spellCard value.</param>
+        </member>
+        <member name="M:CardGameEngine.Player.CastSpell(CardGameEngine.IGame,CardGameEngine.ITargetfulSpellCard,CardGameEngine.ICharacter)">
+            <summary>Performs the CastSpell operation.</summary>
+            <param name="game">The game value.</param>
+            <param name="spellCard">The spellCard value.</param>
+            <param name="target">The target value.</param>
+        </member>
+        <member name="M:CardGameEngine.Player.GetPotentialTargets(CardGameEngine.IGameState)">
+            <summary>Gets the characters that can currently be targeted.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Player.ReactTo(CardGameEngine.IGame,CardGameEngine.IActionEvent)">
+            <summary>Reacts to the specified action event.</summary>
+            <param name="game">The game value.</param>
+            <param name="actionEvent">The actionEvent value.</param>
+        </member>
+        <member name="M:CardGameEngine.Player.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Player.FindParentCard(CardGameEngine.IGameState)">
+            <summary>Finds the parent card in the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Player.FindParentPlayer(CardGameEngine.IGameState)">
+            <summary>Finds the parent player in the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Player.NewPlayer(CardGameEngine.IDeck,CardGameEngine.IHand,CardGameEngine.IBoard,CardGameEngine.IDeck,CardGameEngine.ManaPoolStat,CardGameEngine.AttackStat,CardGameEngine.LifeStat,System.Collections.Generic.List{CardGameEngine.IReaction})">
+            <summary>Creates a player from the supplied game components.</summary>
+            <param name="deck">The deck value.</param>
+            <param name="hand">The hand value.</param>
+            <param name="board">The board value.</param>
+            <param name="graveyard">The graveyard value.</param>
+            <param name="mana">The mana value.</param>
+            <param name="attack">The attack value.</param>
+            <param name="life">The life value.</param>
+            <param name="reactions">The reactions value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.DrawCardOnStartOfTurnEventReaction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.DrawCardOnStartOfTurnEventReaction.ReactTo(CardGameEngine.IGame,CardGameEngine.IActionEvent)">
+            <summary>Reacts to the specified action event.</summary>
+            <param name="game">The game value.</param>
+            <param name="actionEvent">The actionEvent value.</param>
+        </member>
+        <member name="M:CardGameEngine.ModifyActivePlayerOnEndOfTurnEventReaction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ModifyActivePlayerOnEndOfTurnEventReaction.ReactTo(CardGameEngine.IGame,CardGameEngine.IActionEvent)">
+            <summary>Reacts to the specified action event.</summary>
+            <param name="game">The game value.</param>
+            <param name="actionEvent">The actionEvent value.</param>
+        </member>
+        <member name="M:CardGameEngine.ModifyManaOnStartOfTurnEventReaction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ModifyManaOnStartOfTurnEventReaction.ReactTo(CardGameEngine.IGame,CardGameEngine.IActionEvent)">
+            <summary>Reacts to the specified action event.</summary>
+            <param name="game">The game value.</param>
+            <param name="actionEvent">The actionEvent value.</param>
+        </member>
+        <member name="M:CardGameEngine.SetReadyToAttackOnStartOfTurnEventReaction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.SetReadyToAttackOnStartOfTurnEventReaction.ReactTo(CardGameEngine.IGame,CardGameEngine.IActionEvent)">
+            <summary>Reacts to the specified action event.</summary>
+            <param name="game">The game value.</param>
+            <param name="actionEvent">The actionEvent value.</param>
+        </member>
+        <member name="M:CardGameEngine.IReaction.ReactTo(CardGameEngine.IGame,CardGameEngine.IActionEvent)">
+            <summary>
+            React on a given ActionEvent.
+            </summary>
+            <param name="game"></param>
+            <param name="actionEvent"></param>
+        </member>
+        <member name="M:CardGameEngine.IReaction.FindParentCard(CardGameEngine.IGameState)">
+            <summary>
+            Find the card that this IReaction is attached to.
+            </summary>
+            <param name="gameState"></param>
+            <returns>The card that this IReaction is attached to or null
+            if it is not attached.</returns>
+        </member>
+        <member name="M:CardGameEngine.IReaction.FindParentPlayer(CardGameEngine.IGameState)">
+            <summary>
+            Find the player that this IReaction is attached to.
+            </summary>
+            <param name="gameState"></param>
+            <returns>The player that this IReaction is attached to or null
+            if it is not attached.</returns>
+        </member>
+        <member name="P:CardGameEngine.IReactive.Reactions">
+            <summary>
+            Reactions of this IReactive.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IReactive.AllReactions">
+            <summary>
+            All reactions of this IReactive including its children.
+            </summary>
+            <returns>All reactions of this IReactive including its children.</returns>
+        </member>
+        <member name="M:CardGameEngine.Reaction.FindParentCard(CardGameEngine.IGameState)">
+            <summary>Finds the parent card in the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Reaction.FindParentPlayer(CardGameEngine.IGameState)">
+            <summary>Finds the parent player in the specified game state.</summary>
+            <param name="gameState">The gameState value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Reaction.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.Reaction.ReactTo(CardGameEngine.IGame,CardGameEngine.IActionEvent)">
+            <summary>Reacts to the specified action event.</summary>
+            <param name="game">The game value.</param>
+            <param name="actionEvent">The actionEvent value.</param>
+        </member>
+        <member name="M:CardGameEngine.AttackStat.#ctor(System.Int32)">
+            <summary>
+            Potential damage to be dealt.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.AttackStat.#ctor(System.Int32,System.Int32)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.AttackStat"/> type.</summary>
+            <param name="value">The value value.</param>
+            <param name="baseValue">The baseValue value.</param>
+        </member>
+        <member name="M:CardGameEngine.AttackStat.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.LifeStat.#ctor(System.Int32)">
+            <summary>
+            Maximum number of damage that can be taken.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.LifeStat.#ctor(System.Int32,System.Int32)">
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.LifeStat"/> type.</summary>
+            <param name="value">The value value.</param>
+            <param name="baseValue">The baseValue value.</param>
+        </member>
+        <member name="M:CardGameEngine.LifeStat.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ManaCostStat.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Costs in Mana.
+            </summary>
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.ManaCostStat"/> type.</summary>
+            <param name="value">The value value.</param>
+            <param name="baseValue">The baseValue value.</param>
+        </member>
+        <member name="M:CardGameEngine.ManaCostStat.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.ManaPoolStat.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Represents available mana.
+            </summary>
+            <param name="value"></param>
+            <param name="baseValue"></param>
+            <summary>Initializes a new instance of the <see cref="T:CardGameEngine.ManaPoolStat"/> type.</summary>
+            <param name="value">The value value.</param>
+            <param name="baseValue">The baseValue value.</param>
+        </member>
+        <member name="M:CardGameEngine.ManaPoolStat.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="P:CardGameEngine.IStat.Value">
+            <summary>
+            Atomic value of a Card's Stat.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IStat.BaseValue">
+            <summary>
+            Base value for this Stat.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.Stat.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Represents a Card's property.
+            </summary>
+            <param name="value"></param>
+            <param name="baseValue"></param>
+        </member>
+        <member name="M:CardGameEngine.Stat.Clone">
+            <summary>Creates a copy of the current object.</summary>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CardGameEngineJsonConvert.Serialize(System.Object)">
+            <summary>Serializes an object to JSON.</summary>
+            <param name="obj">The obj value.</param>
+            <returns>The result of the operation.</returns>
+        </member>
+        <member name="M:CardGameEngine.CardGameEngineJsonConvert.Deserialize``1(System.String)">
+            <summary>Deserializes JSON into an instance of the specified type.</summary>
+            <param name="json">The JSON payload to deserialize.</param>
+            <returns>The deserialized object.</returns>
+        </member>
+        <member name="T:CardGameEngine.StackConverter">
+            <summary>
+            Converts the engine's <see cref="T:System.Collections.Generic.Stack`1"/>-based card collection while preserving stack order.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.StackConverter.CanConvert(System.Type)">
+            <summary>
+            Determines whether this converter handles the engine's card stack type.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.StackConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Reads a card stack from JSON without reversing the stack order.
+            </summary>
+            <param name="reader">The JSON reader.</param>
+            <param name="objectType">The target object type.</param>
+            <param name="existingValue">An existing stack instance, when available.</param>
+            <param name="serializer">The JSON serializer.</param>
+            <returns>The deserialized card stack.</returns>
+        </member>
+        <member name="M:CardGameEngine.StackConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Writes a card stack as an array in its enumeration order.
+            </summary>
+            <param name="writer">The JSON writer.</param>
+            <param name="value">The card stack to serialize.</param>
+            <param name="serializer">The JSON serializer.</param>
+        </member>
+    </members>
+</doc>
