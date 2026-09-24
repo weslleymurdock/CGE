@@ -22,7 +22,7 @@ public class Deck : CardCollection, IDeck
     }
 
     [JsonIgnore]
-    public override List<ICard> AllCards => new List<ICard>(cards);
+    public override List<ICard> AllCards => [.. cards];
 
     [JsonIgnore]
     public override int Size => cards.Count;
@@ -35,7 +35,7 @@ public class Deck : CardCollection, IDeck
 
     public override object Clone()
     {
-        Stack<ICard> cardsClone = new Stack<ICard>();
+        Stack<ICard> cardsClone = new();
         foreach (ICard card in cards.Reverse())
         {
             cardsClone.Push((ICard)card.Clone());
@@ -61,7 +61,7 @@ public class Deck : CardCollection, IDeck
 
     public void Shuffle()
     {
-        ICard[] tmp = cards.ToArray();
+        ICard[] tmp = [.. cards];
         cards.Clear();
         foreach (ICard card in tmp.OrderBy(x => new Random().Next()))
         {

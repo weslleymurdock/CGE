@@ -13,7 +13,7 @@ public class MonsterCard : Card, IMonsterCard
     public LifeStat LifeStat { get; private set; }
     public AttackStat AttackStat { get; private set; }
     public MonsterCard()
-        : this(new List<IMonsterCardComponent>(), default!)
+        : this([], default!)
     {
     }
 
@@ -25,7 +25,7 @@ public class MonsterCard : Card, IMonsterCard
     /// <param name="attack"></param>
     /// <param name="life"></param>
     public MonsterCard(int mana, int attack, int life, IPlayer owner = default!, string name = "")
-        : this(new List<IMonsterCardComponent> { new MonsterCardComponent(mana, attack, life) }, owner)
+        : this([new MonsterCardComponent(mana, attack, life)], owner)
     {
 
         this.ManaStat = new ManaPoolStat(mana, 0);
@@ -49,7 +49,7 @@ public class MonsterCard : Card, IMonsterCard
         List<IMonsterCardComponent> components,
         bool isReadyToAttack,
         IPlayer owner
-        ) : this(components.ConvertAll(c => (ICardComponent)c), new List<IReaction>(), isReadyToAttack, owner)
+        ) : this(components.ConvertAll(c => (ICardComponent)c), [], isReadyToAttack, owner)
     {
         Reactions.Add(new SetReadyToAttackOnStartOfTurnEventReaction());
     }
@@ -150,7 +150,7 @@ public class MonsterCard : Card, IMonsterCard
     {
         if (Components.Count == 0)
         {
-            return new HashSet<ICharacter>();
+            return [];
         }
 
         //Compute the intersection of all potential targets
@@ -171,10 +171,10 @@ public class MonsterCard : Card, IMonsterCard
 
     public override object Clone()
     {
-        List<ICardComponent> componentsClone = new List<ICardComponent>();
+        List<ICardComponent> componentsClone = [];
         Components.ForEach(c => componentsClone.Add((ICardComponent)c.Clone()));
 
-        List<IReaction> reactionsClone = new List<IReaction>();
+        List<IReaction> reactionsClone = [];
         Reactions.ForEach(r => reactionsClone.Add((IReaction)r.Clone()));
 
         return new MonsterCard(

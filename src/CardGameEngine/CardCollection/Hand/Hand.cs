@@ -13,7 +13,7 @@ public class Hand : CardCollection, IHand
     [JsonProperty]
     protected List<ICard> cards;
 
-    public Hand() : this(new List<ICard>())
+    public Hand() : this([])
     {
     }
 
@@ -27,7 +27,7 @@ public class Hand : CardCollection, IHand
     public int MaxSize { get => 10; }
 
     [JsonIgnore]
-    public override List<ICard> AllCards => new List<ICard>(cards);
+    public override List<ICard> AllCards => [.. cards];
 
     [JsonIgnore]
     public override bool IsEmpty
@@ -58,7 +58,7 @@ public class Hand : CardCollection, IHand
 
     public override object Clone()
     {
-        List<ICard> cardsClone = new List<ICard>();
+        List<ICard> cardsClone = [];
         foreach (ICard card in cards)
         {
             cardsClone.Add((ICard)card.Clone());

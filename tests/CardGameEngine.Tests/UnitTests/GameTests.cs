@@ -103,10 +103,10 @@ public class GameTests
         var mockCard3 = new Mock<ICard>();
 
         var mockPlayer1 = new Mock<IPlayer>();
-        mockPlayer1.Setup(p => p.AllCards).Returns(new List<ICard> { mockCard1.Object, mockCard2.Object });
+        mockPlayer1.Setup(p => p.AllCards).Returns([mockCard1.Object, mockCard2.Object]);
 
         var mockPlayer2 = new Mock<IPlayer>();
-        mockPlayer2.Setup(p => p.AllCards).Returns(new List<ICard> { mockCard3.Object });
+        mockPlayer2.Setup(p => p.AllCards).Returns([mockCard3.Object]);
 
         var players = new List<IPlayer> { mockPlayer1.Object, mockPlayer2.Object };
         var game = new Game(players);
@@ -129,12 +129,12 @@ public class GameTests
         var mockCard2 = new Mock<ICard>();
 
         var mockBoard1 = new Mock<IBoard>();
-        mockBoard1.Setup(b => b.AllCards).Returns(new List<ICard> { mockCard1.Object });
+        mockBoard1.Setup(b => b.AllCards).Returns([mockCard1.Object]);
         var mockPlayer1 = new Mock<IPlayer>();
         mockPlayer1.Setup(p => p.Board).Returns(mockBoard1.Object);
 
         var mockBoard2 = new Mock<IBoard>();
-        mockBoard2.Setup(b => b.AllCards).Returns(new List<ICard> { mockCard2.Object });
+        mockBoard2.Setup(b => b.AllCards).Returns([mockCard2.Object]);
         var mockPlayer2 = new Mock<IPlayer>();
         mockPlayer2.Setup(p => p.Board).Returns(mockBoard2.Object);
 
@@ -159,10 +159,10 @@ public class GameTests
         var mockReaction3 = new Mock<IReaction>(); // Player2 reaction
 
         var mockPlayer1 = new Mock<IPlayer>();
-        mockPlayer1.Setup(p => p.AllReactions()).Returns(new List<IReaction> { mockReaction2.Object });
+        mockPlayer1.Setup(p => p.AllReactions()).Returns([mockReaction2.Object]);
 
         var mockPlayer2 = new Mock<IPlayer>();
-        mockPlayer2.Setup(p => p.AllReactions()).Returns(new List<IReaction> { mockReaction3.Object });
+        mockPlayer2.Setup(p => p.AllReactions()).Returns([mockReaction3.Object]);
 
         var players = new List<IPlayer> { mockPlayer1.Object, mockPlayer2.Object };
         var game = new Game(players);
@@ -189,7 +189,7 @@ public class GameTests
         var mockActionQueue = new Mock<ActionQueue>(false);
         var cloneMock = new Mock<ActionQueue>(false);
         mockActionQueue.Setup(aq => aq.Clone()).Returns(cloneMock.Object);
-        var game = new Game(players, 0, mockActionQueue.Object, new List<IReaction>()); // Inject mocked ActionQueue
+        var game = new Game(players, 0, mockActionQueue.Object, []); // Inject mocked ActionQueue
         
         // Act
         game.StartGame(initialHandSize: 2, initialPlayerLife: 25);
@@ -222,7 +222,7 @@ public class GameTests
         var cloneMock = new Mock<ActionQueue>(false);
         var mockActionQueue = new Mock<ActionQueue>(false);
         mockActionQueue.Setup(aq => aq.Clone()).Returns(cloneMock.Object);
-        var game = new Game(players, 0, (ActionQueue)mockActionQueue.Object, new List<IReaction>());
+        var game = new Game(players, 0, (ActionQueue)mockActionQueue.Object, []);
 
         // Act
         game.NextTurn();
@@ -242,7 +242,7 @@ public class GameTests
         var mockActionQueue = new Mock<ActionQueue>(false);
         var cloneMock = new Mock<ActionQueue>(false); 
         mockActionQueue.Setup(aq => aq.Clone()).Returns(cloneMock.Object);
-        var game = new Game(players, 0, mockActionQueue.Object, new List<IReaction>());
+        var game = new Game(players, 0, mockActionQueue.Object, []);
 
         // Act
         game.Execute(mockAction.Object);
@@ -263,7 +263,7 @@ public class GameTests
         var mockActionQueue = new Mock<ActionQueue>(false);  
         var cloneMock = new Mock<ActionQueue>(false); 
         mockActionQueue.Setup(aq => aq.Clone()).Returns(cloneMock.Object);
-        var game = new Game(players, 0, mockActionQueue.Object, new List<IReaction>());
+        var game = new Game(players, 0, mockActionQueue.Object, []);
 
         // Act
         game.Execute(actions);
@@ -280,7 +280,7 @@ public class GameTests
         var mockReaction1 = new Mock<IReaction>();
         var mockReaction2 = new Mock<IReaction>();
         var mockPlayer = new Mock<IPlayer>();
-        mockPlayer.Setup(p => p.AllReactions()).Returns(new List<IReaction> { mockReaction2.Object });
+        mockPlayer.Setup(p => p.AllReactions()).Returns([mockReaction2.Object]);
 
         var players = new List<IPlayer> { mockPlayer.Object };
         var game = new Game(players);

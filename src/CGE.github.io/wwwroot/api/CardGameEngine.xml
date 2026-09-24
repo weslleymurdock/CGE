@@ -1,0 +1,546 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CardGameEngine</name>
+    </assembly>
+    <members>
+        <member name="P:CardGameEngine.IActionEvent.Action">
+            <summary>
+            Contains the Action this event refers to.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IActionEvent.IsBefore(System.Type)">
+            <summary>
+            Checks if this event is triggered directly before an Action that is
+            an instance of the specified type.
+            </summary>
+            <param name="type"></param>
+            <returns>True if this event is triggered directly before an Action
+            that is an instance of the specified type.</returns>
+        </member>
+        <member name="M:CardGameEngine.IActionEvent.IsAfter(System.Type)">
+            <summary>
+            Checks if this event is triggered directly after an Action that is
+            an instance of the specified type.
+            </summary>
+            <param name="type"></param>
+            <returns>True if this event is triggered directly after an Action
+            that is an instance of the specified type.</returns>
+        </member>
+        <member name="P:CardGameEngine.IActionQueue.ExecuteReactions">
+            <summary>
+            Marks if the ActionQueue also executes IReactions to the
+            executed IActions.
+            Can be e.g. set to false during Game initialization.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IActionQueue.Execute(CardGameEngine.IGame,CardGameEngine.IAction)">
+            <summary>
+            Execute all Actions in the queue if they are executable
+            (see IAction.IsExecutable). Actions that are not executable
+            at this time will be discarded.
+            </summary>
+            <param name="game"></param>
+            <param name="action"></param>
+        </member>
+        <member name="P:CardGameEngine.IAction.IsAborted">
+            <summary>
+            Aborted Actions will not be executed.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IAction.IsExecutable(CardGameEngine.IGameState)">
+            <summary>
+            Check if this Action can be executed on the given Game state.
+            </summary>
+            <param name="gameState"></param>
+            <returns>True if this Action can be executed on the given Game state.</returns>
+        </member>
+        <member name="M:CardGameEngine.IAction.Execute(CardGameEngine.IGame)">
+            <summary>
+            Execute this Action in order to change the Game's state.
+            </summary>
+            <param name="game"></param>
+        </member>
+        <member name="F:CardGameEngine.Board.cards">
+            <summary>
+            Data container.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.Board.#ctor">
+            <summary>
+            Represents all Cards on a Player's Board.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IBoard.MaxSize">
+            <summary>
+            Maximum number of Cards that this Board can hold.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IBoard.Remove(CardGameEngine.ICard)">
+            <summary>
+            Remove the specified Card from this Board.
+            </summary>
+            <param name="card"></param>
+        </member>
+        <member name="M:CardGameEngine.IBoard.AddAt(System.Int32,CardGameEngine.ICard)">
+            <summary>
+            Add the given Card to the Board at position index.
+            </summary>
+            <param name="index"></param>
+            <param name="card"></param>
+        </member>
+        <member name="P:CardGameEngine.IBoard.Item(System.Int32)">
+            <summary>
+            Get the Card at position index.
+            </summary>
+            <param name="index"></param>
+            <returns>The Card at position index.</returns>
+        </member>
+        <member name="M:CardGameEngine.IBoard.IsFreeSlot(System.Int32)">
+            <summary>
+            Checks if the given position points to a free slot on this Board.
+            </summary>
+            <param name="index"></param>
+            <returns>True if the given position points to a free slot on
+            this Board.</returns>
+        </member>
+        <member name="M:CardGameEngine.CardCollection.#ctor">
+            <summary>
+            Abstract representation of a collection of Cards.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IDeck.Pop">
+            <summary>
+            Remove and return the top Card from this Deck.
+            </summary>
+            <returns>The top Card from this Deck.</returns>
+        </member>
+        <member name="M:CardGameEngine.IDeck.Push(CardGameEngine.ICard)">
+            <summary>
+            Push the given Card to this Deck.
+            </summary>
+            <param name="card"></param>
+        </member>
+        <member name="M:CardGameEngine.IDeck.Shuffle">
+            <summary>
+            Shuffle this Deck.
+            </summary>
+        </member>
+        <member name="F:CardGameEngine.Hand.cards">
+            <summary>
+            Data container.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IHand.MaxSize">
+            <summary>
+            Maximum number of Cards that this Hand can hold.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IHand.Remove(CardGameEngine.ICard)">
+            <summary>
+            Remove the specified Card from this Hand.
+            </summary>
+            <param name="card"></param>
+        </member>
+        <member name="M:CardGameEngine.IHand.Add(CardGameEngine.ICard)">
+            <summary>
+            Add the given Card to this Hand.
+            </summary>
+            <param name="card"></param>
+        </member>
+        <member name="P:CardGameEngine.IHand.Item(System.Int32)">
+            <summary>
+            Get the Card at position index.
+            </summary>
+            <param name="index"></param>
+            <returns>The Card at position index.</returns>
+        </member>
+        <member name="P:CardGameEngine.ICardCollection.AllCards">
+            <summary>
+            Get all cards in this Deck.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.ICardCollection.Size">
+            <summary>
+            Number of Cards currently in this Deck.
+            </summary>
+            <returns>The number of Cards in this Deck.</returns>
+        </member>
+        <member name="P:CardGameEngine.ICardCollection.IsEmpty">
+            <summary>
+            Checks if this Deck contains any Cards.
+            </summary>
+            <returns>True if this Deck does not contain any Cards.</returns>
+        </member>
+        <member name="M:CardGameEngine.ICardCollection.Contains(CardGameEngine.ICard)">
+            <summary>
+            Checks if this Deck contains the given Card.
+            </summary>
+            <param name="card"></param>
+            <returns>True if this Deck contains the given Card.</returns>
+        </member>
+        <member name="M:CardGameEngine.ICardComponent.FindCard(CardGameEngine.IGameState)">
+            <summary>
+            Find the ICard this ICardComponent is attached to.
+            </summary>
+            <param name="gameState"></param>
+            <returns>The ICard this ICardComponent is attached to or null
+            if it is not attached.</returns>
+        </member>
+        <member name="M:CardGameEngine.ITargetfulSpellCardComponent.Cast(CardGameEngine.IGame,CardGameEngine.ICharacter)">
+            <summary>
+            Called when the spell card is cast. Execute Actions here.
+            </summary>
+            <param name="gameState"></param>
+            <param name="target"></param>
+        </member>
+        <member name="M:CardGameEngine.ITargetlessSpellCardComponent.Cast(CardGameEngine.IGame)">
+            <summary>
+            Called when spell card is cast. Execute Actions here.
+            </summary>
+            <param name="gameState"></param>
+        </member>
+        <member name="M:CardGameEngine.ICompoundCard.AddComponent(CardGameEngine.ICard)">
+            <summary>
+            Add a Card to this CompoundCard.
+            </summary>
+            <param name="card"></param>
+        </member>
+        <member name="M:CardGameEngine.ICompoundCard.RemoveComponent(CardGameEngine.ICard)">
+            <summary>
+            Remove a Card from this CompoundCard.
+            </summary>
+            <param name="card"></param>
+        </member>
+        <member name="P:CardGameEngine.ICompound.Components">
+            <summary>
+            List of components that this Compound is made of.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IMonsterCard.IsReadyToAttack">
+            <summary>
+            Marks if this MonsterCard is ready to attack. Normally, MonsterCards
+            are unable to attack during the same turn that they have been
+            played. Also it only allows one attack per turn.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IMonsterCard.Attack(CardGameEngine.IGame,CardGameEngine.ICharacter)">
+            <summary>
+            Attack the given target Character.
+            </summary>
+            <param name="game"></param>
+            <param name="target"></param>
+        </member>
+        <member name="M:CardGameEngine.MonsterCard.#ctor(System.Int32,System.Int32,System.Int32,CardGameEngine.IPlayer,System.String)">
+            <summary>
+            Represents a certain type of Card that is played
+            onto the Player's Board.
+            </summary>
+            <param name="mana"></param>
+            <param name="attack"></param>
+            <param name="life"></param>
+        </member>
+        <member name="M:CardGameEngine.MonsterCard.#ctor(System.Collections.Generic.List{CardGameEngine.IMonsterCardComponent},CardGameEngine.IPlayer)">
+            <summary>
+            Represents a certain type of Card that is played
+            onto the Player's Board.
+            </summary>
+            <param name="components"></param>
+        </member>
+        <member name="M:CardGameEngine.IPlayable.IsPlayable(CardGameEngine.IGameState)">
+            <summary>
+            Checks if this Card is playable.
+            </summary>
+            <returns>True if this Card can be played.</returns>
+        </member>
+        <member name="M:CardGameEngine.SpellCard.#ctor(System.Collections.Generic.List{CardGameEngine.ISpellCardComponent},CardGameEngine.IPlayer,System.String)">
+            <summary>
+            Represents a certain type of Card that has an
+            immediate effect on the Game's state.
+            </summary>
+            <param name="components"></param>
+        </member>
+        <member name="M:CardGameEngine.ITargetfulSpellCard.Cast(CardGameEngine.IGame,CardGameEngine.ICharacter)">
+            <summary>
+            Called when the spell card is cast.
+            </summary>
+            <param name="game"></param>
+            <param name="target"></param>
+        </member>
+        <member name="M:CardGameEngine.ITargetlessSpellCard.Cast(CardGameEngine.IGame)">
+            <summary>
+            Called when the spell card is cast.
+            </summary>
+            <param name="game"></param>
+        </member>
+        <member name="M:CardGameEngine.ITargetful.GetPotentialTargets(CardGameEngine.IGameState)">
+            <summary>
+            Get a set of potential target Characters based on the current
+            state of the Game.
+            </summary>
+            <param name="gameState"></param>
+            <returns>All valid target Characters.</returns>
+        </member>
+        <member name="P:CardGameEngine.ICharacter.IsAlive">
+            <summary>
+            Indicates if this Character is still alive.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IStackedDeck.Pop">
+            <summary>
+            Remove and return the top Card from this Deck.
+            </summary>
+            <returns>The top Card from this Deck.</returns>
+        </member>
+        <member name="M:CardGameEngine.IStackedDeck.Push(CardGameEngine.ICard)">
+            <summary>
+            Push the given Card to this Deck.
+            </summary>
+            <param name="card"></param>
+        </member>
+        <member name="M:CardGameEngine.IStackedDeck.Shuffle">
+            <summary>
+            Shuffle this Deck.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.CardGameEngineException.#ctor">
+            <summary>
+            Library specific Exception. Usually thrown when the Game's
+            mechanics are being violated.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.CardGameEngineException.#ctor(System.String)">
+            <summary>
+            Library specific Exception. Usually thrown when the Game's
+            mechanics are being violated.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:CardGameEngine.CardGameEngineException.#ctor(System.String,System.Exception)">
+            <summary>
+            Library specific Exception. Usually thrown when the Game's
+            mechanics are being violated.
+            </summary>
+            <param name="message"></param>
+            <param name="inner"></param>
+        </member>
+        <member name="F:CardGameEngine.Game.activePlayerIndex">
+            <summary>
+            Index of the active Player. Refers to the Players array.
+            Also see the ActivePlayer accessor.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.Game.#ctor">
+            <summary>
+            Represent the current Game state and provides methods to alter
+            this Game state.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.Game.#ctor(System.Collections.Generic.List{CardGameEngine.IPlayer})">
+            <summary>
+            Represent the current Game state and provides methods to alter
+            this Game state.
+            </summary>
+            <param name="players"></param>
+        </member>
+        <member name="M:CardGameEngine.IGame.StartGame(System.Int32,System.Int32)">
+            <summary>
+            Start the game.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IGame.NextTurn">
+            <summary>
+            Start the next turn.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IGame.Execute(CardGameEngine.IAction)">
+            <summary>
+            Queue an Action for execution. Changes on the Game state should
+            only be performed via Actions queued through this method!
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="P:CardGameEngine.IGameState.ActivePlayer">
+            <summary>
+            Convenience method to retrieve the active Player.
+            Equivalent to using
+            <code>Players[ActivePlayerIndex]</code>
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IGameState.NonActivePlayers">
+            <summary>
+            Convenience method to retrieve the non-active Players.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IGameState.Players">
+            <summary>
+            List of Players involved in the Game.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IGameState.AllCards">
+            <summary>
+            Get all Cards involved in the Game.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IGameState.AllCardsOnTheBoard">
+            <summary>
+            Convenience method to retrieve all Cards on the Boards of all players.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IOwnable.FindOwner(CardGameEngine.IGameState)">
+            <summary>
+            Find the owner of this IOwnable.
+            </summary>
+            <param name="gameState"></param>
+            <returns>The player that owns this IOwnable or null if it
+            is not owned by a player.</returns>
+        </member>
+        <member name="P:CardGameEngine.IPlayer.Deck">
+            <summary>
+            The Player's Deck of Cards.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IPlayer.Hand">
+            <summary>
+            The Player's Hand Cards.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IPlayer.Board">
+            <summary>
+            The Player's Cards on the Board.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IPlayer.Graveyard">
+            <summary>
+            The Player's Cards that have been removed from the Game.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IPlayer.AllCards">
+            <summary>
+            Get all Cards from the Player's Decks.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IPlayer.Characters">
+            <summary>
+            Convenience property to retrieve this player's characters, i.e.
+            the player himself and all cards on his/her board.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IPlayer.DrawCard(CardGameEngine.IGame)">
+            <summary>
+            Draw a Card from the Deck and add it to the Hand.
+            </summary>
+            <param name="game"></param>
+        </member>
+        <member name="M:CardGameEngine.IPlayer.CastMonster(CardGameEngine.IGame,CardGameEngine.IMonsterCard,System.Int32)">
+            <summary>
+            Cast a MonsterCard from the Player's Hand to the Board at
+            position boardIndex.
+            </summary>
+            <param name="game"></param>
+            <param name="monsterCard"></param>
+            <param name="boardIndex"></param>
+        </member>
+        <member name="M:CardGameEngine.IPlayer.CastSpell(CardGameEngine.IGame,CardGameEngine.ITargetlessSpellCard)">
+            <summary>
+            Cast a SpellCard from the Player's Hand that needs no target.
+            </summary>
+            <param name="game"></param>
+            <param name="spellCard"></param>
+        </member>
+        <member name="M:CardGameEngine.IPlayer.CastSpell(CardGameEngine.IGame,CardGameEngine.ITargetfulSpellCard,CardGameEngine.ICharacter)">
+            <summary>
+            Cast a SpellCard from the Player's Hand onto the specified
+            target Character.
+            </summary>
+            <param name="game"></param>
+            <param name="spellCard"></param>
+            <param name="target"></param>
+        </member>
+        <member name="M:CardGameEngine.Player.#ctor">
+            <summary>
+            Represents a Player and all his/her associated Cards.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.Player.#ctor(CardGameEngine.IDeck)">
+            <summary>
+            Represents a Player and all his/her associated Cards.
+            </summary>
+            <param name="deck"></param>
+        </member>
+        <member name="M:CardGameEngine.IReaction.ReactTo(CardGameEngine.IGame,CardGameEngine.IActionEvent)">
+            <summary>
+            React on a given ActionEvent.
+            </summary>
+            <param name="game"></param>
+            <param name="actionEvent"></param>
+        </member>
+        <member name="M:CardGameEngine.IReaction.FindParentCard(CardGameEngine.IGameState)">
+            <summary>
+            Find the card that this IReaction is attached to.
+            </summary>
+            <param name="gameState"></param>
+            <returns>The card that this IReaction is attached to or null
+            if it is not attached.</returns>
+        </member>
+        <member name="M:CardGameEngine.IReaction.FindParentPlayer(CardGameEngine.IGameState)">
+            <summary>
+            Find the player that this IReaction is attached to.
+            </summary>
+            <param name="gameState"></param>
+            <returns>The player that this IReaction is attached to or null
+            if it is not attached.</returns>
+        </member>
+        <member name="P:CardGameEngine.IReactive.Reactions">
+            <summary>
+            Reactions of this IReactive.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.IReactive.AllReactions">
+            <summary>
+            All reactions of this IReactive including its children.
+            </summary>
+            <returns>All reactions of this IReactive including its children.</returns>
+        </member>
+        <member name="M:CardGameEngine.AttackStat.#ctor(System.Int32)">
+            <summary>
+            Potential damage to be dealt.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.LifeStat.#ctor(System.Int32)">
+            <summary>
+            Maximum number of damage that can be taken.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.ManaCostStat.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Costs in Mana.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.ManaPoolStat.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Represents available mana.
+            </summary>
+            <param name="value"></param>
+            <param name="baseValue"></param>
+        </member>
+        <member name="P:CardGameEngine.IStat.Value">
+            <summary>
+            Atomic value of a Card's Stat.
+            </summary>
+        </member>
+        <member name="P:CardGameEngine.IStat.BaseValue">
+            <summary>
+            Base value for this Stat.
+            </summary>
+        </member>
+        <member name="M:CardGameEngine.Stat.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Represents a Card's property.
+            </summary>
+            <param name="value"></param>
+            <param name="baseValue"></param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:CardGameEngine.StackConverter" -->
+    </members>
+</doc>

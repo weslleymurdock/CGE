@@ -29,7 +29,7 @@ public class DrawCardAction : Action
 
     public override void Execute(IGame game)
     {
-        RemoveCardFromDeckAction removeAction = new RemoveCardFromDeckAction(Player.Deck);
+        RemoveCardFromDeckAction removeAction = new(Player.Deck);
         game.Execute(removeAction);
         DrawnCard = removeAction.Card;
         game.Execute(new AddCardToHandAction(Player.Hand, DrawnCard));

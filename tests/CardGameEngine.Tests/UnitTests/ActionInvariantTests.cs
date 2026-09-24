@@ -79,7 +79,7 @@ public class ActionInvariantTests
         hand.Setup(h => h.Contains(spell.Object)).Returns(true);
         spell.Setup(s => s.IsCastable(gameState.Object)).Returns(true);
         spell.Setup(s => s.GetPotentialTargets(gameState.Object))
-            .Returns(new HashSet<ICharacter>());
+            .Returns([]);
 
         var action = new CastTargetfulSpellAction(player.Object, spell.Object, target.Object);
 
@@ -100,7 +100,7 @@ public class ActionInvariantTests
         board.Setup(b => b.Contains(attacker.Object)).Returns(false);
         attacker.SetupGet(a => a.IsReadyToAttack).Returns(true);
         attacker.Setup(a => a.GetPotentialTargets(gameState.Object))
-            .Returns(new HashSet<ICharacter> { target.Object });
+            .Returns([target.Object]);
 
         var action = new AttackAction(attacker.Object, target.Object);
 

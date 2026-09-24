@@ -35,24 +35,24 @@ namespace CardGameEngine
         object ReadJsonGeneric<T>(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null)
-                return null;
+                return null!;
             var list = serializer.Deserialize<List<T>>(reader);
             var stack = existingValue as Stack<T> ?? (Stack<T>)serializer.ContractResolver.ResolveContract(objectType).DefaultCreator();
-            for (int i = list.Count - 1; i >= 0; i--)
+            for (int i = list!.Count - 1; i >= 0; i--)
                 stack.Push(list[i]);
             return stack;
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null)
-                return null;
+                return null!;
             try
             {
                 var parameterType = StackParameterType(objectType);
                 var method = GetType().GetMethod("ReadJsonGeneric", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
-                var genericMethod = method.MakeGenericMethod(new[] { parameterType });
-                return genericMethod.Invoke(this, new object[] { reader, objectType, existingValue, serializer });
+                var genericMethod = method?.MakeGenericMethod([parameterType]);
+                return genericMethod?.Invoke(this, [reader, objectType, existingValue, serializer])!;
             }
             catch (TargetInvocationException ex)
             {
@@ -63,7 +63,7 @@ namespace CardGameEngine
 
         public override bool CanWrite { get { return false; } }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
         }

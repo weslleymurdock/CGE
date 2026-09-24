@@ -90,7 +90,7 @@ public class PlayerTests
         mockBoard.Setup(b => b.AllCards).Returns([mockCard3.Object]);
 
         var mockGraveyard = new Mock<IDeck>();
-        mockGraveyard.Setup(g => g.AllCards).Returns(new List<ICard>());
+        mockGraveyard.Setup(g => g.AllCards).Returns([]);
 
         var player = Player.NewPlayer(
             mockDeck.Object,
@@ -100,7 +100,7 @@ public class PlayerTests
             new ManaPoolStat(0, 0),
             new AttackStat(0),
             new LifeStat(0),
-            new List<IReaction>()
+            []
         );
 
         // Act
@@ -158,7 +158,7 @@ public class PlayerTests
         // Arrange
         var mockMonsterCard = new Mock<IMonsterCard>();
         var mockBoard = new Mock<IBoard>();
-        mockBoard.Setup(b => b.AllCards).Returns(new List<ICard> { mockMonsterCard.Object });
+        mockBoard.Setup(b => b.AllCards).Returns([mockMonsterCard.Object]);
 
         var player = Player.NewPlayer(
             new Mock<IDeck>().Object,
@@ -168,7 +168,7 @@ public class PlayerTests
             new ManaPoolStat(0, 0),
             new AttackStat(0),
             new LifeStat(0),
-            new List<IReaction>()
+            []
         );
 
         // Act
@@ -189,19 +189,19 @@ public class PlayerTests
         var mockReaction3 = new Mock<IReaction>();
 
         var mockCard1 = new Mock<ICard>();
-        mockCard1.Setup(c => c.AllReactions()).Returns(new List<IReaction> { mockReaction2.Object });
+        mockCard1.Setup(c => c.AllReactions()).Returns([mockReaction2.Object]);
 
         var mockCard2 = new Mock<ICard>();
-        mockCard2.Setup(c => c.AllReactions()).Returns(new List<IReaction> { mockReaction3.Object });
+        mockCard2.Setup(c => c.AllReactions()).Returns([mockReaction3.Object]);
 
         var mockDeck = new Mock<IDeck>();
-        mockDeck.Setup(d => d.AllCards).Returns(new List<ICard> { mockCard1.Object });
+        mockDeck.Setup(d => d.AllCards).Returns([mockCard1.Object]);
 
         var mockHand = new Mock<IHand>();
-        mockHand.Setup(h => h.AllCards).Returns(new List<ICard> { mockCard2.Object });
+        mockHand.Setup(h => h.AllCards).Returns([mockCard2.Object]);
 
         var mockPlayer = new Mock<IPlayer>();
-        mockPlayer.Setup(p => p.AllReactions()).Returns(new List<IReaction> { mockReaction1.Object, mockReaction2.Object, mockReaction3.Object });
+        mockPlayer.Setup(p => p.AllReactions()).Returns([mockReaction1.Object, mockReaction2.Object, mockReaction3.Object]);
         // Act
         var allReactions = mockPlayer.Object.AllReactions();
 
@@ -260,7 +260,7 @@ public class PlayerTests
             new ManaPoolStat(0, 0),
             new AttackStat(0),
             new LifeStat(0),
-            new List<IReaction>()
+            []
         );
 
         // Act & Assert
@@ -287,7 +287,7 @@ public class PlayerTests
             new ManaPoolStat(0, 0),
             new AttackStat(0),
             new LifeStat(0),
-            new List<IReaction>()
+            []
         );
 
         // Act
@@ -382,7 +382,7 @@ public class PlayerTests
             new ManaPoolStat(5,5),
             new AttackStat(3),
             new LifeStat(0),
-            new List<IReaction> { mockReaction.Object }
+            [mockReaction.Object]
         );
 
         // Act

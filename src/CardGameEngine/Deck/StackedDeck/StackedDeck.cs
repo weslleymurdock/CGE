@@ -22,7 +22,7 @@ namespace CardGameEngine
         }
 
         [JsonIgnore]
-        public override List<ICard> AllCards => new List<ICard>(cards);
+        public override List<ICard> AllCards => [.. cards];
 
         [JsonIgnore]
         public override int Size => cards.Count;
@@ -51,7 +51,7 @@ namespace CardGameEngine
 
         public void Shuffle()
         {
-            ICard[] tmp = cards.ToArray();
+            ICard[] tmp = [.. cards];
             cards.Clear();
             foreach (ICard card in tmp.OrderBy(x => new Random().Next()))
             {

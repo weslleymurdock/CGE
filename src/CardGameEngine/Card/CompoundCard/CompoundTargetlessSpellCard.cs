@@ -7,13 +7,13 @@ namespace CardGameEngine;
 public class CompoundTargetlessSpellCard : CompoundCard, ITargetlessSpellCard
 {
     public CompoundTargetlessSpellCard(List<ITargetlessSpellCard> components, string name)
-        : base(new List<ICard>(), name)
+        : base([], name)
     {
         components.ForEach(c => Components.Add(c));
     }
 
     public CompoundTargetlessSpellCard(ITargetlessSpellCard spellCard, string name)
-        : this(new List<ITargetlessSpellCard> { spellCard }, name)
+        : this([spellCard], name)
     {
     }
     public override object Clone()

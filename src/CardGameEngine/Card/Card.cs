@@ -10,7 +10,7 @@ public abstract class Card : ReactiveCompound, ICard
 {
     public abstract IPlayer Owner { get; set; }
     public string Name { get; set; } 
-    public Card(string name = "") : this(new List<ICardComponent>(), new List<IReaction>(), default!, name)
+    public Card(string name = "") : this([], [], default!, name)
     {
     }
 

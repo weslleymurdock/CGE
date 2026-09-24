@@ -13,12 +13,12 @@ public class CardComponent : Reaction, ICardComponent
     public List<IReaction> Reactions { get; }
 
     public CardComponent(int mana)
-        : this(new ManaCostStat(mana, mana), new List<IReaction>())
+        : this(new ManaCostStat(mana, mana), [])
     {
     }
 
     public CardComponent(int manaValue, int manaBaseValue)
-        : this(new ManaCostStat(manaValue, manaBaseValue), new List<IReaction>())
+        : this(new ManaCostStat(manaValue, manaBaseValue), [])
     {
     }
 
@@ -43,7 +43,7 @@ public class CardComponent : Reaction, ICardComponent
 
     public List<IReaction> AllReactions()
     {
-        return new List<IReaction>(Reactions);
+        return [.. Reactions];
     }
 
     public override void ReactTo(IGame game, IActionEvent actionEvent)
@@ -53,7 +53,7 @@ public class CardComponent : Reaction, ICardComponent
 
     public override object Clone()
     {
-        List<IReaction> reactionsClone = new List<IReaction>();
+        List<IReaction> reactionsClone = [];
         foreach (IReaction reaction in Reactions)
         {
             reactionsClone.Add((IReaction)reaction.Clone());

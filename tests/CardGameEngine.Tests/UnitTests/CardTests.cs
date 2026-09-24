@@ -11,7 +11,7 @@ public class TestCard : Card
 {
     public override IPlayer Owner { get; set; }
 
-    public TestCard(IPlayer owner, string name = "") : base(new List<ICardComponent>(), new List<IReaction>(), owner, name)
+    public TestCard(IPlayer owner, string name = "") : base([], [], owner, name)
     {
         Owner = owner;
     }
@@ -24,8 +24,8 @@ public class TestCard : Card
 
     public override object Clone()
     {
-        return new TestCard(new List<ICardComponent>(Components.Select(c => (ICardComponent)c.Clone())),
-                            new List<IReaction>(Reactions.Select(r => (IReaction)r.Clone())),
+        return new TestCard([.. Components.Select(c => (ICardComponent)c.Clone())],
+                            [.. Reactions.Select(r => (IReaction)r.Clone())],
                             Owner,
                             Name);
     }
@@ -76,7 +76,7 @@ public class CardTests
         var cardComponent2 = new Mock<ICardComponent>();
         cardComponent2.Setup(c => c.ManaValue).Returns(2);
 
-        var card = new TestCard(new List<ICardComponent> { cardComponent1.Object, cardComponent2.Object }, new List<IReaction>(), mockPlayer.Object);
+        var card = new TestCard([cardComponent1.Object, cardComponent2.Object], [], mockPlayer.Object);
 
         // Act & Assert
         Assert.Equal(5, card.ManaValue);
@@ -116,7 +116,7 @@ public class CardTests
         mockHand.Setup(h => h.Contains(card)).Returns(true);
 
         mockGameState.Setup(gs => gs.ActivePlayer).Returns(mockPlayer.Object);
-        mockGameState.Setup(gs => gs.Players).Returns(new List<IPlayer> { mockPlayer.Object });
+        mockGameState.Setup(gs => gs.Players).Returns([mockPlayer.Object]);
 
         // Act
         bool isCastable = card.IsCastable(mockGameState.Object);
@@ -143,7 +143,7 @@ public class CardTests
         mockHand.Setup(h => h.Contains(card)).Returns(true);
 
         mockGameState.Setup(gs => gs.ActivePlayer).Returns(mockOtherPlayer.Object); // Not the owner
-        mockGameState.Setup(gs => gs.Players).Returns(new List<IPlayer> { mockPlayer.Object, mockOtherPlayer.Object });
+        mockGameState.Setup(gs => gs.Players).Returns([mockPlayer.Object, mockOtherPlayer.Object]);
 
         // Act
         bool isCastable = card.IsCastable(mockGameState.Object);
@@ -170,7 +170,7 @@ public class CardTests
         mockHand.Setup(h => h.Contains(card)).Returns(true);
 
         mockGameState.Setup(gs => gs.ActivePlayer).Returns(mockPlayer.Object);
-        mockGameState.Setup(gs => gs.Players).Returns(new List<IPlayer> { mockPlayer.Object });
+        mockGameState.Setup(gs => gs.Players).Returns([mockPlayer.Object]);
 
         // Act
         bool isCastable = card.IsCastable(mockGameState.Object);
@@ -196,7 +196,7 @@ public class CardTests
         mockHand.Setup(h => h.Contains(card)).Returns(false); // Card not in hand
 
         mockGameState.Setup(gs => gs.ActivePlayer).Returns(mockPlayer.Object);
-        mockGameState.Setup(gs => gs.Players).Returns(new List<IPlayer> { mockPlayer.Object });
+        mockGameState.Setup(gs => gs.Players).Returns([mockPlayer.Object]);
 
         // Act
         bool isCastable = card.IsCastable(mockGameState.Object);
@@ -225,13 +225,13 @@ public class CardTests
     {
         // Arrange
         var mockPlayer1 = new Mock<IPlayer>();
-        mockPlayer1.Setup(p => p.AllCards).Returns(new List<ICard> { new TestCard(mockPlayer1.Object) });
+        mockPlayer1.Setup(p => p.AllCards).Returns([new TestCard(mockPlayer1.Object)]);
         var mockPlayer2 = new Mock<IPlayer>();
         var card = new TestCard(mockPlayer1.Object) { Name = "Test Card" };
-        mockPlayer1.Setup(p => p.AllCards).Returns(new List<ICard> { card }); // Ensure the card is in AllCards for the owner
+        mockPlayer1.Setup(p => p.AllCards).Returns([card]); // Ensure the card is in AllCards for the owner
 
         var mockGameState = new Mock<IGameState>();
-        mockGameState.Setup(gs => gs.Players).Returns(new List<IPlayer> { mockPlayer1.Object, mockPlayer2.Object });
+        mockGameState.Setup(gs => gs.Players).Returns([mockPlayer1.Object, mockPlayer2.Object]);
 
         // Act
         var parentPlayer = card.FindParentPlayer(mockGameState.Object);
@@ -245,13 +245,13 @@ public class CardTests
     {
         // Arrange
         var mockPlayer1 = new Mock<IPlayer>();
-        mockPlayer1.Setup(p => p.AllCards).Returns(new List<ICard>()); // Player1 does not contain the card
+        mockPlayer1.Setup(p => p.AllCards).Returns([]); // Player1 does not contain the card
         var mockPlayer2 = new Mock<IPlayer>();
-        mockPlayer2.Setup(p => p.AllCards).Returns(new List<ICard>()); // Player2 does not contain the card
+        mockPlayer2.Setup(p => p.AllCards).Returns([]); // Player2 does not contain the card
         var card = new TestCard(new Mock<IPlayer>().Object) { Name = "Test Card" }; // Card has an owner, but not in any player's AllCards list
 
         var mockGameState = new Mock<IGameState>();
-        mockGameState.Setup(gs => gs.Players).Returns(new List<IPlayer> { mockPlayer1.Object, mockPlayer2.Object });
+        mockGameState.Setup(gs => gs.Players).Returns([mockPlayer1.Object, mockPlayer2.Object]);
 
         // Act & Assert
         var exception = Assert.Throws<CardGameEngineException>(() => card.FindParentPlayer(mockGameState.Object));
@@ -267,7 +267,7 @@ public class CardTests
         mockReaction.Setup(r => r.Clone()).Returns(new Mock<IReaction>().Object);
         var cardComponent = new CardComponent(1, 1);
 
-        var original = new TestCard(new List<ICardComponent> { cardComponent }, new List<IReaction> { mockReaction.Object }, mockPlayer.Object, "Original Card");
+        var original = new TestCard([cardComponent], [mockReaction.Object], mockPlayer.Object, "Original Card");
 
         // Act
         var clone = (TestCard)original.Clone();

@@ -41,7 +41,7 @@ public class Board : CardCollection, IBoard
     {
         get
         {
-            List<ICard> allCards = new List<ICard>();
+            List<ICard> allCards = [];
             foreach (ICard card in cards)
             {
                 if (card != null)

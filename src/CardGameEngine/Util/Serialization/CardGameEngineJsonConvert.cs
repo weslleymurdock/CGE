@@ -5,7 +5,8 @@ namespace CardGameEngine
 {
     public static class CardGameEngineJsonConvert
     {
-        public static readonly JsonSerializerSettings serializerSettings = new JsonSerializerSettings
+        public static readonly JsonSerializerSettings serializerSettings = new()
+
         {
             Converters = new[] { new StackConverter() },
             PreserveReferencesHandling = PreserveReferencesHandling.Objects,

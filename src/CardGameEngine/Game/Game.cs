@@ -26,7 +26,7 @@ namespace CardGameEngine
         /// Represent the current Game state and provides methods to alter
         /// this Game state.
         /// </summary>
-        public Game() : this(new List<IPlayer>())
+        public Game() : this([])
         {
         }
 
@@ -36,7 +36,7 @@ namespace CardGameEngine
         /// </summary>
         /// <param name="players"></param>
         public Game(List<IPlayer> players)
-            : this(players, new Random().Next(players.Count), new ActionQueue(false), new List<IReaction>())
+            : this(players, new Random().Next(players.Count), new ActionQueue(false), [])
         {
             Reactions.Add(new ModifyActivePlayerOnEndOfTurnEventReaction());
             Reactions.Add(new ModifyManaOnStartOfTurnEventReaction());
@@ -67,7 +67,7 @@ namespace CardGameEngine
         {
             get
             {
-                return Players.Where(p => p != ActivePlayer).ToList();
+                return [.. Players.Where(p => p != ActivePlayer)];
             }
         }
 
@@ -76,7 +76,7 @@ namespace CardGameEngine
         {
             get
             {
-                List<ICard> allCards = new List<ICard>();
+                List<ICard> allCards = [];
                 foreach (IPlayer player in Players)
                 {
                     allCards.AddRange(player.AllCards);
@@ -90,7 +90,7 @@ namespace CardGameEngine
         {
             get
             {
-                List<ICard> allCards = new List<ICard>();
+                List<ICard> allCards = [];
                 foreach (IPlayer player in Players)
                 {
                     allCards.AddRange(player.Board.AllCards);
@@ -101,7 +101,7 @@ namespace CardGameEngine
 
         public List<IReaction> AllReactions()
         {
-            List<IReaction> allReactions = new List<IReaction>(Reactions);
+            List<IReaction> allReactions = [.. Reactions];
             Players.ForEach(p => allReactions.AddRange(p.AllReactions()));
             return allReactions;
         }
@@ -153,13 +153,13 @@ namespace CardGameEngine
 
         public object Clone()
         {
-            List<IPlayer> playersClone = new List<IPlayer>();
+            List<IPlayer> playersClone = [];
             foreach (IPlayer player in Players)
             {
                 playersClone.Add((IPlayer)player.Clone());
             }
 
-            List<IReaction> reactionsClone = new List<IReaction>();
+            List<IReaction> reactionsClone = [];
             foreach (IReaction reaction in Reactions)
             {
                 reactionsClone.Add((IReaction)reaction.Clone());

@@ -24,7 +24,7 @@ public abstract class CompoundCard : Card, ICompoundCard
         this.Components = components;
     }
 
-    public CompoundCard(ICard card) : this(new List<ICard> { card }, ((Card)card).Name)
+    public CompoundCard(ICard card) : this([card], ((Card)card).Name)
     {
     }
 

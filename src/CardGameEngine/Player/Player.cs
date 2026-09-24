@@ -37,7 +37,7 @@ namespace CardGameEngine
         public Player(IDeck deck)
             : this(deck, new Hand(), new Board(), new Deck(),
                   new ManaPoolStat(0, 0), new AttackStat(0), new LifeStat(0),
-                  new List<IReaction>())
+                  [])
         {
         }
 
@@ -65,11 +65,13 @@ namespace CardGameEngine
         {
             get
             {
-                List<ICard> allCards = new List<ICard>();
-                allCards.AddRange(Deck.AllCards);
-                allCards.AddRange(Hand.AllCards);
-                allCards.AddRange(Board.AllCards);
-                allCards.AddRange(Graveyard.AllCards);
+                List<ICard> allCards =
+                [
+                    .. Deck.AllCards,
+                    .. Hand.AllCards,
+                    .. Board.AllCards,
+                    .. Graveyard.AllCards,
+                ];
                 return allCards;
             }
         }
@@ -121,10 +123,11 @@ namespace CardGameEngine
         {
             get
             {
-                List<ICharacter> characters = new List<ICharacter>
-                {
+                List<ICharacter> characters =
+
+                [
                     this
-                };
+                ];
                 Board.AllCards.ForEach(c => characters.Add((ICharacter)c));
                 return characters;
             }
@@ -132,7 +135,7 @@ namespace CardGameEngine
 
         public List<IReaction> AllReactions()
         {
-            List<IReaction> allReactions = new List<IReaction>(Reactions);
+            List<IReaction> allReactions = [.. Reactions];
             AllCards.ForEach(c => allReactions.AddRange(c.AllReactions()));
             return allReactions;
         }
@@ -183,7 +186,7 @@ namespace CardGameEngine
 
         public HashSet<ICharacter> GetPotentialTargets(IGameState gameState)
         {
-            return new HashSet<ICharacter>();
+            return [];
         }
 
         public void ReactTo(IGame game, IActionEvent actionEvent)
@@ -193,7 +196,7 @@ namespace CardGameEngine
 
         public virtual object Clone()
         {
-            List<IReaction> reactionsClone = new List<IReaction>();
+            List<IReaction> reactionsClone = [];
             foreach (IReaction reaction in Reactions)
             {
                 reactionsClone.Add((IReaction)reaction.Clone());

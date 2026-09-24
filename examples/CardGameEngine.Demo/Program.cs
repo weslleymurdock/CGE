@@ -34,7 +34,7 @@ internal static class Program
         opponent.Deck.Push(opponentMonster);
         opponent.Deck.Push(new MonsterCard(1, 2, 3, opponent, "Squire"));
 
-        var game = new Game(new List<IPlayer> { player, opponent });
+        var game = new Game([player, opponent]);
         game.ActivePlayer = player;
 
         Console.WriteLine("=== CardGameEngine console demo ===");

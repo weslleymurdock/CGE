@@ -7,6 +7,6 @@ public interface ITargetlessSpellCardComponent : ISpellCardComponent, ITargetles
     /// <summary>
     /// Called when spell card is cast. Execute Actions here.
     /// </summary>
-    /// <param name="gameState"></param>
+    /// <param name="game"></param>
     void Cast(IGame game);
 }

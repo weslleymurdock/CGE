@@ -10,17 +10,17 @@ public class TargetfulSpellCard : SpellCard, ITargetfulSpellCard
     public override IPlayer Owner { get; set; }
 
     public TargetfulSpellCard(IPlayer owner = default!, string name = "")
-        : this(new List<ISpellCardComponent>(), owner, name)
+        : this([], owner, name)
     {
     }
 
     public TargetfulSpellCard(ISpellCardComponent component, IPlayer owner, string name)
-        : this(new List<ISpellCardComponent> { component }, owner, name)
+        : this([component], owner, name)
     { 
     }
 
     public TargetfulSpellCard(List<ISpellCardComponent> components, IPlayer owner, string name)
-        : this(components.ConvertAll(c => (ICardComponent)c), new List<IReaction>(), owner, name)
+        : this(components.ConvertAll(c => (ICardComponent)c), [], owner, name)
     {
     }
 
@@ -46,7 +46,7 @@ public class TargetfulSpellCard : SpellCard, ITargetfulSpellCard
                 potentialTargets.IntersectWith(((ITargetful)component).GetPotentialTargets(gameState));
             }
         }
-        return potentialTargets ?? new HashSet<ICharacter>();
+        return potentialTargets ?? [];
     }
 
     public void Cast(IGame game, ICharacter target)
@@ -72,10 +72,10 @@ public class TargetfulSpellCard : SpellCard, ITargetfulSpellCard
 
     public override object Clone()
     {
-        List<ICardComponent> componentsClone = new List<ICardComponent>();
+        List<ICardComponent> componentsClone = [];
         Components.ForEach(c => componentsClone.Add((ICardComponent)c.Clone()));
 
-        List<IReaction> reactionsClone = new List<IReaction>();
+        List<IReaction> reactionsClone = [];
         Reactions.ForEach(r => reactionsClone.Add((IReaction)r.Clone()));
 
         return new TargetfulSpellCard(

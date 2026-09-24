@@ -75,7 +75,7 @@ public class MonsterCardComponent : CardComponent, IMonsterCardComponent
 
     public override object Clone()
     {
-        List<IReaction> reactionsClone = new List<IReaction>();
+        List<IReaction> reactionsClone = [];
         foreach (IReaction reaction in Reactions)
         {
             reactionsClone.Add((IReaction)reaction.Clone());
@@ -91,7 +91,7 @@ public class MonsterCardComponent : CardComponent, IMonsterCardComponent
 
     public HashSet<ICharacter> GetPotentialTargets(IGameState gameState)
     {
-        HashSet<ICharacter> potentialTargets = new HashSet<ICharacter>();
+        HashSet<ICharacter> potentialTargets = [];
         foreach (IPlayer player in gameState.NonActivePlayers)
         {
             player.Characters.ForEach(c => potentialTargets.Add(c));

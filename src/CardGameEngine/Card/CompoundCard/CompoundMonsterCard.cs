@@ -46,7 +46,7 @@ public class CompoundMonsterCard : CompoundCard, IMonsterCard
     }
 
     public CompoundMonsterCard(IMonsterCard monsterCard)
-        : this(new List<IMonsterCard> { monsterCard })
+        : this([monsterCard])
     {
     }
 

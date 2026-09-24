@@ -10,7 +10,7 @@ public abstract class ReactiveCompound : Compound, IReactive
     public List<IReaction> Reactions { get; }
 
     public ReactiveCompound(List<ICardComponent> components)
-        : this(components, new List<IReaction>())
+        : this(components, [])
     {
     }
 
@@ -23,7 +23,7 @@ public abstract class ReactiveCompound : Compound, IReactive
 
     public List<IReaction> AllReactions()
     {
-        List<IReaction> allReactions = new List<IReaction>(Reactions);
+        List<IReaction> allReactions = [.. Reactions];
         Components.ForEach(c => allReactions.AddRange(c.AllReactions()));
         return allReactions;
     }
