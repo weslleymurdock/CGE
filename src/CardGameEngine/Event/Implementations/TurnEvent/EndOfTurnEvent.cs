@@ -6,8 +6,8 @@ namespace CardGameEngine
     [Serializable]
     public class EndOfTurnEvent : Event
     {
-        [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="EndOfTurnEvent"/> type.</summary>
+        [JsonConstructor]
         public EndOfTurnEvent()
         {
         }
