@@ -12,11 +12,11 @@ public class ModifyLifeStatAction : Action
     [JsonProperty]
     public int Delta;
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="ModifyLifeStatAction"/> type.</summary>
 /// <param name="living">The living value.</param>
 /// <param name="delta">The delta value.</param>
 /// <param name="isAborted">The isAborted value.</param>
+    [JsonConstructor]
     public ModifyLifeStatAction(ILiving living, int delta, bool isAborted = false)
         : base(isAborted)
     {
