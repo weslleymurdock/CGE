@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 
 namespace CardGameEngine
@@ -12,6 +12,10 @@ namespace CardGameEngine
         /// <param name="value"></param>
         /// <param name="baseValue"></param>
         [JsonConstructor]
+/// <summary>Initializes a new instance of the <see cref="ManaPoolStat"/> type.</summary>
+/// <param name="value">The value value.</param>
+/// <param name="base(value">The base(value value.</param>
+/// <param name="baseValue">The baseValue value.</param>
         public ManaPoolStat(int value, int baseValue) : base(value, baseValue)
         {
         }
@@ -30,6 +34,8 @@ namespace CardGameEngine
             set => base.BaseValue = Math.Max(0, value);
         }
 
+/// <summary>Creates a copy of the current object.</summary>
+/// <returns>The result of the operation.</returns>
         public override object Clone()
         {
             return new ManaPoolStat(Value, BaseValue);
