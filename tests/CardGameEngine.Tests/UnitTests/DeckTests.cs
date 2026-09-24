@@ -160,8 +160,8 @@ public class DeckTests
         var restored = CardGameEngineJsonConvert.Deserialize<Deck>(json);
 
         // Assert
-        Assert.Equal("Top", restored.Pop().Name);
-        Assert.Equal("Bottom", restored.Pop().Name);
+        Assert.Equal(2, ((IMonsterCard)restored.Pop()).AttackValue);
+        Assert.Equal(1, ((IMonsterCard)restored.Pop()).AttackValue);
     }
 
 }
