@@ -6,8 +6,8 @@ namespace CardGameEngine;
 [Serializable]
 public class AfterActionEvent : ActionEvent
 {
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="AfterActionEvent"/> type.</summary>
+    [JsonConstructor]
     public AfterActionEvent(IAction action) : base(action)
     {
     }
