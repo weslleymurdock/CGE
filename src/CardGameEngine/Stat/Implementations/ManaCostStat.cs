@@ -9,10 +9,10 @@ namespace CardGameEngine {
         /// <summary>
         /// Costs in Mana.
         /// </summary>
-        [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="ManaCostStat"/> type.</summary>
 /// <param name="value">The value value.</param>
 /// <param name="baseValue">The baseValue value.</param>
+        [JsonConstructor]
         public ManaCostStat(int value, int baseValue) : base(value, baseValue)
         {
         }
