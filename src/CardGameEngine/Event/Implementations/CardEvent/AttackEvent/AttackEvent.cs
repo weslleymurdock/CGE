@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 namespace CardGameEngine
 {
     [Serializable]
@@ -7,6 +7,9 @@ namespace CardGameEngine
         protected Func<IMonsterCard> GetAttacker;
         protected Func<ICharacter> GetTarget;
 
+/// <summary>Initializes a new instance of the <see cref="AttackEvent"/> type.</summary>
+/// <param name="getAttacker">The getAttacker value.</param>
+/// <param name="getTarget">The getTarget value.</param>
         public AttackEvent(Func<IMonsterCard> getAttacker, Func<ICharacter> getTarget)
         {
             GetAttacker = getAttacker;
