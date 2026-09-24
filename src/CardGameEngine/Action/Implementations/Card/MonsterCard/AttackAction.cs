@@ -12,11 +12,11 @@ public class AttackAction : Action
     [JsonProperty]
     public ICharacter Target;
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="AttackAction"/> type.</summary>
 /// <param name="attacker">The attacker value.</param>
 /// <param name="target">The target value.</param>
 /// <param name="isAborted">The isAborted value.</param>
+    [JsonConstructor]
     public AttackAction(IMonsterCard attacker, ICharacter target, bool isAborted = false)
         : base(isAborted)
     {
