@@ -18,9 +18,9 @@ public class Hand : CardCollection, IHand
     {
     }
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="Hand"/> type.</summary>
 /// <param name="cards">The cards value.</param>
+    [JsonConstructor]
     protected Hand(List<ICard> cards)
     {
         this.cards = cards;
