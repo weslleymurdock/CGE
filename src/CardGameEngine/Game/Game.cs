@@ -43,12 +43,12 @@ namespace CardGameEngine
             Reactions.Add(new DrawCardOnStartOfTurnEventReaction());
         }
 
-        [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="Game"/> type.</summary>
 /// <param name="players">The players value.</param>
 /// <param name="activePlayerIndex">The activePlayerIndex value.</param>
 /// <param name="actionQueue">The actionQueue value.</param>
 /// <param name="reactions">The reactions value.</param>
+        [JsonConstructor]
         public Game(List<IPlayer> players, int activePlayerIndex, ActionQueue actionQueue, List<IReaction> reactions)
         {
             Players = players;
