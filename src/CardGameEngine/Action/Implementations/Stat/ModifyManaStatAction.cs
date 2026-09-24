@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 
 namespace CardGameEngine;
@@ -28,6 +28,8 @@ public class ModifyManaStatAction : Action
         DeltaBaseValue = deltaBaseValue;
     }
 
+/// <summary>Creates a copy of the current object.</summary>
+/// <returns>The result of the operation.</returns>
     public override object Clone()
     {
         return new ModifyManaStatAction(
@@ -38,12 +40,17 @@ public class ModifyManaStatAction : Action
         );
     }
 
+/// <summary>Executes this operation against the specified game.</summary>
+/// <param name="game">The game value.</param>
     public override void Execute(IGame game)
     {
         Manaful.ManaBaseValue += DeltaBaseValue;
         Manaful.ManaValue += DeltaValue;
     }
 
+/// <summary>Determines whether this operation can be executed for the specified game state.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
     public override bool IsExecutable(IGameState gameState)
     {
         return true;
