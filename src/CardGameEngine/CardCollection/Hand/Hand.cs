@@ -14,7 +14,6 @@ public class Hand : CardCollection, IHand
     protected List<ICard> cards;
 
 /// <summary>Initializes a new instance of the <see cref="Hand"/> type.</summary>
-/// <param name="this([]">The this([] value.</param>
     public Hand() : this([])
     {
     }
