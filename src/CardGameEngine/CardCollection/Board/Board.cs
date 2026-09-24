@@ -27,9 +27,9 @@ public class Board : CardCollection, IBoard
         }
     }
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="Board"/> type.</summary>
 /// <param name="cards">The cards value.</param>
+    [JsonConstructor]
     protected Board(ICard[] cards)
     {
         this.cards = cards;
