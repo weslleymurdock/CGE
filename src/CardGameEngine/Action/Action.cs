@@ -8,9 +8,9 @@ public abstract class Action : IAction
 {
     public bool IsAborted { get; set; }
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="Action"/> type.</summary>
 /// <param name="isAborted">The isAborted value.</param>
+    [JsonConstructor]
     public Action(bool isAborted = false)
     {
         IsAborted = isAborted;
