@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 
 namespace CardGameEngine
@@ -21,6 +21,9 @@ namespace CardGameEngine
         /// <param name="value"></param>
         /// <param name="baseValue"></param>
         [JsonConstructor]
+/// <summary>Initializes a new instance of the <see cref="Stat"/> type.</summary>
+/// <param name="value">The value value.</param>
+/// <param name="baseValue">The baseValue value.</param>
         public Stat(int value, int baseValue)
         {
             this.baseValue = baseValue;
@@ -40,6 +43,8 @@ namespace CardGameEngine
             set => baseValue = Math.Max(GlobalMin, Math.Min(GlobalMax, value));
         }
 
+/// <summary>Creates a copy of the current object.</summary>
+/// <returns>The result of the operation.</returns>
         public abstract object Clone();
     }
 }
