@@ -15,12 +15,12 @@ public class AddCardToBoardAction : Action
     [JsonProperty]
     public int BoardIndex;
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="AddCardToBoardAction"/> type.</summary>
 /// <param name="board">The board value.</param>
 /// <param name="card">The card value.</param>
 /// <param name="boardIndex">The boardIndex value.</param>
 /// <param name="isAborted">The isAborted value.</param>
+    [JsonConstructor]
     public AddCardToBoardAction(IBoard board, ICard card, int boardIndex, bool isAborted = false)
         : base(isAborted)
     {
