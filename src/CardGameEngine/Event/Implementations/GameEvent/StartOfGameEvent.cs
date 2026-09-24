@@ -6,8 +6,8 @@ namespace CardGameEngine
     [Serializable]
     public class StartOfGameEvent : Event
     {
-        [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="StartOfGameEvent"/> type.</summary>
+        [JsonConstructor]
         public StartOfGameEvent()
         {
         }
