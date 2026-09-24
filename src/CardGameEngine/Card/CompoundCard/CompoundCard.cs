@@ -28,8 +28,6 @@ public abstract class CompoundCard : Card, ICompoundCard
     }
 
 /// <summary>Initializes a new instance of the <see cref="CompoundCard"/> type.</summary>
-/// <param name="this([card]">The this([card] value.</param>
-/// <param name="((Card)card).Name">The ((Card)card).Name value.</param>
     public CompoundCard(ICard card) : this([card], ((Card)card).Name)
     {
     }
