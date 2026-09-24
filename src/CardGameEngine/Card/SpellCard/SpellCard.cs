@@ -27,12 +27,12 @@ public abstract class SpellCard : Card, ISpellCard
     {
     }
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="SpellCard"/> type.</summary>
 /// <param name="components">The components value.</param>
 /// <param name="reactions">The reactions value.</param>
 /// <param name="owner">The owner value.</param>
 /// <param name="name">The name value.</param>
+    [JsonConstructor]
     public SpellCard(List<ICardComponent> components, List<IReaction> reactions, IPlayer owner, string name)
         : base(components, reactions, owner, name)
     {
