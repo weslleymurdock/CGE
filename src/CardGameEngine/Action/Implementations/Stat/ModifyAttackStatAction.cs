@@ -12,11 +12,11 @@ public class ModifyAttackStatAction : Action
     [JsonProperty]
     public int Delta;
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="ModifyAttackStatAction"/> type.</summary>
 /// <param name="attacking">The attacking value.</param>
 /// <param name="delta">The delta value.</param>
 /// <param name="isAborted">The isAborted value.</param>
+    [JsonConstructor]
     public ModifyAttackStatAction(IAttacking attacking, int delta, bool isAborted = false)
         : base(isAborted)
     {
