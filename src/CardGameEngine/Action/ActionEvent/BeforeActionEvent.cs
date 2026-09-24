@@ -8,7 +8,6 @@ public class BeforeActionEvent : ActionEvent
 {
     [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="BeforeActionEvent"/> type.</summary>
-/// <param name="base(action">The base(action value.</param>
     public BeforeActionEvent(IAction action) : base(action)
     {
     }
