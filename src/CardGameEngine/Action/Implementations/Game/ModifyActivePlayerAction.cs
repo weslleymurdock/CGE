@@ -9,10 +9,10 @@ public class ModifyActivePlayerAction : Action
     [JsonProperty]
     public IPlayer NewActivePlayer;
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="ModifyActivePlayerAction"/> type.</summary>
 /// <param name="newActivePlayer">The newActivePlayer value.</param>
 /// <param name="isAborted">The isAborted value.</param>
+    [JsonConstructor]
     public ModifyActivePlayerAction(IPlayer newActivePlayer, bool isAborted = false)
         : base(isAborted)
     {
