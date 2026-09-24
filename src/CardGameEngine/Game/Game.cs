@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -44,6 +44,11 @@ namespace CardGameEngine
         }
 
         [JsonConstructor]
+/// <summary>Initializes a new instance of the <see cref="Game"/> type.</summary>
+/// <param name="players">The players value.</param>
+/// <param name="activePlayerIndex">The activePlayerIndex value.</param>
+/// <param name="actionQueue">The actionQueue value.</param>
+/// <param name="reactions">The reactions value.</param>
         public Game(List<IPlayer> players, int activePlayerIndex, ActionQueue actionQueue, List<IReaction> reactions)
         {
             Players = players;
@@ -99,6 +104,8 @@ namespace CardGameEngine
             }
         }
 
+/// <summary>Gets all reactions associated with this object.</summary>
+/// <returns>The result of the operation.</returns>
         public List<IReaction> AllReactions()
         {
             List<IReaction> allReactions = [.. Reactions];
@@ -106,6 +113,9 @@ namespace CardGameEngine
             return allReactions;
         }
 
+/// <summary>Initializes the game and starts the first turn.</summary>
+/// <param name="initialHandSize">The initialHandSize value.</param>
+/// <param name="initialPlayerLife">The initialPlayerLife value.</param>
         public void StartGame(int initialHandSize = 4, int initialPlayerLife = 30)
         {
             //Do not trigger any reactions during setup
@@ -130,27 +140,37 @@ namespace CardGameEngine
             Execute(new StartOfTurnEvent());
         }
 
+/// <summary>Advances the game to the next turn.</summary>
         public void NextTurn()
         {
             Execute(new EndOfTurnEvent());
             Execute(new StartOfTurnEvent());
         }
 
+/// <summary>Executes this operation against the specified game.</summary>
+/// <param name="action">The action value.</param>
         public void Execute(IAction action)
         {
             actionQueue.Execute(this, action);
         }
 
+/// <summary>Executes this operation against the specified game.</summary>
+/// <param name="actions">The actions value.</param>
         public void Execute(List<IAction> actions)
         {
             actions.ForEach(a => Execute(a));
         }
 
+/// <summary>Reacts to the specified action event.</summary>
+/// <param name="game">The game value.</param>
+/// <param name="actionEvent">The actionEvent value.</param>
         public void ReactTo(IGame game, IActionEvent actionEvent)
         {
             AllReactions().ForEach(r => r.ReactTo(game, actionEvent));
         }
 
+/// <summary>Creates a copy of the current object.</summary>
+/// <returns>The result of the operation.</returns>
         public object Clone()
         {
             List<IPlayer> playersClone = [];
@@ -173,12 +193,18 @@ namespace CardGameEngine
             );
         }
 
+/// <summary>Finds the parent card in the specified game state.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
         public ICard FindParentCard(IGameState gameState)
         {
             throw new CardGameEngineException("Cannot use method 'FindParentCard' on " +
                 "instance of type 'Game'");
         }
 
+/// <summary>Finds the parent player in the specified game state.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
         public IPlayer FindParentPlayer(IGameState gameState)
         {
             throw new CardGameEngineException("Cannot use method 'FindParentPlayer' on " +
