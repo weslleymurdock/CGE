@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -133,6 +133,8 @@ namespace CardGameEngine
             }
         }
 
+/// <summary>Gets all reactions associated with this object.</summary>
+/// <returns>The result of the operation.</returns>
         public List<IReaction> AllReactions()
         {
             List<IReaction> allReactions = [.. Reactions];
@@ -140,11 +142,17 @@ namespace CardGameEngine
             return allReactions;
         }
 
+/// <summary>Draws a card for the player.</summary>
+/// <param name="game">The game value.</param>
         public void DrawCard(IGame game)
         {
             game.Execute(new DrawCardAction(this));
         }
 
+/// <summary>Performs the CastMonster operation.</summary>
+/// <param name="game">The game value.</param>
+/// <param name="monsterCard">The monsterCard value.</param>
+/// <param name="boardIndex">The boardIndex value.</param>
         public void CastMonster(IGame game, IMonsterCard monsterCard, int boardIndex)
         {
             if (!monsterCard.IsSummonable(game))
@@ -162,6 +170,9 @@ namespace CardGameEngine
             game.Execute(new CastMonsterAction(this, monsterCard, boardIndex));
         }
 
+/// <summary>Performs the CastSpell operation.</summary>
+/// <param name="game">The game value.</param>
+/// <param name="spellCard">The spellCard value.</param>
         public void CastSpell(IGame game, ITargetlessSpellCard spellCard)
         {
             if (!spellCard.IsCastable(game))
@@ -173,6 +184,10 @@ namespace CardGameEngine
             game.Execute(new CastTargetlessSpellAction(this, spellCard));
         }
 
+/// <summary>Performs the CastSpell operation.</summary>
+/// <param name="game">The game value.</param>
+/// <param name="spellCard">The spellCard value.</param>
+/// <param name="target">The target value.</param>
         public void CastSpell(IGame game, ITargetfulSpellCard spellCard, ICharacter target)
         {
             if (!spellCard.IsCastable(game))
@@ -184,16 +199,24 @@ namespace CardGameEngine
             game.Execute(new CastTargetfulSpellAction(this, spellCard, target));
         }
 
+/// <summary>Gets the characters that can currently be targeted.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
         public HashSet<ICharacter> GetPotentialTargets(IGameState gameState)
         {
             return [];
         }
 
+/// <summary>Reacts to the specified action event.</summary>
+/// <param name="game">The game value.</param>
+/// <param name="actionEvent">The actionEvent value.</param>
         public void ReactTo(IGame game, IActionEvent actionEvent)
         {
             AllReactions().ForEach(r => r.ReactTo(game, actionEvent));
         }
 
+/// <summary>Creates a copy of the current object.</summary>
+/// <returns>The result of the operation.</returns>
         public virtual object Clone()
         {
             List<IReaction> reactionsClone = [];
@@ -214,17 +237,33 @@ namespace CardGameEngine
             );
         }
 
+/// <summary>Finds the parent card in the specified game state.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
         public ICard FindParentCard(IGameState gameState)
         {
             throw new CardGameEngineException("Cannot use method 'FindParentCard' on " +
                 "instance of type 'Player'");
         }
 
+/// <summary>Finds the parent player in the specified game state.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
         public IPlayer FindParentPlayer(IGameState gameState)
         {
             return this;
         }
 
+/// <summary>Creates a player from the supplied game components.</summary>
+/// <param name="deck">The deck value.</param>
+/// <param name="hand">The hand value.</param>
+/// <param name="board">The board value.</param>
+/// <param name="graveyard">The graveyard value.</param>
+/// <param name="mana">The mana value.</param>
+/// <param name="attack">The attack value.</param>
+/// <param name="life">The life value.</param>
+/// <param name="reactions">The reactions value.</param>
+/// <returns>The result of the operation.</returns>
         public static Player NewPlayer(IDeck deck, IHand hand, IBoard board, IDeck graveyard, ManaPoolStat mana, AttackStat attack, LifeStat life, List<IReaction> reactions)
         {
             return new Player(deck, hand, board, graveyard, mana, attack, life, reactions);
