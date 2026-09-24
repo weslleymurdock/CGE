@@ -27,10 +27,10 @@ public class CardComponent : Reaction, ICardComponent
     {
     }
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="CardComponent"/> type.</summary>
 /// <param name="manaCostStat">The manaCostStat value.</param>
 /// <param name="reactions">The reactions value.</param>
+    [JsonConstructor]
     protected CardComponent(ManaCostStat manaCostStat, List<IReaction> reactions)
     {
         this.manaCostStat = manaCostStat;
