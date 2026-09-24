@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -12,6 +12,7 @@ public class MonsterCard : Card, IMonsterCard
     public ManaPoolStat ManaStat { get; private set; }
     public LifeStat LifeStat { get; private set; }
     public AttackStat AttackStat { get; private set; }
+/// <summary>Initializes a new instance of the <see cref="MonsterCard"/> type.</summary>
     public MonsterCard()
         : this([], default!)
     {
@@ -125,11 +126,17 @@ public class MonsterCard : Card, IMonsterCard
 
     public override IPlayer Owner { get; set; }
 
+/// <summary>Performs the GetSum operation.</summary>
+/// <param name="GetValue">The GetValue value.</param>
+/// <returns>The result of the operation.</returns>
     private int GetSum(Func<IMonsterCardComponent, int> GetValue)
     {
         return Components.Where(c => c is IMonsterCardComponent).Sum(c => GetValue((IMonsterCardComponent)c));
     }
 
+/// <summary>Performs an attack against the specified target.</summary>
+/// <param name="game">The game value.</param>
+/// <param name="target">The target value.</param>
     public void Attack(IGame game, ICharacter target)
     {
         if(!IsReadyToAttack)
@@ -146,6 +153,9 @@ public class MonsterCard : Card, IMonsterCard
         game.Execute(new AttackAction(this, target));
     }
 
+/// <summary>Gets the characters that can currently be targeted.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
     public virtual HashSet<ICharacter> GetPotentialTargets(IGameState gameState)
     {
         if (Components.Count == 0)
@@ -162,6 +172,9 @@ public class MonsterCard : Card, IMonsterCard
         return potentialTargets;
     }
 
+/// <summary>Determines whether this card can currently be summoned.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
     public bool IsSummonable(IGameState gameState)
     {
         IBoard board = gameState.ActivePlayer.Board;
@@ -169,6 +182,8 @@ public class MonsterCard : Card, IMonsterCard
                 && board.AllCards.Count < board.MaxSize;
     }
 
+/// <summary>Creates a copy of the current object.</summary>
+/// <returns>The result of the operation.</returns>
     public override object Clone()
     {
         List<ICardComponent> componentsClone = [];
