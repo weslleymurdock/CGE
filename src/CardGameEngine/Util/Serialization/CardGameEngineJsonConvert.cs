@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 
 namespace CardGameEngine
@@ -14,6 +14,9 @@ namespace CardGameEngine
             Formatting = Formatting.Indented
         };
 
+/// <summary>Serializes an object to JSON.</summary>
+/// <param name="obj">The obj value.</param>
+/// <returns>The result of the operation.</returns>
         public static string Serialize(Object obj)
         {
             return JsonConvert.SerializeObject(obj, serializerSettings);
