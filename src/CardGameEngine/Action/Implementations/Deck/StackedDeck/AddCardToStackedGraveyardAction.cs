@@ -12,11 +12,11 @@ public class AddCardToStackedGraveyardAction : Action
     [JsonProperty]
     public ICard Card;
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="AddCardToStackedGraveyardAction"/> type.</summary>
 /// <param name="graveyard">The graveyard value.</param>
 /// <param name="card">The card value.</param>
 /// <param name="isAborted">The isAborted value.</param>
+    [JsonConstructor]
     public AddCardToStackedGraveyardAction(IStackedDeck graveyard, ICard card, bool isAborted = false)
     {
         Graveyard = graveyard;
