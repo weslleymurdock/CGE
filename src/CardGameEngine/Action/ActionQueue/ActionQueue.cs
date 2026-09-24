@@ -18,10 +18,10 @@ public class ActionQueue : IActionQueue
     {
     }
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="ActionQueue"/> type.</summary>
 /// <param name="executeReactions">The executeReactions value.</param>
 /// <param name="isGameOver">The isGameOver value.</param>
+    [JsonConstructor]
     protected ActionQueue(bool executeReactions, bool isGameOver)
     {
         ExecuteReactions = executeReactions;
