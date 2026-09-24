@@ -16,9 +16,9 @@ namespace CardGameEngine
         {
         }
 
-        [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="StackedDeck"/> type.</summary>
 /// <param name="cards">The cards value.</param>
+        [JsonConstructor]
         protected StackedDeck(Stack<ICard> cards)
         {
             this.cards = cards;
