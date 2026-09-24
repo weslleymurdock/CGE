@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -13,6 +13,10 @@ public class MonsterCardComponent : CardComponent, IMonsterCardComponent
     [JsonProperty]
     protected LifeStat lifeStat;
 
+/// <summary>Initializes a new instance of the <see cref="MonsterCardComponent"/> type.</summary>
+/// <param name="mana">The mana value.</param>
+/// <param name="attack">The attack value.</param>
+/// <param name="life">The life value.</param>
     public MonsterCardComponent(int mana, int attack, int life)
         : this(mana, new AttackStat(attack), new LifeStat(life))
     {
@@ -26,6 +30,10 @@ public class MonsterCardComponent : CardComponent, IMonsterCardComponent
         lifeStat = new LifeStat(lifeValue, lifeBaseValue);
     }
 
+/// <summary>Initializes a new instance of the <see cref="MonsterCardComponent"/> type.</summary>
+/// <param name="mana">The mana value.</param>
+/// <param name="attackStat">The attackStat value.</param>
+/// <param name="lifeStat">The lifeStat value.</param>
     public MonsterCardComponent(int mana, AttackStat attackStat, LifeStat lifeStat)
         : base(mana)
     {
@@ -73,9 +81,11 @@ public class MonsterCardComponent : CardComponent, IMonsterCardComponent
         set => lifeStat.BaseValue = value;
     }
 
+/// <summary>Creates a copy of the current object.</summary>
+/// <returns>The result of the operation.</returns>
     public override object Clone()
     {
-        List<IReaction> reactionsClone = new List<IReaction>();
+        List<IReaction> reactionsClone = [];
         foreach (IReaction reaction in Reactions)
         {
             reactionsClone.Add((IReaction)reaction.Clone());
@@ -89,9 +99,12 @@ public class MonsterCardComponent : CardComponent, IMonsterCardComponent
         );
     }
 
+/// <summary>Gets the characters that can currently be targeted.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
     public HashSet<ICharacter> GetPotentialTargets(IGameState gameState)
     {
-        HashSet<ICharacter> potentialTargets = new HashSet<ICharacter>();
+        HashSet<ICharacter> potentialTargets = [];
         foreach (IPlayer player in gameState.NonActivePlayers)
         {
             player.Characters.ForEach(c => potentialTargets.Add(c));

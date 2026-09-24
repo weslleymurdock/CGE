@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,20 +14,33 @@ public abstract class CompoundCard : Card, ICompoundCard
         get => ((Card)Components[0]).Owner;
         set
         {
+            // Card invokes the virtual Owner setter from its constructor before
+            // CompoundCard has initialized its component collection.
+            if (Components is null)
+            {
+                return;
+            }
+
             Components.ForEach(c => ((Card)c).Owner = value);
         }
     }
 
+/// <summary>Initializes a new instance of the <see cref="CompoundCard"/> type.</summary>
+/// <param name="components">The components value.</param>
+/// <param name="Name">The Name value.</param>
     public CompoundCard(List<ICard> components, string Name)
         : base([.. components.SelectMany(x => x.Components)], [.. components.SelectMany(x => x.Reactions)], ((Card)components[0]).Owner, Name)
     {
         this.Components = components;
     }
 
-    public CompoundCard(ICard card) : this(new List<ICard> { card }, ((Card)card).Name)
+/// <summary>Initializes a new instance of the <see cref="CompoundCard"/> type.</summary>
+    public CompoundCard(ICard card) : this([card], ((Card)card).Name)
     {
     }
 
+/// <summary>Adds a component to this object.</summary>
+/// <param name="card">The card value.</param>
     public virtual void AddComponent(ICard card)
     {
         if(card is CompoundCard)
@@ -42,6 +55,8 @@ public abstract class CompoundCard : Card, ICompoundCard
         }
     }
 
+/// <summary>Removes a component from this object.</summary>
+/// <param name="card">The card value.</param>
     public void RemoveComponent(ICard card)
     {
         if (card is CompoundCard)

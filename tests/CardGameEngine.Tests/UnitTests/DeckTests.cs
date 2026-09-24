@@ -147,4 +147,21 @@ public class DeckTests
             Assert.NotSame(originalCards[i], clonedCards[i]);
         }
     }
+    [Fact]
+    public void JsonRoundTrip_PreservesDeckTopCardOrder()
+    {
+        // Arrange
+        var deck = new Deck();
+        deck.Push(new MonsterCard(1, 1, 1, name: "Bottom"));
+        deck.Push(new MonsterCard(1, 2, 2, name: "Top"));
+
+        // Act
+        var json = CardGameEngineJsonConvert.Serialize(deck);
+        var restored = CardGameEngineJsonConvert.Deserialize<Deck>(json);
+
+        // Assert
+        Assert.Equal(2, ((IMonsterCard)restored.Pop()).AttackValue);
+        Assert.Equal(1, ((IMonsterCard)restored.Pop()).AttackValue);
+    }
+
 }

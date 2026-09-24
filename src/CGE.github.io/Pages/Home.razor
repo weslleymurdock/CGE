@@ -1,0 +1,121 @@
+@page "/"
+
+<PageTitle>CardGameEngine — .NET Card Game Framework</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="py-8">
+    <MudStack Spacing="6">
+        <MudPaper Elevation="0" Class="pa-8 hero">
+            <MudText Typo="Typo.h2">Build your card game in C#.</MudText>
+            <MudText Typo="Typo.h6" Class="mt-3">
+                CardGameEngine provides the game state, action pipeline, cards, components,
+                events, reactions and turn lifecycle. Your application supplies the game-specific cards and rules.
+            </MudText>
+            <MudStack Row="true" Spacing="2" Class="mt-6">
+                <MudButton Href="#quickstart" Variant="Variant.Filled" Color="Color.Primary">Start building</MudButton>
+                <MudButton Href="/guide" Variant="Variant.Outlined">Step-by-step guide</MudButton>
+                <MudButton Href="https://github.com/weslleymurdock/CGE" Target="_blank" Variant="Variant.Outlined">GitHub</MudButton>
+            </MudStack>
+        </MudPaper>
+
+        <MudText Typo="Typo.h4">What the implementation provides</MudText>
+        <MudGrid>
+            @foreach (var item in Concepts)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudPaper Class="pa-5 h-100">
+                        <MudText Typo="Typo.h6">@item.Title</MudText>
+                        <MudText Class="mt-2">@item.Description</MudText>
+                    </MudPaper>
+                </MudItem>
+            }
+        </MudGrid>
+
+        <MudText Typo="Typo.h4" id="quickstart">Quick start</MudText>
+
+        <MudAlert Severity="Severity.Info">
+            CardGameEngine is not published to NuGet yet. The website therefore does not reference the package.
+            The API reference is generated directly from the engine project during the build.
+        </MudAlert>
+
+        <MudPaper Class="pa-5">
+            <MudText Typo="Typo.h6">2. Create players and the game</MudText>
+            <MudText Class="mb-3">
+                The game receives its players and exposes the active player and game state.
+            </MudText>
+            <pre><code>var player = new Player();
+var opponent = new Player();
+
+var game = new Game(new List&lt;IPlayer&gt;
+{
+    player,
+    opponent
+});
+
+game.ActivePlayer = player;</code></pre>
+        </MudPaper>
+
+        <MudPaper Class="pa-5">
+            <MudText Typo="Typo.h6">3. Start with real cards</MudText>
+            <MudText Class="mb-3">
+                Add cards to a Deck with Push, then call StartGame to initialize life, mana and the initial hands.
+            </MudText>
+            <pre><code>var monster = new MonsterCard(
+    2, 5, 6, player, "Knight");
+
+player.Deck.Push(monster);
+
+game.StartGame(
+    initialHandSize: 1,
+    initialPlayerLife: 20);</code></pre>
+        </MudPaper>
+
+        <MudPaper Class="pa-5">
+            <MudText Typo="Typo.h6">4. Execute state transitions</MudText>
+            <MudText Class="mb-3">
+                Actions are validated against the current game state immediately before execution.
+            </MudText>
+            <pre><code>game.Execute(
+    new ModifyManaStatAction(
+        player,
+        4,
+        4));
+
+game.Execute(new DrawCardAction(player));</code></pre>
+        </MudPaper>
+
+        <MudPaper Class="pa-5">
+            <MudText Typo="Typo.h6">5. Add cards, events and reactions</MudText>
+            <MudText>
+                Monster cards, targetless spells and targetful spells use concrete components.
+                Events mark lifecycle points and reactions can execute additional actions.
+            </MudText>
+        </MudPaper>
+
+        <MudAlert Severity="Severity.Info">
+            For the complete API walkthrough, including valid-target calculation, combat, cloning and
+            game termination, open the <a href="/guide">Step-by-step guide</a>.
+            For the generated API surface, open the <a href="/api">API reference</a>.
+        </MudAlert>
+
+        <MudText Typo="Typo.h4">Repository reference</MudText>
+        <MudList T="string">
+            <MudListItem>README — API and behavior documented from the current implementation.</MudListItem>
+            <MudListItem>examples/CardGameEngine.Demo — executable end-to-end example.</MudListItem>
+            <MudListItem>tests/CardGameEngine.Tests — regression coverage for action invariants.</MudListItem>
+        </MudList>
+    </MudStack>
+</MudContainer>
+
+@code {
+    private static readonly IReadOnlyList<Concept> Concepts =
+    [
+        new("Game state", "Game, players, active player, decks, hands, boards and graveyards."),
+        new("Action pipeline", "IAction validation and state transitions through Game.Execute(...)."),
+        new("Cards & components", "MonsterCard plus targetless and targetful spell cards and components."),
+        new("Events", "Lifecycle actions such as StartOfTurnEvent, EndOfTurnEvent and card events."),
+        new("Reactions", "IReaction implementations that observe IActionEvent and can execute actions."),
+        new("Turn lifecycle", "StartGame and NextTurn with the built-in turn reactions.")
+    ];
+
+    private sealed record Concept(string Title, string Description);
+}

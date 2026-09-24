@@ -1,71 +1,71 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Newtonsoft.Json;
 
 namespace CardGameEngine
 {
     /// <summary>
-    /// Converter for any Stack<T> that prevents Json.NET from reversing its order when deserializing.
+    /// Converts the engine's <see cref="Stack{T}"/>-based card collection while preserving stack order.
     /// </summary>
     public class StackConverter : JsonConverter
     {
-        // Prevent Json.NET from reversing the order of a Stack<T> when deserializing.
-        // https://github.com/JamesNK/Newtonsoft.Json/issues/971
-        static Type StackParameterType(Type objectType)
-        {
-            while (objectType != null)
-            {
-                if (objectType.IsGenericType)
-                {
-                    var genericType = objectType.GetGenericTypeDefinition();
-                    if (genericType == typeof(Stack<>))
-                        return objectType.GetGenericArguments()[0];
-                }
-                objectType = objectType.BaseType;
-            }
-            return null;
-        }
-
+        /// <summary>
+        /// Determines whether this converter handles the engine's card stack type.
+        /// </summary>
         public override bool CanConvert(Type objectType)
         {
-            return StackParameterType(objectType) != null;
+            return objectType == typeof(Stack<ICard>);
         }
 
-        object ReadJsonGeneric<T>(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        /// <summary>
+        /// Reads a card stack from JSON without reversing the stack order.
+        /// </summary>
+        /// <param name="reader">The JSON reader.</param>
+        /// <param name="objectType">The target object type.</param>
+        /// <param name="existingValue">An existing stack instance, when available.</param>
+        /// <param name="serializer">The JSON serializer.</param>
+        /// <returns>The deserialized card stack.</returns>
+        public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null)
-                return null;
-            var list = serializer.Deserialize<List<T>>(reader);
-            var stack = existingValue as Stack<T> ?? (Stack<T>)serializer.ContractResolver.ResolveContract(objectType).DefaultCreator();
-            for (int i = list.Count - 1; i >= 0; i--)
-                stack.Push(list[i]);
+            {
+                return null!;
+            }
+
+            var cards = serializer.Deserialize<List<ICard>>(reader)
+                ?? throw new JsonSerializationException("The card stack JSON value could not be deserialized.");
+
+            var stack = existingValue as Stack<ICard> ?? new Stack<ICard>();
+
+            // Json.NET reads the serialized stack from top to bottom. Push in reverse
+            // order so Stack.Pop() returns the same card that was originally on top.
+            for (var i = cards.Count - 1; i >= 0; i--)
+            {
+                stack.Push(cards[i]);
+            }
+
             return stack;
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        /// <summary>
+        /// Writes a card stack as an array in its enumeration order.
+        /// </summary>
+        /// <param name="writer">The JSON writer.</param>
+        /// <param name="value">The card stack to serialize.</param>
+        /// <param name="serializer">The JSON serializer.</param>
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
-            if (reader.TokenType == JsonToken.Null)
-                return null;
-            try
+            if (value is not Stack<ICard> stack)
             {
-                var parameterType = StackParameterType(objectType);
-                var method = GetType().GetMethod("ReadJsonGeneric", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
-                var genericMethod = method.MakeGenericMethod(new[] { parameterType });
-                return genericMethod.Invoke(this, new object[] { reader, objectType, existingValue, serializer });
+                throw new JsonSerializationException("StackConverter can only serialize Stack<ICard> values.");
             }
-            catch (TargetInvocationException ex)
+
+            writer.WriteStartArray();
+            foreach (var card in stack)
             {
-                // Wrap the TargetInvocationException in a JsonSerializerException
-                throw new JsonSerializationException("Failed to deserialize " + objectType, ex);
+                serializer.Serialize(writer, card, typeof(ICard));
             }
-        }
-
-        public override bool CanWrite { get { return false; } }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
+            writer.WriteEndArray();
         }
     }
 }

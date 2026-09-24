@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Newtonsoft.Json;
 
@@ -9,6 +9,9 @@ public class ModifyActivePlayerAction : Action
     [JsonProperty]
     public IPlayer NewActivePlayer;
 
+/// <summary>Initializes a new instance of the <see cref="ModifyActivePlayerAction"/> type.</summary>
+/// <param name="newActivePlayer">The newActivePlayer value.</param>
+/// <param name="isAborted">The isAborted value.</param>
     [JsonConstructor]
     public ModifyActivePlayerAction(IPlayer newActivePlayer, bool isAborted = false)
         : base(isAborted)
@@ -16,6 +19,8 @@ public class ModifyActivePlayerAction : Action
         NewActivePlayer = newActivePlayer;
     }
 
+/// <summary>Creates a copy of the current object.</summary>
+/// <returns>The result of the operation.</returns>
     public override object Clone()
     {
         return new ModifyActivePlayerAction(
@@ -24,11 +29,16 @@ public class ModifyActivePlayerAction : Action
         );
     }
 
+/// <summary>Executes this operation against the specified game.</summary>
+/// <param name="game">The game value.</param>
     public override void Execute(IGame game)
     {
         game.ActivePlayer = NewActivePlayer;
     }
 
+/// <summary>Determines whether this operation can be executed for the specified game state.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
     public override bool IsExecutable(IGameState gameState)
     {
         if(!gameState.Players.Contains(NewActivePlayer))

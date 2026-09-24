@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -10,10 +10,19 @@ public abstract class Card : ReactiveCompound, ICard
 {
     public abstract IPlayer Owner { get; set; }
     public string Name { get; set; } 
-    public Card(string name = "") : this(new List<ICardComponent>(), new List<IReaction>(), default!, name)
+/// <summary>Initializes a new instance of the <see cref="Card"/> type.</summary>
+/// <param name="name">The name value.</param>
+/// <param name="[]">The [] value.</param>
+/// <param name="name">The name value.</param>
+    public Card(string name = "") : this([], [], default!, name)
     {
     }
 
+/// <summary>Initializes a new instance of the <see cref="Card"/> type.</summary>
+/// <param name="components">The components value.</param>
+/// <param name="reactions">The reactions value.</param>
+/// <param name="owner">The owner value.</param>
+/// <param name="name">The name value.</param>
     [JsonConstructor]
     protected Card(List<ICardComponent> components, List<IReaction> reactions, IPlayer owner, string name)
         : base(components, reactions)
@@ -42,6 +51,9 @@ public abstract class Card : ReactiveCompound, ICard
         }
     }
 
+/// <summary>Determines whether this card can currently be cast.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
     public virtual bool IsCastable(IGameState gameState)
     {
         IPlayer owner = FindParentPlayer(gameState);
@@ -51,11 +63,17 @@ public abstract class Card : ReactiveCompound, ICard
             && ManaValue <= gameState.ActivePlayer.ManaValue;
     }
 
+/// <summary>Finds the parent card in the specified game state.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
     public override ICard FindParentCard(IGameState gameState)
     {
         return this;
     }
 
+/// <summary>Finds the parent player in the specified game state.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
     public override IPlayer FindParentPlayer(IGameState gameState)
     {
         foreach (IPlayer player in gameState.Players)

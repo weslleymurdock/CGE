@@ -1,5 +1,9 @@
 <Solution>
+  <Folder Name="/examples/">
+    <Project Path="examples/CardGameEngine.Demo/CardGameEngine.Demo.csproj" />
+  </Folder>
   <Folder Name="/src/">
+    <Project Path="src/CGE.github.io/CGE.github.io.csproj" />
     <Project Path="src/CardGameEngine/CardGameEngine.csproj" />
   </Folder>
   <Folder Name="/tests/">

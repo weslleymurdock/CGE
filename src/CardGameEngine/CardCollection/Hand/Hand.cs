@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -13,10 +13,13 @@ public class Hand : CardCollection, IHand
     [JsonProperty]
     protected List<ICard> cards;
 
-    public Hand() : this(new List<ICard>())
+/// <summary>Initializes a new instance of the <see cref="Hand"/> type.</summary>
+    public Hand() : this([])
     {
     }
 
+/// <summary>Initializes a new instance of the <see cref="Hand"/> type.</summary>
+/// <param name="cards">The cards value.</param>
     [JsonConstructor]
     protected Hand(List<ICard> cards)
     {
@@ -27,7 +30,7 @@ public class Hand : CardCollection, IHand
     public int MaxSize { get => 10; }
 
     [JsonIgnore]
-    public override List<ICard> AllCards => new List<ICard>(cards);
+    public override List<ICard> AllCards => [.. cards];
 
     [JsonIgnore]
     public override bool IsEmpty
@@ -38,11 +41,16 @@ public class Hand : CardCollection, IHand
     [JsonIgnore]
     public override int Size => cards.Count;
 
+/// <summary>Performs the Contains operation.</summary>
+/// <param name="card">The card value.</param>
+/// <returns>The result of the operation.</returns>
     public override bool Contains(ICard card)
     {
         return cards.Contains(card);
     }
 
+/// <summary>Performs the Add operation.</summary>
+/// <param name="card">The card value.</param>
     public void Add(ICard card)
     {
         if(cards.Count < MaxSize)
@@ -51,14 +59,18 @@ public class Hand : CardCollection, IHand
         }
     }
 
+/// <summary>Performs the Remove operation.</summary>
+/// <param name="card">The card value.</param>
     public void Remove(ICard card)
     {
         cards.Remove(card);
     }
 
+/// <summary>Creates a copy of the current object.</summary>
+/// <returns>The result of the operation.</returns>
     public override object Clone()
     {
-        List<ICard> cardsClone = new List<ICard>();
+        List<ICard> cardsClone = [];
         foreach (ICard card in cards)
         {
             cardsClone.Add((ICard)card.Clone());

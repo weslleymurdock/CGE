@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 
 namespace CardGameEngine;
@@ -25,6 +25,8 @@ public class CastMonsterAction : Action
         BoardIndex = boardIndex;
     }
 
+/// <summary>Creates a copy of the current object.</summary>
+/// <returns>The result of the operation.</returns>
     public override object Clone()
     {
         return new CastMonsterAction(
@@ -35,6 +37,8 @@ public class CastMonsterAction : Action
             );
     }
 
+/// <summary>Executes this operation against the specified game.</summary>
+/// <param name="game">The game value.</param>
     public override void Execute(IGame game)
     {
         game.Execute(new ModifyManaStatAction(Player, -MonsterCard.ManaValue, 0));
@@ -42,9 +46,14 @@ public class CastMonsterAction : Action
         game.Execute(new AddCardToBoardAction(Player.Board, MonsterCard, BoardIndex));
     }
 
+/// <summary>Determines whether this operation can be executed for the specified game state.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
     public override bool IsExecutable(IGameState gameState)
     {
-        return MonsterCard.IsSummonable(gameState)
+        return Player == gameState.ActivePlayer
+            && Player.Hand.Contains(MonsterCard)
+            && MonsterCard.IsSummonable(gameState)
             && Player.Board.IsFreeSlot(BoardIndex);
     }
 }

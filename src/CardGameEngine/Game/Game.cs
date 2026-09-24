@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -26,7 +26,7 @@ namespace CardGameEngine
         /// Represent the current Game state and provides methods to alter
         /// this Game state.
         /// </summary>
-        public Game() : this(new List<IPlayer>())
+        public Game() : this([])
         {
         }
 
@@ -36,13 +36,18 @@ namespace CardGameEngine
         /// </summary>
         /// <param name="players"></param>
         public Game(List<IPlayer> players)
-            : this(players, new Random().Next(players.Count), new ActionQueue(false), new List<IReaction>())
+            : this(players, new Random().Next(players.Count), new ActionQueue(false), [])
         {
             Reactions.Add(new ModifyActivePlayerOnEndOfTurnEventReaction());
             Reactions.Add(new ModifyManaOnStartOfTurnEventReaction());
             Reactions.Add(new DrawCardOnStartOfTurnEventReaction());
         }
 
+/// <summary>Initializes a new instance of the <see cref="Game"/> type.</summary>
+/// <param name="players">The players value.</param>
+/// <param name="activePlayerIndex">The activePlayerIndex value.</param>
+/// <param name="actionQueue">The actionQueue value.</param>
+/// <param name="reactions">The reactions value.</param>
         [JsonConstructor]
         public Game(List<IPlayer> players, int activePlayerIndex, ActionQueue actionQueue, List<IReaction> reactions)
         {
@@ -67,7 +72,7 @@ namespace CardGameEngine
         {
             get
             {
-                return Players.Where(p => p != ActivePlayer).ToList();
+                return [.. Players.Where(p => p != ActivePlayer)];
             }
         }
 
@@ -76,7 +81,7 @@ namespace CardGameEngine
         {
             get
             {
-                List<ICard> allCards = new List<ICard>();
+                List<ICard> allCards = [];
                 foreach (IPlayer player in Players)
                 {
                     allCards.AddRange(player.AllCards);
@@ -90,7 +95,7 @@ namespace CardGameEngine
         {
             get
             {
-                List<ICard> allCards = new List<ICard>();
+                List<ICard> allCards = [];
                 foreach (IPlayer player in Players)
                 {
                     allCards.AddRange(player.Board.AllCards);
@@ -99,13 +104,18 @@ namespace CardGameEngine
             }
         }
 
+/// <summary>Gets all reactions associated with this object.</summary>
+/// <returns>The result of the operation.</returns>
         public List<IReaction> AllReactions()
         {
-            List<IReaction> allReactions = new List<IReaction>(Reactions);
+            List<IReaction> allReactions = [.. Reactions];
             Players.ForEach(p => allReactions.AddRange(p.AllReactions()));
             return allReactions;
         }
 
+/// <summary>Initializes the game and starts the first turn.</summary>
+/// <param name="initialHandSize">The initialHandSize value.</param>
+/// <param name="initialPlayerLife">The initialPlayerLife value.</param>
         public void StartGame(int initialHandSize = 4, int initialPlayerLife = 30)
         {
             //Do not trigger any reactions during setup
@@ -130,36 +140,46 @@ namespace CardGameEngine
             Execute(new StartOfTurnEvent());
         }
 
+/// <summary>Advances the game to the next turn.</summary>
         public void NextTurn()
         {
             Execute(new EndOfTurnEvent());
             Execute(new StartOfTurnEvent());
         }
 
+/// <summary>Executes this operation against the specified game.</summary>
+/// <param name="action">The action value.</param>
         public void Execute(IAction action)
         {
             actionQueue.Execute(this, action);
         }
 
+/// <summary>Executes this operation against the specified game.</summary>
+/// <param name="actions">The actions value.</param>
         public void Execute(List<IAction> actions)
         {
             actions.ForEach(a => Execute(a));
         }
 
+/// <summary>Reacts to the specified action event.</summary>
+/// <param name="game">The game value.</param>
+/// <param name="actionEvent">The actionEvent value.</param>
         public void ReactTo(IGame game, IActionEvent actionEvent)
         {
             AllReactions().ForEach(r => r.ReactTo(game, actionEvent));
         }
 
+/// <summary>Creates a copy of the current object.</summary>
+/// <returns>The result of the operation.</returns>
         public object Clone()
         {
-            List<IPlayer> playersClone = new List<IPlayer>();
+            List<IPlayer> playersClone = [];
             foreach (IPlayer player in Players)
             {
                 playersClone.Add((IPlayer)player.Clone());
             }
 
-            List<IReaction> reactionsClone = new List<IReaction>();
+            List<IReaction> reactionsClone = [];
             foreach (IReaction reaction in Reactions)
             {
                 reactionsClone.Add((IReaction)reaction.Clone());
@@ -173,12 +193,18 @@ namespace CardGameEngine
             );
         }
 
+/// <summary>Finds the parent card in the specified game state.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
         public ICard FindParentCard(IGameState gameState)
         {
             throw new CardGameEngineException("Cannot use method 'FindParentCard' on " +
                 "instance of type 'Game'");
         }
 
+/// <summary>Finds the parent player in the specified game state.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
         public IPlayer FindParentPlayer(IGameState gameState)
         {
             throw new CardGameEngineException("Cannot use method 'FindParentPlayer' on " +

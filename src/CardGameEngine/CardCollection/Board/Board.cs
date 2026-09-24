@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -27,6 +27,8 @@ public class Board : CardCollection, IBoard
         }
     }
 
+/// <summary>Initializes a new instance of the <see cref="Board"/> type.</summary>
+/// <param name="cards">The cards value.</param>
     [JsonConstructor]
     protected Board(ICard[] cards)
     {
@@ -41,7 +43,7 @@ public class Board : CardCollection, IBoard
     {
         get
         {
-            List<ICard> allCards = new List<ICard>();
+            List<ICard> allCards = [];
             foreach (ICard card in cards)
             {
                 if (card != null)
@@ -91,6 +93,9 @@ public class Board : CardCollection, IBoard
         get => cards[index];
     }
 
+/// <summary>Performs the Contains operation.</summary>
+/// <param name="card">The card value.</param>
+/// <returns>The result of the operation.</returns>
     public override bool Contains(ICard card)
     {
         foreach (ICard c in cards)
@@ -103,6 +108,9 @@ public class Board : CardCollection, IBoard
         return false;
     }
 
+/// <summary>Performs the AddAt operation.</summary>
+/// <param name="index">The index value.</param>
+/// <param name="card">The card value.</param>
     public void AddAt(int index, ICard card)
     {
         if(!IsFreeSlot(index))
@@ -113,6 +121,8 @@ public class Board : CardCollection, IBoard
         cards[index] = card;
     }
 
+/// <summary>Performs the Remove operation.</summary>
+/// <param name="card">The card value.</param>
     public void Remove(ICard card)
     {
         for(int i=0; i<cards.Length; ++i)
@@ -124,11 +134,16 @@ public class Board : CardCollection, IBoard
         }
     }
 
+/// <summary>Performs the IsFreeSlot operation.</summary>
+/// <param name="index">The index value.</param>
+/// <returns>The result of the operation.</returns>
     public bool IsFreeSlot(int index)
     {
         return cards[index] == null;
     }
 
+/// <summary>Creates a copy of the current object.</summary>
+/// <returns>The result of the operation.</returns>
     public override object Clone()
     {
         ICard[] cardsClone = new ICard[cards.Length];

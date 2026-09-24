@@ -1,8 +1,11 @@
-﻿namespace CardGameEngine;
+namespace CardGameEngine;
 
 [Serializable]
 public class CompoundTargetfulSpellCard : CompoundCard, ITargetfulSpellCard
 {
+/// <summary>Initializes a new instance of the <see cref="CompoundTargetfulSpellCard"/> type.</summary>
+/// <param name="components">The components value.</param>
+/// <param name="name">The name value.</param>
     public CompoundTargetfulSpellCard(List<ISpellCard> components, string name = "")
         : base([], name)
     {
@@ -15,16 +18,23 @@ public class CompoundTargetfulSpellCard : CompoundCard, ITargetfulSpellCard
         components.ForEach(c => Components.Add(c));
     }
 
+/// <summary>Initializes a new instance of the <see cref="CompoundTargetfulSpellCard"/> type.</summary>
+/// <param name="spellCard">The spellCard value.</param>
     public CompoundTargetfulSpellCard(ISpellCard spellCard)
         : this([spellCard])
     {
     }
 
+/// <summary>Creates a copy of the current object.</summary>
+/// <returns>The result of the operation.</returns>
     public override object Clone()
     {
         return new CompoundTargetfulSpellCard(Components.ConvertAll(c => (ISpellCard)c.Clone()));   
     }
 
+/// <summary>Gets the characters that can currently be targeted.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
     public HashSet<ICharacter> GetPotentialTargets(IGameState gameState)
     {
         //Compute the intersection of all potential targets
@@ -44,6 +54,9 @@ public class CompoundTargetfulSpellCard : CompoundCard, ITargetfulSpellCard
         return potentialTargets;
     }
 
+/// <summary>Casts this spell using the specified game or target.</summary>
+/// <param name="game">The game value.</param>
+/// <param name="targetCharacter">The targetCharacter value.</param>
     public void Cast(IGame game, ICharacter targetCharacter)
     {
         foreach (ICard card in Components)

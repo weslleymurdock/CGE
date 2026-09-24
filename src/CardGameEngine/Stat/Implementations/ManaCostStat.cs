@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 
 namespace CardGameEngine {
@@ -9,11 +9,16 @@ namespace CardGameEngine {
         /// <summary>
         /// Costs in Mana.
         /// </summary>
+/// <summary>Initializes a new instance of the <see cref="ManaCostStat"/> type.</summary>
+/// <param name="value">The value value.</param>
+/// <param name="baseValue">The baseValue value.</param>
         [JsonConstructor]
         public ManaCostStat(int value, int baseValue) : base(value, baseValue)
         {
         }
 
+/// <summary>Creates a copy of the current object.</summary>
+/// <returns>The result of the operation.</returns>
         public override object Clone()
         {
             return new ManaCostStat(Value, BaseValue);
