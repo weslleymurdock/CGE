@@ -12,11 +12,11 @@ public class RemoveCardFromStackedDeckAction : Action
     [JsonProperty]
     public readonly IStackedDeck deck;
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="RemoveCardFromStackedDeckAction"/> type.</summary>
 /// <param name="deck">The deck value.</param>
 /// <param name="card">The card value.</param>
 /// <param name="isAborted">The isAborted value.</param>
+    [JsonConstructor]
     public RemoveCardFromStackedDeckAction(IStackedDeck deck, ICard card, bool isAborted = false)
     {
         this.deck = deck;
