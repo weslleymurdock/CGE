@@ -8,9 +8,9 @@ public abstract class ActionEvent : Event, IActionEvent
 {
     public IAction Action { get; protected set; }
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="ActionEvent"/> type.</summary>
 /// <param name="action">The action value.</param>
+    [JsonConstructor]
     public ActionEvent(IAction action)
     {
         Action = action;
