@@ -6,13 +6,11 @@ namespace CardGameEngine
     public class EndDrawCardEvent : CardEvent
     {
 /// <summary>Initializes a new instance of the <see cref="EndDrawCardEvent"/> type.</summary>
-/// <param name="base(card">The base(card value.</param>
         public EndDrawCardEvent(ICard card) : base(card)
         {
         }
 
 /// <summary>Initializes a new instance of the <see cref="EndDrawCardEvent"/> type.</summary>
-/// <param name="base(getCard">The base(getCard value.</param>
         public EndDrawCardEvent(Func<ICard> getCard) : base(getCard)
         {
         }
