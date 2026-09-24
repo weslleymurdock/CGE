@@ -11,10 +11,10 @@ namespace CardGameEngine
         /// </summary>
         /// <param name="value"></param>
         /// <param name="baseValue"></param>
-        [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="ManaPoolStat"/> type.</summary>
 /// <param name="value">The value value.</param>
 /// <param name="baseValue">The baseValue value.</param>
+        [JsonConstructor]
         public ManaPoolStat(int value, int baseValue) : base(value, baseValue)
         {
         }
