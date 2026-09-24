@@ -103,7 +103,10 @@ public class CompoundMonsterCard : CompoundCard, IMonsterCard
 /// <returns>The result of the operation.</returns>
     public bool IsSummonable(IGameState gameState)
     {
-        throw new NotImplementedException();
+        // A compound monster is summonable only when every component can be
+        // represented by the same active-player summon state and the board has room.
+        return base.IsCastable(gameState)
+            && gameState.ActivePlayer.Board.AllCards.Count < gameState.ActivePlayer.Board.MaxSize;
     }
 
 /// <summary>Gets the characters that can currently be targeted.</summary>
@@ -111,7 +114,22 @@ public class CompoundMonsterCard : CompoundCard, IMonsterCard
 /// <returns>The result of the operation.</returns>
     public HashSet<ICharacter> GetPotentialTargets(IGameState gameState)
     {
-        throw new NotImplementedException();
+        if (Components.Count == 0)
+        {
+            return [];
+        }
+
+        // A compound monster can attack only targets that every component can attack.
+        var potentialTargets = new HashSet<ICharacter>(
+            ((IMonsterCard)Components[0]).GetPotentialTargets(gameState));
+
+        for (var i = 1; i < Components.Count; i++)
+        {
+            potentialTargets.IntersectWith(
+                ((IMonsterCard)Components[i]).GetPotentialTargets(gameState));
+        }
+
+        return potentialTargets;
     }
 
 /// <summary>Creates a copy of the current object.</summary>
