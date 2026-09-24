@@ -12,7 +12,6 @@ namespace CardGameEngine
         protected Stack<ICard> cards;
 
 /// <summary>Initializes a new instance of the <see cref="StackedDeck"/> type.</summary>
-/// <param name="Stack<ICard>()">The Stack<ICard>() value.</param>
         public StackedDeck() : this(new Stack<ICard>())
         {
         }
