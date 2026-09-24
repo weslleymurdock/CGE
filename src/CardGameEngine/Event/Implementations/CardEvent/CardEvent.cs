@@ -10,7 +10,6 @@ namespace CardGameEngine
         protected Func<ICard> GetCard;
 
 /// <summary>Initializes a new instance of the <see cref="CardEvent"/> type.</summary>
-/// <param name="this(()">The this(() value.</param>
         public CardEvent(ICard card) : this(() => card)
         {
         }
