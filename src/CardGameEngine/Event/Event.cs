@@ -6,8 +6,8 @@ namespace CardGameEngine
     [Serializable]
     public abstract class Event : Action
     {
-        [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="Event"/> type.</summary>
+        [JsonConstructor]
         public Event()
         {
         }
