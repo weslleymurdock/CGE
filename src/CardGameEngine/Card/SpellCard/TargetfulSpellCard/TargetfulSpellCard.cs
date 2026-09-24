@@ -35,12 +35,12 @@ public class TargetfulSpellCard : SpellCard, ITargetfulSpellCard
     {
     }
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="TargetfulSpellCard"/> type.</summary>
 /// <param name="components">The components value.</param>
 /// <param name="reactions">The reactions value.</param>
 /// <param name="owner">The owner value.</param>
 /// <param name="name">The name value.</param>
+    [JsonConstructor]
     public TargetfulSpellCard(List<ICardComponent> components, List<IReaction> reactions, IPlayer owner, string name)
         : base(components, reactions, owner, name)
     {
