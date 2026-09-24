@@ -63,7 +63,7 @@ namespace CardGameEngine
             writer.WriteStartArray();
             foreach (var card in stack)
             {
-                serializer.Serialize(writer, card);
+                serializer.Serialize(writer, card, typeof(ICard));
             }
             writer.WriteEndArray();
         }
