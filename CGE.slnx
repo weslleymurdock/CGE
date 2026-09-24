@@ -1,6 +1,12 @@
 <Solution>
+  <Folder Name="/.github/workflows/">
+    <File Path=".github/workflows/build-test-deploy.yml" />
+  </Folder>
   <Folder Name="/examples/">
     <Project Path="examples/CardGameEngine.Demo/CardGameEngine.Demo.csproj" />
+  </Folder>
+  <Folder Name="/scripts/">
+    <File Path="scripts/tag.ps1" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/CGE.github.io/CGE.github.io.csproj" />
