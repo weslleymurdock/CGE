@@ -12,7 +12,6 @@ public class Deck : CardCollection, IDeck
     protected Stack<ICard> cards;
 
 /// <summary>Initializes a new instance of the <see cref="Deck"/> type.</summary>
-/// <param name="Stack<ICard>()">The Stack<ICard>() value.</param>
     public Deck() : this(new Stack<ICard>())
     {
     }
