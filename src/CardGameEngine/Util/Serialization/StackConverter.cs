@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Newtonsoft.Json;
@@ -27,6 +27,9 @@ namespace CardGameEngine
             return null;
         }
 
+/// <summary>Performs the CanConvert operation.</summary>
+/// <param name="objectType">The objectType value.</param>
+/// <returns>The result of the operation.</returns>
         public override bool CanConvert(Type objectType)
         {
             return StackParameterType(objectType) != null;
@@ -43,6 +46,12 @@ namespace CardGameEngine
             return stack;
         }
 
+/// <summary>Performs the ReadJson operation.</summary>
+/// <param name="reader">The reader value.</param>
+/// <param name="objectType">The objectType value.</param>
+/// <param name="existingValue">The existingValue value.</param>
+/// <param name="serializer">The serializer value.</param>
+/// <returns>The result of the operation.</returns>
         public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null)
@@ -63,6 +72,10 @@ namespace CardGameEngine
 
         public override bool CanWrite { get { return false; } }
 
+/// <summary>Performs the WriteJson operation.</summary>
+/// <param name="writer">The writer value.</param>
+/// <param name="value">The value value.</param>
+/// <param name="serializer">The serializer value.</param>
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
