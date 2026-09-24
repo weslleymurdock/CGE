@@ -8,7 +8,6 @@ namespace CardGameEngine;
 public abstract class TargetfulSpellCardComponent : CardComponent, ITargetfulSpellCardComponent
 {
 /// <summary>Initializes a new instance of the <see cref="TargetfulSpellCardComponent"/> type.</summary>
-/// <param name="base(mana">The base(mana value.</param>
     public TargetfulSpellCardComponent(int mana) : base(mana)
     {
     }
