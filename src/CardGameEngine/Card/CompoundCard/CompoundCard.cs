@@ -14,6 +14,13 @@ public abstract class CompoundCard : Card, ICompoundCard
         get => ((Card)Components[0]).Owner;
         set
         {
+            // Card invokes the virtual Owner setter from its constructor before
+            // CompoundCard has initialized its component collection.
+            if (Components is null)
+            {
+                return;
+            }
+
             Components.ForEach(c => ((Card)c).Owner = value);
         }
     }
