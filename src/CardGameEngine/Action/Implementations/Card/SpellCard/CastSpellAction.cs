@@ -12,11 +12,11 @@ public abstract class CastSpellAction : Action
     [JsonProperty]
     public ISpellCard SpellCard;
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="CastSpellAction"/> type.</summary>
 /// <param name="player">The player value.</param>
 /// <param name="spellCard">The spellCard value.</param>
 /// <param name="isAborted">The isAborted value.</param>
+    [JsonConstructor]
     public CastSpellAction(IPlayer player, ISpellCard spellCard, bool isAborted = false)
         : base(isAborted)
     {
