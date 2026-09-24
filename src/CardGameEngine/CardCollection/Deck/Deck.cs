@@ -16,9 +16,9 @@ public class Deck : CardCollection, IDeck
     {
     }
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="Deck"/> type.</summary>
 /// <param name="cards">The cards value.</param>
+    [JsonConstructor]
     protected Deck(Stack<ICard> cards)
     {
         this.cards = cards;
