@@ -13,7 +13,6 @@ public abstract class Card : ReactiveCompound, ICard
 /// <summary>Initializes a new instance of the <see cref="Card"/> type.</summary>
 /// <param name="name">The name value.</param>
 /// <param name="[]">The [] value.</param>
-/// <param name="default!">The default! value.</param>
 /// <param name="name">The name value.</param>
     public Card(string name = "") : this([], [], default!, name)
     {
