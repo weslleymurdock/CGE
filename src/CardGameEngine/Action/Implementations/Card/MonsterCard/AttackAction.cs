@@ -13,6 +13,10 @@ public class AttackAction : Action
     public ICharacter Target;
 
     [JsonConstructor]
+/// <summary>Initializes a new instance of the <see cref="AttackAction"/> type.</summary>
+/// <param name="attacker">The attacker value.</param>
+/// <param name="target">The target value.</param>
+/// <param name="isAborted">The isAborted value.</param>
     public AttackAction(IMonsterCard attacker, ICharacter target, bool isAborted = false)
         : base(isAborted)
     {
@@ -20,6 +24,8 @@ public class AttackAction : Action
         Target = target;
     }
 
+/// <summary>Creates a copy of the current object.</summary>
+/// <returns>The result of the operation.</returns>
     public override object Clone()
     {
         return new AttackAction(
@@ -29,6 +35,8 @@ public class AttackAction : Action
         );
     }
 
+/// <summary>Executes this operation against the specified game.</summary>
+/// <param name="game">The game value.</param>
     public override void Execute(IGame game)
     {
         game.Execute(new ModifyLifeStatAction(Target, -Attacker.AttackValue));
@@ -36,6 +44,9 @@ public class AttackAction : Action
         game.Execute(new ModifyReadyToAttackAction(Attacker, false));
     }
 
+/// <summary>Determines whether this operation can be executed for the specified game state.</summary>
+/// <param name="gameState">The gameState value.</param>
+/// <returns>The result of the operation.</returns>
     public override bool IsExecutable(IGameState gameState)
     {
         return Attacker != null
