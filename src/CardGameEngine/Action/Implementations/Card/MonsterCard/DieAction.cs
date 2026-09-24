@@ -9,10 +9,10 @@ public class DieAction : Action
     [JsonProperty]
     public IMonsterCard MonsterCard;
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="DieAction"/> type.</summary>
 /// <param name="monsterCard">The monsterCard value.</param>
 /// <param name="isAborted">The isAborted value.</param>
+    [JsonConstructor]
     public DieAction(IMonsterCard monsterCard, bool isAborted = false)
         : base(isAborted)
     {
