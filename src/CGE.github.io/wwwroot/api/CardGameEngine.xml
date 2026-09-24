@@ -191,14 +191,14 @@
             <summary>
             Called when the spell card is cast. Execute Actions here.
             </summary>
-            <param name="gameState"></param>
+            <param name="game"></param>
             <param name="target"></param>
         </member>
         <member name="M:CardGameEngine.ITargetlessSpellCardComponent.Cast(CardGameEngine.IGame)">
             <summary>
             Called when spell card is cast. Execute Actions here.
             </summary>
-            <param name="gameState"></param>
+            <param name="game"></param>
         </member>
         <member name="M:CardGameEngine.ICompoundCard.AddComponent(CardGameEngine.ICard)">
             <summary>
@@ -259,6 +259,8 @@
             immediate effect on the Game's state.
             </summary>
             <param name="components"></param>
+            <param name="owner"></param>-
+            <param name="name"></param>-
         </member>
         <member name="M:CardGameEngine.ITargetfulSpellCard.Cast(CardGameEngine.IGame,CardGameEngine.ICharacter)">
             <summary>

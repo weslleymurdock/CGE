@@ -32,6 +32,7 @@ jobs:
   deploy:
     name: Continous Delivery - Docs 
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
     - name: Checkout 
       uses: actions/checkout@v7
