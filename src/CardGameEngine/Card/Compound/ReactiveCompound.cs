@@ -16,10 +16,10 @@ public abstract class ReactiveCompound : Compound, IReactive
     {
     }
 
-    [JsonConstructor]
 /// <summary>Initializes a new instance of the <see cref="ReactiveCompound"/> type.</summary>
 /// <param name="components">The components value.</param>
 /// <param name="reactions">The reactions value.</param>
+    [JsonConstructor]
     protected ReactiveCompound(List<ICardComponent> components, List<IReaction> reactions)
         : base(components)
     {
