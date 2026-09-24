@@ -12,6 +12,7 @@ public interface IMonsterCard : ICard, ICharacter, ITargetful
     LifeStat LifeStat { get; }
     AttackStat AttackStat { get; }
 
+    /// <summary>Determines whether the card can currently be summoned for the specified game state.</summary>
     bool IsSummonable(IGameState gameState);
 
     /// <summary>
